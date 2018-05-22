@@ -14,33 +14,12 @@ import android.widget.TextView;
 
 import com.example.florian.myapplication.R;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.CoreProtocolPNames;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.SocketException;
-import java.util.ArrayList;
-import java.util.List;
 
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.FormBody;
-import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -105,13 +84,11 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
                             snackbar.dismiss();
                         }
                     });
-                    String json = "{\"err\":0,\"con\":0,\"titre\":\"Erreur connexion\",\"msg\":\"N'a pas résusi à se connecter\"}";
-                    JSONObject js = parseStringToJson(json);
-                    if(interpreteJson(js)){
-                        System.out.println("Connexion réussi");
-                    }else{
-                        Log.w(js.getString("titre"),js.getString("msg"));
-                    }
+                    String jsonErr = "{\"err\":0,\"con\":0,\"titre\":\"Erreur connexion\",\"msg\":\"N'a pas résusi à se connecter\"}";
+                    String jsonWin = "{\"err\":0,\"con\":1}";
+                    String jsonDeco = "{\"err\":0}";
+                    JSONObject js = parseStringToJson(jsonDeco);
+                    interpreteConnexionByJson(js);
                     Log.w("COUCOU", "Fin thread");
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -123,16 +100,29 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         }).start();
     }
 
-    protected boolean interpreteJson(JSONObject json){
+    protected void interpreteConnexionByJson(JSONObject json){
         int err = -1;
         int con = -1;
+        String titre = "";
+        String msg = "";
         try {
             err = json.getInt("err");
             con = json.getInt("con");
+            titre = json.getString("titre");
+            msg = json.getString("msg");
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return (err == 0) && (con == 1);
+        if(err == 0){
+            if(con == 0){
+                Log.w(titre,msg);
+
+            }else if(con == 1){
+                Log.w("Connexion","Connexion réussi");
+            }else {
+                Log.w("Déconnexion", "Se déconnecte");
+            }
+        }
     }
 
     private String generateUrl() {
