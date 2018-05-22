@@ -1,0 +1,99 @@
+<resources>
+    <string name="app_name">GENS Mobile</string>
+    <string name="avertissement_message">Le GPS est nécessaire pour faciliter vos campagnes</string>
+    <string name="avertissement">Attention</string>
+    <string name="oui">Oui</string>
+    <string name="non">Non</string>
+    <string name="accord">D\'accord</string>
+    <string name="gps_requis_message">Le GPS est requis pour continuer. Voulez-vous l\'activer ?</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Login</string>
+    <string name="prompt_password">Mot de passe</string>
+    <string name="valider">Valider</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">Le login est invalide</string>
+    <string name="error_invalid_password">Le mot de passe est trop petit</string>
+    <string name="error_incorrect_password">Login ou mot de passe incorrect</string>
+    <string name="error_field_required">Ce champ est requis pour continuer</string>
+
+    <!-- Strings pour la page home -->
+    <string name="obs_ponct">Observation ponctuelle</string>
+    <string name="protocole">Protocole de suivi</string>
+    <string name="relevé">Outil de relevé de terrain</string>
+    <string name="sync">Synchroniser</string>
+    <string name="chargement">Chargement de la carte...</string>
+
+    <!-- Boutons sur la map -->
+    <string name="recenser">Recenser</string>
+    <string name="finMission">Fin de mission</string>
+    <string name="finReleve">Fin de relevé</string>
+
+    <!--Strings pour la MainActivityRel-->
+    <string name="nommerReleve">Donnez un nom à votre relevé : </string>
+    <string name="confirmMessage">Votre relevé va se terminer. Êtes-vous sûr ?</string>
+
+    <!-- Pour le layout qui s'affiche après appui sur bouton recenser -->
+    <string name="layoutTitle">Recensement espèce</string>
+    <string name="hintAutoCompleteLatin">Nom latin</string>
+    <string name="hintAutoCompleteFr">Nom français</string>
+    <string name="saisirTaxon">Veuillez choisir une espèce valide</string>
+
+    <!-- Pour le layout formulaire -->
+    <string name="formTitle">Formulaire recensement</string>
+    <string name="nomLatin">Nom latin : </string>
+    <string name="nomFr">Nom français : </string>
+    <string name="heure">Heure : </string>
+    <string name="date">Date : </string>
+    <string name="nombre">Dénombrement : </string>
+    <!--Flore-->
+    <string name="abondance">Indice d\'abondance : </string>
+    <string-array name="indicesAbondance">
+        <item>0: Non défini</item>
+        <item>1: 1 à 25 pieds</item>
+        <item>2: 26 à 100 pieds</item>
+        <item>3: 101 à 1000 pieds</item>
+        <item>4: 1001 à 10000 pieds</item>
+        <item>5: plus de 10000 pieds</item>
+    </string-array>
+    <string name="incoherentDenombrement">Le dénombrement est incohérent avec l\'indice d\'abondance.</string>
+    <!--Formulaire faune-->
+    <string name="incoherantNbGenre">Le nombre de mâle et de femelle est incohérant</string>
+    <string name="vu">Vu</string>
+    <string name="entendu">Entendu</string>
+    <string name="error_radio_button">Veuillez sélectionner un bouton</string>
+    <string name="error_edit_nombre">0 est une valeur spéciale</string>
+    <string name="ponte">Présence de ponte </string>
+    <string name="male">Mâle</string>
+    <string name="female">Femelle</string>
+    <string name="activite">Activité : </string>
+    <string name="statut">Statut : </string>
+    <string name="nidification">Nidification : </string>
+    <string-array name="activités">
+        <item></item>
+        <item>Accouplement</item>
+        <item>Alimentation</item>
+        <item>Chasse</item>
+        <item>En vol</item>
+        <item>Parade</item>
+        <item>Transport matériaux</item>
+        <item>Poste de chant</item>
+        <item>Ponte</item>
+        <item>Repos</item>
+        <item>Toilette</item>
+        <item>Nourissage</item>
+    </string-array>
+    <string-array name="statuts">
+        <item></item>
+        <item>Nicheur</item>
+        <item>Hivernant</item>
+        <item>Migrateur</item>
+    </string-array>
+    <string-array name="nidification">
+        <item></item>
+        <item>Possible</item>
+        <item>Probable</item>
+        <item>Certaine</item>
+    </string-array>
+    <string name="emptyNidif">Veuillez choisir un statut de nidification</string>
+</resources>

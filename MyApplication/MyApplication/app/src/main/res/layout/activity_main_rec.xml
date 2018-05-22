@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.MapsActivities.MainActivityRec"
+    tools:layout_editor_absoluteY="81dp">
+
+    <org.mapsforge.map.android.view.MapView
+        android:id="@+id/mapViewOSM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:id="@+id/recensementLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:background="@color/colorPrimary">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/layout_margin"
+            android:text="@string/layoutTitle"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF" />
+        <com.example.florian.myapplication.AutoComplete.CustomAutoCompleteView
+            android:id="@+id/autoCompleteEspeceLatin"
+            android:hint="@string/hintAutoCompleteLatin"
+            android:textColorHint="#FFFFFF"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:completionThreshold="3"/>
+        <com.example.florian.myapplication.AutoComplete.CustomAutoCompleteView
+            android:id="@+id/autoCompleteEspeceFr"
+            android:hint="@string/hintAutoCompleteFr"
+            android:textColorHint="#FFFFFF"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:completionThreshold="3"/>
+        <Button
+            android:id="@+id/validerRecensement"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/valider"
+            android:textAllCaps="false"/>
+    </LinearLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/missionLayout"
+        android:layout_width="match_parent"
+        android:layout_height="99dp"
+        android:layout_marginBottom="40dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/mapViewOSM"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/reloc1"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/bouton_reloc"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <Button
+            android:id="@+id/recenser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/recenser"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/fond_bouton_mission"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:padding="5dp"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/fin_mission"
+            android:padding="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/finMission"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/fond_bouton_mission"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </android.support.constraint.ConstraintLayout>
+</android.support.constraint.ConstraintLayout>
