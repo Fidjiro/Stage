@@ -26,6 +26,8 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -74,7 +76,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onClick(View view) {
+    public void onClick(final View view) {
         if (!isConnected()) {
             Snackbar.make(view, "Aucune connexion à internet.", Snackbar.LENGTH_LONG).show();
             return;
@@ -103,12 +105,34 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
                             snackbar.dismiss();
                         }
                     });
+                    String json = "{\"err\":0,\"con\":0,\"titre\":\"Erreur connexion\",\"msg\":\"N'a pas résusi à se connecter\"}";
+                    JSONObject js = parseStringToJson(json);
+                    if(interpreteJson(js)){
+                        System.out.println("Connexion réussi");
+                    }else{
+                        Log.w(js.getString("titre"),js.getString("msg"));
+                    }
                     Log.w("COUCOU", "Fin thread");
                 } catch (IOException e) {
                     e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Snackbar.make(view, "Mauvaise forme de json",Snackbar.LENGTH_LONG).show();
                 }
             }
         }).start();
+    }
+
+    protected boolean interpreteJson(JSONObject json){
+        int err = -1;
+        int con = -1;
+        try {
+            err = json.getInt("err");
+            con = json.getInt("con");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return (err == 0) && (con == 1);
     }
 
     private String generateUrl() {
@@ -125,6 +149,10 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         return networkInfo != null && networkInfo.isConnected();
+    }
+
+    protected JSONObject parseStringToJson(String s) throws JSONException {
+        return new JSONObject(s);
     }
 }
 
