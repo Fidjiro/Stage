@@ -53,4 +53,8 @@ dependencies {
     implementation 'org.mapsforge:mapsforge-poi-awt:master-SNAPSHOT'
     implementation 'org.xerial:sqlite-jdbc:3.20.0'
 
+    implementation 'org.locationtech.jts:jts-core:1.15.0'
+    implementation 'org.locationtech.jts:jts:1.15.0'
+    implementation 'org.locationtech.jts:jts-io:1.15.0'
+    implementation 'org.locationtech.jts:jts-modules:1.15.0'
 }

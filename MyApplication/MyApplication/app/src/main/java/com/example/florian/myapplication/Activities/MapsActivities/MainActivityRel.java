@@ -16,19 +16,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.florian.myapplication.R;
+import com.example.florian.myapplication.Tools.MyPolygon;
 import com.example.florian.myapplication.Tools.Utils;
 
-import org.mapsforge.core.graphics.Canvas;
 import org.mapsforge.core.graphics.Color;
-import org.mapsforge.core.graphics.Paint;
 import org.mapsforge.core.graphics.Style;
-import org.mapsforge.core.model.BoundingBox;
 import org.mapsforge.core.model.LatLong;
-import org.mapsforge.core.model.Point;
 import org.mapsforge.map.android.graphics.AndroidGraphicFactory;
 import org.mapsforge.map.layer.Layer;
 import org.mapsforge.map.layer.overlay.Marker;
-import org.mapsforge.map.layer.overlay.Polygon;
 import org.mapsforge.map.layer.overlay.Polyline;
 
 import java.util.ArrayList;
@@ -52,22 +48,16 @@ public class MainActivityRel extends MainActivity {
     protected Polyline polyline;
     protected List<LatLong> latLongsLine;
     protected double lineLength;
-    protected Polygon polygon;
     protected List<LatLong> latLongsPolygon;
     protected double polygonPerimeter;
-
-    protected Paint paintFill = Utils.createPaint(
-            AndroidGraphicFactory.INSTANCE.createColor(Color.GREEN), 2,
-            Style.FILL);
-    protected Paint paintStroke = Utils.createPaint(
-            AndroidGraphicFactory.INSTANCE.createColor(Color.BLACK), 2,
-            Style.STROKE);
 
     protected int currentReleve;
     protected final int POLYGON = 2;
     protected final int LINE = 1;
     protected final int NO_RELEVE = 0;
     public static final int PAINT_STROKE = AndroidGraphicFactory.INSTANCE.createColor(Color.BLUE);
+
+    protected MyPolygon polygon;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -132,10 +122,16 @@ public class MainActivityRel extends MainActivity {
                 addLayer(marker);
             }
         });
+        /*Coordinate c = new Coordinate(1.83969,50.66759);
+        GeometryFactory geometryFactory = new GeometryFactory();
+        LinearRing linearRing = geometryFactory.createLinearRing(new Coordinate[]{});
+        org.locationtech.jts.geom.Polygon polygonJTS = geometryFactory.createPolygon(linearRing, null);
+        polygonJTS.get*/
     }
 
     /**
      * Vérifie s'il y a un relevé de terrain en cours
+     *
      *
      * @return <code>True</code> si oui, <code>false</code> sinon
      */
@@ -249,12 +245,12 @@ public class MainActivityRel extends MainActivity {
     }
 
     /**
-     * Démarre un relevé de polygonne
+     * Démarre un relevé de polygone
      */
     protected void startPolygon(){
         instantiatePolygon();
         polygon.addPoint(getUsrLatLong());
-        addLayer(polygon);
+        addLayer(polygon.getLayer());
         pointsTaker = new PointsTaker();
         pointsTaker.run();
     }
@@ -264,10 +260,11 @@ public class MainActivityRel extends MainActivity {
     }
 
     /**
-     * Arrête le relevé de polygonne
+     * Arrête le relevé de polygone
      */
     protected void stopPolygon() {
         handler.removeCallbacks(pointsTaker);
+        addLayer(polygon.getLayer());
         polygonPerimeter = getPolygonPerimeter(latLongsPolygon);
         setPerimeterText();
     }
@@ -282,7 +279,7 @@ public class MainActivityRel extends MainActivity {
      * Instantie le polygonne
      */
     protected void instantiatePolygon() {
-        polygon = new Polygon(paintFill, paintStroke, AndroidGraphicFactory.INSTANCE);
+        polygon = new MyPolygon();
         latLongsPolygon = polygon.getLatLongs();
     }
 
