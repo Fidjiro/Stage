@@ -73,8 +73,8 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
+    protected void onResume() {
+        super.onResume();
         showProgress(false);
     }
 
@@ -133,7 +133,7 @@ public class HomeActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(final Boolean success) {
-            showProgress(false);
+
         }
 
         @Override

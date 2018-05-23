@@ -18,10 +18,13 @@ import android.widget.TextView;
 import com.example.florian.myapplication.R;
 import com.example.florian.myapplication.Tools.Utils;
 
+import org.mapsforge.core.graphics.Canvas;
 import org.mapsforge.core.graphics.Color;
 import org.mapsforge.core.graphics.Paint;
 import org.mapsforge.core.graphics.Style;
+import org.mapsforge.core.model.BoundingBox;
 import org.mapsforge.core.model.LatLong;
+import org.mapsforge.core.model.Point;
 import org.mapsforge.map.android.graphics.AndroidGraphicFactory;
 import org.mapsforge.map.layer.Layer;
 import org.mapsforge.map.layer.overlay.Marker;
@@ -92,8 +95,8 @@ public class MainActivityRel extends MainActivity {
             @Override
             public void onClick(View view) {
                 if(noReleveInProgress()) {
-                    startLine();
                     setCurrentReleve(LINE);
+                    startLine();
                     finReleve.setVisibility(View.VISIBLE);
                 }
             }
@@ -103,8 +106,8 @@ public class MainActivityRel extends MainActivity {
             @Override
             public void onClick(View view) {
                 if(noReleveInProgress()) {
-                    startPolygon();
                     setCurrentReleve(POLYGON);
+                    startPolygon();
                     finReleve.setVisibility(View.VISIBLE);
                 }
             }
@@ -138,6 +141,14 @@ public class MainActivityRel extends MainActivity {
      */
     protected boolean noReleveInProgress(){
         return currentReleve == NO_RELEVE;
+    }
+
+    protected boolean currentReleveIsLine() {
+        return currentReleve == LINE;
+    }
+
+    protected boolean currentReleveIsPolygon() {
+        return currentReleve == POLYGON;
     }
 
     /**
@@ -188,9 +199,9 @@ public class MainActivityRel extends MainActivity {
      */
     protected void startLine() {
         instantiatePolyline();
-        latLongsLine.add(getUsrLatLong());
+        polyline.addPoint(getUsrLatLong());
         addLayer(polyline);
-        pointsTaker = new PointsTaker(latLongsLine);
+        pointsTaker = new PointsTaker();
         pointsTaker.run();
     }
 
@@ -198,9 +209,9 @@ public class MainActivityRel extends MainActivity {
      * Stop le relevé en cours d'exécution
      */
     protected void stopReleve(){
-        if(currentReleve == LINE)
+        if(currentReleveIsLine())
             stopLine();
-        else if(currentReleve == POLYGON)
+        else if(currentReleveIsPolygon())
             stopPolygon();
         nomReleve.setText("");
         nomReleveForm.setVisibility(View.VISIBLE);
@@ -242,7 +253,9 @@ public class MainActivityRel extends MainActivity {
      */
     protected void startPolygon(){
         instantiatePolygon();
-        pointsTaker = new PointsTaker(latLongsPolygon);
+        polygon.addPoint(getUsrLatLong());
+        addLayer(polygon);
+        pointsTaker = new PointsTaker();
         pointsTaker.run();
     }
 
@@ -255,7 +268,6 @@ public class MainActivityRel extends MainActivity {
      */
     protected void stopPolygon() {
         handler.removeCallbacks(pointsTaker);
-        addLayer(polygon);
         polygonPerimeter = getPolygonPerimeter(latLongsPolygon);
         setPerimeterText();
     }
@@ -279,22 +291,32 @@ public class MainActivityRel extends MainActivity {
      */
     protected class PointsTaker implements Runnable{
 
-        protected List<LatLong> latLongsList;
         /**
          * Délai entre chaque relevé de point en ms
          */
         protected static final int DELAY = 5000;
 
-        public PointsTaker(List<LatLong> l){
-            super();
-            latLongsList = l;
-        }
-
         @Override
         public void run() {
-            latLongsList.add(getUsrLatLong());
-            polyline.requestRedraw();
+            addPointToGoodLayer();
+            callGoodRedraw();
             handler.postDelayed(this,DELAY);
+        }
+
+        protected void addPointToGoodLayer(){
+            if(currentReleveIsLine()){
+                polyline.addPoint(getUsrLatLong());
+            } else if(currentReleveIsPolygon()){
+                polygon.addPoint(getUsrLatLong());
+            }
+        }
+
+        protected void callGoodRedraw(){
+            if(currentReleve == LINE){
+                polyline.requestRedraw();
+            } else if(currentReleve == POLYGON){
+                polygon.requestRedraw();
+            }
         }
 
     }
