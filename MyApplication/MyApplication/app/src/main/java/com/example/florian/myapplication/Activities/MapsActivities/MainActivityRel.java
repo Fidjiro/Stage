@@ -188,6 +188,8 @@ public class MainActivityRel extends MainActivity {
      */
     protected void startLine() {
         instantiatePolyline();
+        latLongsLine.add(getUsrLatLong());
+        addLayer(polyline);
         pointsTaker = new PointsTaker(latLongsLine);
         pointsTaker.run();
     }
@@ -209,7 +211,6 @@ public class MainActivityRel extends MainActivity {
      */
     protected void stopLine() {
         handler.removeCallbacks(pointsTaker);
-        addLayer(polyline);
         lineLength = polylineLengthInMeters(latLongsLine);
         setLineLengthText();
     }
@@ -279,6 +280,9 @@ public class MainActivityRel extends MainActivity {
     protected class PointsTaker implements Runnable{
 
         protected List<LatLong> latLongsList;
+        /**
+         * Délai entre chaque relevé de point en ms
+         */
         protected static final int DELAY = 5000;
 
         public PointsTaker(List<LatLong> l){
@@ -289,6 +293,7 @@ public class MainActivityRel extends MainActivity {
         @Override
         public void run() {
             latLongsList.add(getUsrLatLong());
+            polyline.requestRedraw();
             handler.postDelayed(this,DELAY);
         }
 
@@ -314,7 +319,7 @@ public class MainActivityRel extends MainActivity {
     /**
      * Ajoute le layer l à la carte
      *
-     * @param l le layer à ajotuer
+     * @param l le layer à ajouter
      */
     protected void addLayer(Layer l){
         myMap.getLayers().add(l);
