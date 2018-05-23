@@ -84,10 +84,10 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
                             snackbar.dismiss();
                         }
                     });
-                    String jsonErr = "{\"err\":0,\"con\":0,\"titre\":\"Erreur connexion\",\"msg\":\"N'a pas résusi à se connecter\"}";
+                    String jsonErr = "{\"err\":0,\"con\":0,\"titre\":\"Erreur connexion\",\"msg\":\"N'a pas réussi à se connecter\"}";
                     String jsonWin = "{\"err\":0,\"con\":1}";
                     String jsonDeco = "{\"err\":0}";
-                    JSONObject js = parseStringToJson(jsonDeco);
+                    JSONObject js = parseStringToJsonObject(jsonDeco);
                     interpreteConnexionByJson(js);
                     Log.w("COUCOU", "Fin thread");
                 } catch (IOException e) {
@@ -141,7 +141,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         return networkInfo != null && networkInfo.isConnected();
     }
 
-    protected JSONObject parseStringToJson(String s) throws JSONException {
+    protected JSONObject parseStringToJsonObject(String s) throws JSONException {
         return new JSONObject(s);
     }
 }
