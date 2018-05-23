@@ -31,6 +31,8 @@
 
     <!--Strings pour la MainActivityRel-->
     <string name="nommerReleve">Donnez un nom à votre relevé : </string>
+    <string name="longueur">Longueur de la ligne : </string>
+    <string name="perimetre">Périmètre du polygone : </string>
     <string name="confirmMessage">Votre relevé va se terminer. Êtes-vous sûr ?</string>
 
     <!-- Pour le layout qui s'affiche après appui sur bouton recenser -->

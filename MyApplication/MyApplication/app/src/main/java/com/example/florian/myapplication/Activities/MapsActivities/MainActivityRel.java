@@ -7,13 +7,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.florian.myapplication.R;
 import com.example.florian.myapplication.Tools.Utils;
@@ -39,6 +39,7 @@ public class MainActivityRel extends MainActivity {
 
     protected ImageButton lineButton, polygonButton, pointButton;
     protected EditText nomReleve;
+    protected TextView lineLength_perimeterText;
     protected LinearLayout nomReleveForm;
     protected Button validNom, finReleve;
 
@@ -78,6 +79,7 @@ public class MainActivityRel extends MainActivity {
         nomReleveForm = (LinearLayout) findViewById(R.id.nomReleveLayout);
         validNom = (Button) findViewById(R.id.validerNom);
         finReleve = (Button) findViewById(R.id.finReleve);
+        lineLength_perimeterText = (TextView) findViewById(R.id.lineLength_perimeter);
 
         View.OnClickListener stopListener = new View.OnClickListener() {
             @Override
@@ -209,7 +211,11 @@ public class MainActivityRel extends MainActivity {
         handler.removeCallbacks(pointsTaker);
         addLayer(polyline);
         lineLength = polylineLengthInMeters(latLongsLine);
-        Log.w("longueur",lineLength + "");
+        setLineLengthText();
+    }
+
+    protected void setLineLengthText(){
+        lineLength_perimeterText.setText(getString(R.string.longueur) + lineLength);
     }
 
     protected double polylineLengthInMeters(List<LatLong> polyline){
@@ -239,6 +245,10 @@ public class MainActivityRel extends MainActivity {
         pointsTaker.run();
     }
 
+    protected void setPerimeterText(){
+        lineLength_perimeterText.setText(getString(R.string.perimetre) + polygonPerimeter);
+    }
+
     /**
      * Arrête le relevé de polygonne
      */
@@ -246,6 +256,7 @@ public class MainActivityRel extends MainActivity {
         handler.removeCallbacks(pointsTaker);
         addLayer(polygon);
         polygonPerimeter = getPolygonPerimeter(latLongsPolygon);
+        setPerimeterText();
     }
 
     private double getPolygonPerimeter(List<LatLong> list){
