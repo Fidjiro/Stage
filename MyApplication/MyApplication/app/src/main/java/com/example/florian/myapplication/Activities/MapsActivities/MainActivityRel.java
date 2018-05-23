@@ -16,16 +16,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.florian.myapplication.R;
-import com.example.florian.myapplication.Tools.MyPolygon;
 import com.example.florian.myapplication.Tools.Utils;
 
 import org.mapsforge.core.graphics.Color;
+import org.mapsforge.core.graphics.Paint;
 import org.mapsforge.core.graphics.Style;
 import org.mapsforge.core.model.LatLong;
 import org.mapsforge.map.android.graphics.AndroidGraphicFactory;
 import org.mapsforge.map.layer.Layer;
 import org.mapsforge.map.layer.overlay.Marker;
 import org.mapsforge.map.layer.overlay.Polyline;
+import org.mapsforge.map.layer.overlay.Polygon;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,14 +51,21 @@ public class MainActivityRel extends MainActivity {
     protected double lineLength;
     protected List<LatLong> latLongsPolygon;
     protected double polygonPerimeter;
+    protected Polygon polygon;
 
     protected int currentReleve;
     protected final int POLYGON = 2;
     protected final int LINE = 1;
     protected final int NO_RELEVE = 0;
+
+    protected Paint paintFill = Utils.createPaint(
+            AndroidGraphicFactory.INSTANCE.createColor(Color.GREEN), 2,
+            Style.FILL);
+    protected Paint paintStroke = Utils.createPaint(
+            AndroidGraphicFactory.INSTANCE.createColor(Color.BLACK), 2,
+            Style.STROKE);
     public static final int PAINT_STROKE = AndroidGraphicFactory.INSTANCE.createColor(Color.BLUE);
 
-    protected MyPolygon polygon;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -250,7 +258,7 @@ public class MainActivityRel extends MainActivity {
     protected void startPolygon(){
         instantiatePolygon();
         polygon.addPoint(getUsrLatLong());
-        addLayer(polygon.getLayer());
+        addLayer(polygon);
         pointsTaker = new PointsTaker();
         pointsTaker.run();
     }
@@ -264,7 +272,7 @@ public class MainActivityRel extends MainActivity {
      */
     protected void stopPolygon() {
         handler.removeCallbacks(pointsTaker);
-        addLayer(polygon.getLayer());
+        addLayer(polygon);
         polygonPerimeter = getPolygonPerimeter(latLongsPolygon);
         setPerimeterText();
     }
@@ -279,7 +287,7 @@ public class MainActivityRel extends MainActivity {
      * Instantie le polygonne
      */
     protected void instantiatePolygon() {
-        polygon = new MyPolygon();
+        polygon = new Polygon(paintFill, paintStroke, AndroidGraphicFactory.INSTANCE);;
         latLongsPolygon = polygon.getLatLongs();
     }
 
