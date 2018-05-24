@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
@@ -18,6 +19,8 @@ import android.widget.QuickContactBadge;
 import android.widget.TextView;
 
 import com.example.florian.myapplication.Activities.MapsActivities.MainActivity;
+import com.example.florian.myapplication.Database.ReleveDatabase.HistoryDao;
+import com.example.florian.myapplication.Database.ReleveDatabase.Releve;
 import com.example.florian.myapplication.R;
 import com.example.florian.myapplication.Tools.Utils;
 
@@ -40,11 +43,15 @@ import java.util.ListIterator;
  */
 public class MainActivityRel extends MainActivity {
 
+    protected HistoryDao dao;
+
     protected ImageButton lineButton, polygonButton, pointButton;
     protected EditText nomReleve;
     protected TextView lineLength_perimeterText;
     protected LinearLayout nomReleveForm;
     protected Button validNom, finReleve, mesReleve;
+
+    protected String currentName;
 
     protected Handler handler;
     protected Runnable pointsTaker;
@@ -75,6 +82,9 @@ public class MainActivityRel extends MainActivity {
         super.onCreate(savedInstanceState);
 
         handler = new Handler();
+
+        dao = new HistoryDao(this);
+        dao.open();
 
         lineButton = (ImageButton) findViewById(R.id.bouton_releve_ligne);
         polygonButton = (ImageButton) findViewById(R.id.bouton_releve_polygone);
@@ -126,6 +136,7 @@ public class MainActivityRel extends MainActivity {
         validNom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                currentName = nomReleve.getText().toString();
                 nomReleveForm.setVisibility(View.INVISIBLE);
                 final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(nomReleve.getWindowToken(),0);
@@ -142,11 +153,12 @@ public class MainActivityRel extends MainActivity {
                 addLayer(marker);
             }
         });
-        /*Coordinate c = new Coordinate(1.83969,50.66759);
-        GeometryFactory geometryFactory = new GeometryFactory();
-        LinearRing linearRing = geometryFactory.createLinearRing(new Coordinate[]{});
-        org.locationtech.jts.geom.Polygon polygonJTS = geometryFactory.createPolygon(linearRing, null);
-        polygonJTS.get*/
+    }
+
+    private Releve createReleveToInsert(){
+        SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        long creatorId = loginPreferences.getLong("usrId",0);
+        return new Releve(creatorId,currentName,getCurrentReleveType(),Utils.getDate(),Utils.getTime());
     }
 
     /**
@@ -165,6 +177,14 @@ public class MainActivityRel extends MainActivity {
 
     protected boolean currentReleveIsPolygon() {
         return currentReleve == POLYGON;
+    }
+
+    protected String getCurrentReleveType(){
+        if(currentReleveIsLine()){
+            return getString(R.string.line);
+        } else if(currentReleveIsPolygon()){
+            return getString(R.string.polygon);
+        } return getString(R.string.point);
     }
 
     /**
@@ -225,6 +245,8 @@ public class MainActivityRel extends MainActivity {
      * Stop le relevé en cours d'exécution
      */
     protected void stopReleve(){
+        Releve rel = createReleveToInsert();
+        dao.insertInventaire(rel);
         if(currentReleveIsLine())
             stopLine();
         else if(currentReleveIsPolygon())
@@ -371,5 +393,11 @@ public class MainActivityRel extends MainActivity {
      */
     public void setCurrentReleve(int currentReleve) {
         this.currentReleve = currentReleve;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dao.close();
     }
 }

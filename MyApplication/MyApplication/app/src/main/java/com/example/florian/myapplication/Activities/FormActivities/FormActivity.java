@@ -19,6 +19,7 @@ import com.example.florian.myapplication.Database.CampagneDatabase.CampagneDAO;
 import com.example.florian.myapplication.Database.CampagneDatabase.Inventaire;
 import com.example.florian.myapplication.Database.LoadingDatabase.TaxUsrDAO;
 import com.example.florian.myapplication.R;
+import com.example.florian.myapplication.Tools.Utils;
 
 import java.util.Calendar;
 
@@ -204,36 +205,10 @@ public abstract class FormActivity extends AppCompatActivity {
         Intent intent = getIntent();
         lat = intent.getDoubleExtra("latitude",0.0);
         lon = intent.getDoubleExtra("longitude",0.0);
-        dat = getDate();
+        dat = Utils.getDate();
         nomfr.setText(intent.getStringExtra("nomfr"));
         nomlatin.setText(intent.getStringExtra("nomlatin"));
         date.setText(dat);
-    }
-
-    /**
-     * Récupère la date du jour du système
-     * @return La date au format JJ/MM/AAAA
-     */
-    protected String getDate(){
-        Calendar c = Calendar.getInstance();
-        int day = c.get(Calendar.DAY_OF_MONTH);
-        // On réalise un +1 car Janvier est considéré comme 0
-        int month = c.get(Calendar.MONTH) + 1;
-        int year = c.get(Calendar.YEAR);
-        c.get(Calendar.HOUR_OF_DAY);
-
-        return formatInt(day) + "/" + formatInt(month) + "/" + year;
-    }
-
-    /**
-     * Formate un chiffre en format c en format 0c (ex: 1 sera transformé en 01)
-     * @param i L'entier à transformer
-     * @return L'entier formaté
-     */
-    protected String formatInt(int i){
-        if(i < 10)
-            return "0" + i;
-        return "" + i;
     }
 
     /**

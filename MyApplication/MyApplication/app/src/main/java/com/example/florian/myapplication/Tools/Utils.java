@@ -37,11 +37,15 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Calendar;
 
 /**
  * Méthodes utilitaire qui peuvent être utilisées dans l'application
  */
 public final class Utils {
+
+    public static Calendar c = Calendar.getInstance();
+
     /**
      * Compatibility method.
      *
@@ -143,6 +147,35 @@ public final class Utils {
             throw new IOException("Could not open "+aFileName, e);
         }
         return cacheFile;
+    }
+
+    /**
+     * Récupère la date du jour du système
+     * @return La date au format JJ/MM/AAAA
+     */
+    public static String getDate(){
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        // On réalise un +1 car Janvier est considéré comme 0
+        int month = c.get(Calendar.MONTH) + 1;
+        int year = c.get(Calendar.YEAR);
+        c.get(Calendar.HOUR_OF_DAY);
+
+        return formatInt(day) + "/" + formatInt(month) + "/" + year;
+    }
+
+    public static String getTime(){
+        return c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE);
+    }
+
+    /**
+     * Formate un chiffre en format c en format 0c (ex: 1 sera transformé en 01)
+     * @param i L'entier à transformer
+     * @return L'entier formaté
+     */
+    public static String formatInt(int i){
+        if(i < 10)
+            return "0" + i;
+        return "" + i;
     }
 
     private Utils() {

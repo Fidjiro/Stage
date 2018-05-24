@@ -8,6 +8,14 @@ public class Releve {
     private String date;
     private String heure;
 
+    public Releve(long creator, String nom, String type, String date, String heure) {
+        this.creator = creator;
+        this.nom = nom;
+        this.type = type;
+        this.date = date;
+        this.heure = heure;
+    }
+
     public long get_id() {
         return _id;
     }
