@@ -6,6 +6,6 @@ Dépôt de mon projet de stage
 
 https://www.overleaf.com/16382407qyykymyjfcfp
 
-#Soutenance
+# Soutenance
 
 Le 25 Juin de 9h45 à 10h30 en A2
