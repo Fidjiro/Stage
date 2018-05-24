@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.QuickContactBadge;
 import android.widget.TextView;
 
 import com.example.florian.myapplication.Activities.MapsActivities.MainActivity;
@@ -89,7 +88,7 @@ public class MainActivityRel extends MainActivity {
         lineButton = (ImageButton) findViewById(R.id.bouton_releve_ligne);
         polygonButton = (ImageButton) findViewById(R.id.bouton_releve_polygone);
         pointButton = (ImageButton) findViewById(R.id.bouton_releve_point);
-        nomReleve = (EditText) findViewById(R.id.nomReleve);
+        nomReleve = (EditText) findViewById(R.id.nomRel);
         nomReleveForm = (LinearLayout) findViewById(R.id.nomReleveLayout);
         validNom = (Button) findViewById(R.id.validerNom);
         finReleve = (Button) findViewById(R.id.finReleve);
@@ -306,7 +305,6 @@ public class MainActivityRel extends MainActivity {
      */
     protected void stopPolygon() {
         handler.removeCallbacks(pointsTaker);
-        addLayer(polygon);
         polygonPerimeter = getPolygonPerimeter(latLongsPolygon);
         setPerimeterText();
     }

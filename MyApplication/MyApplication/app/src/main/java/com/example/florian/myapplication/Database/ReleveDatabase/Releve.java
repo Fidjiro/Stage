@@ -16,6 +16,11 @@ public class Releve {
         this.heure = heure;
     }
 
+    public Releve(long _id, long creator, String nom, String type, String date, String heure) {
+        this(creator,nom,type,date,heure);
+        this._id = _id;
+    }
+
     public long get_id() {
         return _id;
     }

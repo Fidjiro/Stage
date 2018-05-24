@@ -2,15 +2,19 @@ package com.example.florian.myapplication.Database.ReleveDatabase;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.florian.myapplication.Database.CampagneDatabase.Inventaire;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HistoryDao {
 
     protected final static int VERSION = 1;
     // Le nom du fichier qui représente ma base
-    protected final static String NAME = "database2.db";
+    protected final static String NAME = "database3.db";
 
     protected SQLiteDatabase mDb;
     protected HistoryDatabaseHandler mHandler;
@@ -55,13 +59,40 @@ public class HistoryDao {
 
     private ContentValues getCvFrom(Releve rel){
         ContentValues cv = new ContentValues();
-        cv.put(KEY,rel.get_id());
         cv.put(CREATOR,rel.getCreator());
         cv.put(NOM,rel.getNom());
         cv.put(TYPE,rel.getType());
         cv.put(DATE,rel.getDate());
         cv.put(TIME,rel.getHeure());
         return cv;
+    }
+
+    public List<Releve> getReleveOfTheUsr(long creatorId){
+        String request = "SELECT * FROM " + TABLE_NAME + " WHERE " + CREATOR + " = ?;";
+        Cursor c = mDb.rawQuery(request,new String[]{creatorId +""});
+        return dealWithCursor(c);
+    }
+
+    protected List<Releve> dealWithCursor(Cursor c){
+        List<Releve> res = new ArrayList<>();
+
+        if(c.moveToFirst()){
+            do {
+                long _id = c.getLong(c.getColumnIndex(KEY));
+                long creator = c.getLong(c.getColumnIndex(CREATOR));
+                String nom = c.getString(c.getColumnIndex(NOM));
+                String type = c.getString(c.getColumnIndex(TYPE));
+                String date = c.getString(c.getColumnIndex(DATE));
+                String heure = c.getString(c.getColumnIndex(TIME));
+
+                Releve rel = new Releve(_id,creator,nom,type,date,heure);
+
+                res.add(rel);
+            } while(c.moveToNext());
+        }
+
+        c.close();
+        return res;
     }
 
 }

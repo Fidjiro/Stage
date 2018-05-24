@@ -14,7 +14,7 @@ public class HistoryDatabaseHandler extends SQLiteOpenHelper {
     public static final String HISTORY_DATE = "date";
     public static final String HISTORY_TIME = "heure";
     public static final String HISTORY_TABLE_CREATE = "CREATE TABLE " + HISTORY_TABLE_NAME + " (" +
-            HISTORY_KEY + "INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            HISTORY_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             HISTORY_CREATOR + " INTEGER NOT NULL, " +
             HISTORY_NOM + " TEXT, " +
             HISTORY_TYPE + " TEXT NOT NULL, " +

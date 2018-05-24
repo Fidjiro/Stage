@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="4">
 
     <TextView
-        android:id="@+id/textViewCol1"
+        android:id="@+id/nomRel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Large Text"
@@ -16,7 +17,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView
-        android:id="@+id/textViewCol2"
+        android:id="@+id/typeReleve"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Large Text"
@@ -25,7 +26,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView
-        android:id="@+id/textViewCol3"
+        android:id="@+id/dateReleve"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Large Text"
@@ -34,7 +35,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView
-        android:id="@+id/textViewCol4"
+        android:id="@+id/heureReleve"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Large Text"
