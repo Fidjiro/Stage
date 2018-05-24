@@ -1,8 +1,9 @@
-package com.example.florian.myapplication.Activities.MapsActivities;
+package com.example.florian.myapplication.Activities.MapsActivities.Releve;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
@@ -13,8 +14,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.QuickContactBadge;
 import android.widget.TextView;
 
+import com.example.florian.myapplication.Activities.MapsActivities.MainActivity;
 import com.example.florian.myapplication.R;
 import com.example.florian.myapplication.Tools.Utils;
 
@@ -41,7 +44,7 @@ public class MainActivityRel extends MainActivity {
     protected EditText nomReleve;
     protected TextView lineLength_perimeterText;
     protected LinearLayout nomReleveForm;
-    protected Button validNom, finReleve;
+    protected Button validNom, finReleve, mesReleve;
 
     protected Handler handler;
     protected Runnable pointsTaker;
@@ -80,7 +83,16 @@ public class MainActivityRel extends MainActivity {
         nomReleveForm = (LinearLayout) findViewById(R.id.nomReleveLayout);
         validNom = (Button) findViewById(R.id.validerNom);
         finReleve = (Button) findViewById(R.id.finReleve);
+        mesReleve = (Button) findViewById(R.id.mesReleves);
         lineLength_perimeterText = (TextView) findViewById(R.id.lineLength_perimeter);
+
+        mesReleve.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivityRel.this,HistoryActivity.class);
+                startActivity(intent);
+            }
+        });
 
         View.OnClickListener stopListener = new View.OnClickListener() {
             @Override

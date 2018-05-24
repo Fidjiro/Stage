@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.LinearLayout;
 
+import com.example.florian.myapplication.Activities.MapsActivities.Releve.MainActivityRel;
 import com.example.florian.myapplication.Database.LoadingDatabase.TaxUsrDAO;
 import com.example.florian.myapplication.R;
 import com.example.florian.myapplication.Tools.MyMapView;

@@ -99,4 +99,7 @@
         <item>Certaine</item>
     </string-array>
     <string name="emptyNidif">Veuillez choisir un statut de nidification</string>
+
+    <!--Strings pour l'historique des relevés-->
+    <string name="titleHistory">Historique des relevés</string>
 </resources>

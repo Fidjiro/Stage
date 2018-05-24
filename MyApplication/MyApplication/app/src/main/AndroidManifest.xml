@@ -22,13 +22,13 @@
         <activity
             android:name=".Activities.MapsActivities.MainActivityRec"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Activities.MapsActivities.MainActivityRel"
+            android:name=".Activities.MapsActivities.Releve.MainActivityRel"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activities.LoginActivity"
             android:label="@string/app_name"
@@ -45,10 +45,10 @@
         <activity android:name=".Activities.TestActivity" />
         <activity android:name=".Activities.Sync.HttpActivity" />
         <activity android:name=".Activities.FormActivities.Faune.FauneActivity" />
-        <activity android:name=".Activities.FormActivities.Flore.FloreActivity"/>
-        <activity android:name=".Activities.FormActivities.Faune.AmphibienActivity"/>
-        <activity android:name=".Activities.FormActivities.Faune.OiseauxActivity"/>
-
+        <activity android:name=".Activities.FormActivities.Flore.FloreActivity" />
+        <activity android:name=".Activities.FormActivities.Faune.AmphibienActivity" />
+        <activity android:name=".Activities.FormActivities.Faune.OiseauxActivity" />
+        <activity android:name=".Activities.MapsActivities.Releve.HistoryActivity"></activity>
     </application>
 
 </manifest>
