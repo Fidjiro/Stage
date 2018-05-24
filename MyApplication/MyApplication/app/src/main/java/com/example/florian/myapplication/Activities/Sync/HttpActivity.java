@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.florian.myapplication.Database.CampagneDatabase.CampagneDAO;
+import com.example.florian.myapplication.Database.CampagneDatabase.Inventaire;
 import com.example.florian.myapplication.R;
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
@@ -45,15 +47,27 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
     private OkHttpClient client;
     private String username;
     private String password;
-    static final String URL = "http://vps122669.ovh.net:8080/connexion.php";///&log=%s&mdp=%s";
+    static final String URL = "http://vps122669.ovh.net:8080/connexion.php";
+
+    private CampagneDAO dao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_http);
+
+        dao = new CampagneDAO(this);
+        dao.open();
+
         cookieJar = new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(this));
         client = new OkHttpClient.Builder().cookieJar(cookieJar).build();
+
         makeView();
+
+        SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        username = loginPreferences.getString("username","");
+        password = loginPreferences.getString("password","");
+
         snackbar = Snackbar.make(txtJson, "Requête en cours d'exécution",
                 Snackbar.LENGTH_INDEFINITE);
     }
@@ -72,9 +86,12 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         }
         snackbar.show();
 
-        RequestBody requestBody = new FormBody.Builder().add("log","rv").add("mdp","rv!9#").build();
-        final Request request = new Request.Builder().url(generateUrl()).post(requestBody).build();
+        System.out.println("Log: " + username + ", mdp: " + password);
+        RequestBody requestBody = new FormBody.Builder().add("log",username).add("mdp",password).build();
+        final Request request = new Request.Builder().url(URL).post(requestBody).build();
         Log.e("Requête",request.toString());
+
+
 
         new Thread(new Runnable() {
             @Override
@@ -109,6 +126,27 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         }).start();
     }
 
+    private RequestBody createRequestBodyToSend(){
+        Inventaire inv = dao.getInventaire();
+        RequestBody requestBody = new FormBody.Builder().add("ref_taxon",inv.getRef_taxon() + "").
+                                                        add("ref_user",inv.getUser() + "").
+                                                        add("typeTaxon",inv.getTypeTaxon() + "").
+                                                        add("latitude",inv.getLatitude() + "").
+                                                        add("longitude",inv.getLongitude() + "").
+                                                        add("date",inv.getDate()).
+                                                        add("nombre",inv.getNombre() + "").
+                                                        add("type_obs",inv.getType_obs()).
+                                                        add("nbMale",inv.getNbMale() + "").
+                                                        add("nbFemale",inv.getNbFemale() + "").
+                                                        add("presencePonte",inv.getPresencePonte()).
+                                                        add("activite",inv.getActivite()).
+                                                        add("statut",inv.getStatut()).
+                                                        add("nidif",inv.getNidif()).
+                                                        add("indice_abondance",inv.getIndiceAbondance() + "").
+                                                        build();
+        return requestBody;
+    }
+
     protected void interpreteConnexionByJson(JSONObject json){
         int err = -1;
         int con = -1;
@@ -127,19 +165,25 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
                 Log.w(titre,msg);
             }else if(con == 1){
                 Log.w("Connexion","Connexion réussi");
+                RequestBody requestBody = createRequestBodyToSend();
+                final Request request = new Request.Builder().url(URL).post(requestBody).build();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Response response = client.newCall(request).execute();
+                            if (!response.isSuccessful()) {
+                                throw new IOException(response.toString());
+                            }
+                        }catch(IOException e){
+                            e.printStackTrace();
+                        }
+                    }
+                });
             }else {
                 Log.w("Déconnexion", "Se déconnecte");
             }
         }
-    }
-
-    private String generateUrl() {
-        SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
-        username = loginPreferences.getString("username","");
-        password = loginPreferences.getString("password","");
-        String toto = String.format(URL,username,password);
-        Log.w("url",toto);
-        return toto;
     }
 
     private boolean isConnected() {
@@ -151,5 +195,11 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
 
     protected JSONObject parseStringToJsonObject(String s) throws JSONException {
         return new JSONObject(s);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dao.close();
     }
 }

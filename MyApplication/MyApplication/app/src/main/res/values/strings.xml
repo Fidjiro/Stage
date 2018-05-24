@@ -34,6 +34,7 @@
     <string name="longueur">Longueur de la ligne : </string>
     <string name="perimetre">Périmètre du polygone : </string>
     <string name="confirmMessage">Votre relevé va se terminer. Êtes-vous sûr ?</string>
+    <string name="mesReleves">Mes relevés</string>
 
     <!-- Pour le layout qui s'affiche après appui sur bouton recenser -->
     <string name="layoutTitle">Recensement espèce</string>

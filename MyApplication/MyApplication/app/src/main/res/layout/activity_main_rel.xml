@@ -12,6 +12,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
+    <Button
+        android:id="@+id/mesReleves"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:drawableTop="@drawable/jumelles"
+        android:layout_margin="@dimen/formLayoutsMargin"
+        android:text="@string/mesReleves"
+        android:textAllCaps="false" />
+
     <android.support.constraint.ConstraintLayout
         android:id="@+id/releveLayout"
         android:layout_width="match_parent"
