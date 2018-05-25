@@ -39,7 +39,7 @@ public class TestActivity extends AppCompatActivity {
 
         dao = new CampagneDAO(this);
         dao.open();
-        Inventaire inv = dao.getInventaireOfTheUsr();
+        Inventaire inv = dao.getInventaireOfTheUsr(0);
 
         ref_taxon.setText(ref_taxon.getText() + "" + inv.getRef_taxon());
         latitude.setText(latitude.getText() + "" + inv.getLatitude());

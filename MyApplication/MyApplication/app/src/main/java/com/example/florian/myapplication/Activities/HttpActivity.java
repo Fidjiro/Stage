@@ -1,4 +1,4 @@
-package com.example.florian.myapplication.Activities.Sync;
+package com.example.florian.myapplication.Activities;
 
 import android.content.Context;
 import android.content.SharedPreferences;

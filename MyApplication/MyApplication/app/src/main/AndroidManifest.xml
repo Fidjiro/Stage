@@ -43,7 +43,7 @@
             android:name=".Activities.HomeActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".Activities.TestActivity" />
-        <activity android:name=".Activities.Sync.HttpActivity" />
+        <activity android:name=".Activities.HttpActivity" />
         <activity android:name=".Activities.FormActivities.Faune.FauneActivity" />
         <activity android:name=".Activities.FormActivities.Flore.FloreActivity" />
         <activity android:name=".Activities.FormActivities.Faune.AmphibienActivity" />
