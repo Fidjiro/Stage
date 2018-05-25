@@ -251,7 +251,15 @@ public class MainActivityRel extends MainActivity {
         pointsTaker.run();
     }
 
+    private void makePositionsTextVisible(){
+        lineLengthText.setVisibility(View.GONE);
+        perimeterText.setVisibility(View.GONE);
+        positionL93Text.setVisibility(View.VISIBLE);
+        positionWGSText.setVisibility(View.VISIBLE);
+    }
+
     protected void stopPoint(){
+        makePositionsTextVisible();
         setPositionText();
     }
 
@@ -276,12 +284,20 @@ public class MainActivityRel extends MainActivity {
         nomReleveForm.setVisibility(View.VISIBLE);
     }
 
+    private void makeLineLengthTextVisible(){
+        lineLengthText.setVisibility(View.VISIBLE);
+        perimeterText.setVisibility(View.GONE);
+        positionL93Text.setVisibility(View.GONE);
+        positionWGSText.setVisibility(View.GONE);
+    }
+
     /**
      * Stop le relevé de ligne
      */
     protected void stopLine() {
         handler.removeCallbacks(pointsTaker);
         lineLength = polylineLengthInMeters(latLongsLine);
+        makeLineLengthTextVisible();
         setLineLengthText();
     }
 
@@ -318,6 +334,13 @@ public class MainActivityRel extends MainActivity {
         pointsTaker.run();
     }
 
+    private void makePerimeterTextVisible(){
+        lineLengthText.setVisibility(View.GONE);
+        perimeterText.setVisibility(View.VISIBLE);
+        positionL93Text.setVisibility(View.GONE);
+        positionWGSText.setVisibility(View.GONE);
+    }
+
     protected void setPerimeterText(){
         perimeterText.setText(getString(R.string.perimetre) + polygonPerimeter);
     }
@@ -328,6 +351,7 @@ public class MainActivityRel extends MainActivity {
     protected void stopPolygon() {
         handler.removeCallbacks(pointsTaker);
         polygonPerimeter = getPolygonPerimeter(latLongsPolygon);
+        makePerimeterTextVisible();
         setPerimeterText();
     }
 
