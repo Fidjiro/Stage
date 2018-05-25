@@ -1,5 +1,6 @@
 package com.example.florian.myapplication.Activities;
 
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -39,9 +40,11 @@ public class TestActivity extends AppCompatActivity {
 
         dao = new CampagneDAO(this);
         dao.open();
-        Inventaire inv = dao.getInventaireOfTheUsr(0);
+        SharedPreferences loginPreferences = getSharedPreferences("loginPrefs",MODE_PRIVATE);
+        long usrId = loginPreferences.getLong("usrId",1);
+        Inventaire inv = dao.getInventaireOfTheUsr(usrId);
 
-        ref_taxon.setText(ref_taxon.getText() + "" + inv.getRef_taxon());
+        ref_taxon.setText(ref_taxon.getText() + "" + inv.getRef_taxon() + ", _id :" + inv.get_id());
         latitude.setText(latitude.getText() + "" + inv.getLatitude());
         longitude.setText(longitude.getText() + "" + inv.getLongitude());
         date.setText(date.getText() + inv.getDate());

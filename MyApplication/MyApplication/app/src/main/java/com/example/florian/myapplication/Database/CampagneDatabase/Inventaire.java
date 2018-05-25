@@ -46,7 +46,8 @@ public class Inventaire {
      * @param nidif
      * @param indiceAbondance
      */
-    public Inventaire(long ref_taxon, long user, int typeTaxon, double latitude, double longitude, String date, int nombre, String type_obs, int nbMale, int nbFemale, String presencePonte, String activite, String statut, String nidif, int indiceAbondance) {
+    public Inventaire(long _id,long ref_taxon, long user, int typeTaxon, double latitude, double longitude, String date, int nombre, String type_obs, int nbMale, int nbFemale, String presencePonte, String activite, String statut, String nidif, int indiceAbondance) {
+        this._id = _id;
         this.ref_taxon = ref_taxon;
         this.user = user;
         this.typeTaxon = typeTaxon;
@@ -57,9 +58,17 @@ public class Inventaire {
         this.type_obs = type_obs;
         this.nbMale = nbMale;
         this.nbFemale = nbFemale;
+        if(presencePonte == null)
+            presencePonte = "false";
         this.presencePonte = presencePonte;
+        if(activite == null)
+            activite = "";
         this.activite = activite;
+        if(statut == null)
+            statut = "";
         this.statut = statut;
+        if(nidif == null)
+            nidif = "";
         this.nidif = nidif;
         this.indiceAbondance = indiceAbondance;
     }
@@ -83,6 +92,10 @@ public class Inventaire {
         this.type_obs = type_obs;
         this.user = user;
         this.nombre = nombre;
+        this.presencePonte = "false";
+        this.activite = "";
+        this.statut = "";
+        this.nidif = "";
     }
 
     /**

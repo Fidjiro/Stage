@@ -4,12 +4,15 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.florian.myapplication.Database.CampagneDatabase.CampagneDAO;
@@ -36,15 +39,18 @@ import okhttp3.Response;
  */
 public class HttpActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button btnHit;
+    LinearLayout psswLayout;
+    Button launchSync,validPssw;
     TextView txtJson;
+    EditText psswText;
     private Snackbar snackbar;
 
     private CookieJar cookieJar;
     private OkHttpClient client;
     private String username;
     private long usrId;
-    static final String URL = "http://vps122669.ovh.net:8080/connexion.php";
+    static final String URL_CONNEXION = "http://vps122669.ovh.net:8080/connexion.php";
+    static final String URL_ADD_DATA = "http://vps122669.ovh.net:8080/addData.php";
 
     private CampagneDAO dao;
 
@@ -70,9 +76,27 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void makeView() {
-        btnHit = (Button) findViewById(R.id.btnHit);
+        launchSync = (Button) findViewById(R.id.btnHit);
         txtJson = (TextView) findViewById(R.id.tvJsonItem);
-        btnHit.setOnClickListener(this);
+        validPssw = (Button) findViewById(R.id.validPssw);
+        psswText = (EditText) findViewById(R.id.password);
+        psswLayout = (LinearLayout) findViewById(R.id.passwordLayout);
+        validPssw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!isConnected()) {
+                    Snackbar.make(txtJson, "Aucune connexion à internet.", Snackbar.LENGTH_LONG).show();
+                    return;
+                }
+                String mdp = psswText.getText().toString();
+                Log.w("Mdp: ", mdp);
+                RequestBody requestBody = new FormBody.Builder().add("log",username).add("mdp",mdp).build();
+                final Request request = new Request.Builder().url(URL_CONNEXION).post(requestBody).build();
+                AttemptLoginTask task = new AttemptLoginTask(request);
+                task.execute((Void)null);
+            }
+        });
+        launchSync.setOnClickListener(this);
     }
 
     @Override
@@ -83,112 +107,187 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         }
         snackbar.show();
 
-        System.out.println("Log: " + username );
-        RequestBody requestBody = new FormBody.Builder().add("log",username).build();
-        final Request request = new Request.Builder().url(URL).post(requestBody).build();
-        Log.e("Requête",request.toString());
+        RequestBody requestBody = createRequestBodyToSend();
+        final Request request = new Request.Builder().url(URL_ADD_DATA).post(requestBody).build();
 
-
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Response response = client.newCall(request).execute();
-                    if (!response.isSuccessful()) {
-                        throw new IOException(response.toString());
-                    }
-
-                    final String body = response.body().string();
-
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            txtJson.setText(body);
-                            snackbar.dismiss();
-                        }
-                    });
-
-                    JSONObject js = parseStringToJsonObject(body);
-                    interpreteConnexionByJson(js);
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Snackbar.make(view, "Mauvaise forme de json",Snackbar.LENGTH_LONG).show();
-                }
-            }
-        }).start();
+        SendDataTask task = new SendDataTask(request);
+        task.execute((Void) null);
     }
 
-    private RequestBody createRequestBodyToSend(){
-        Inventaire inv = dao.getInventaireOfTheUsr(usrId);
+    private class SendDataTask extends AsyncTask<Void,Void,Boolean>{
 
-        RequestBody requestBody = new FormBody.Builder().add("_id",inv.get_id() + "").
-                                                        add("ref_taxon",inv.getRef_taxon() + "").
-                                                        add("ref_user",inv.getUser() + "").
-                                                        add("typeTaxon",inv.getTypeTaxon() + "").
-                                                        add("latitude",inv.getLatitude() + "").
-                                                        add("longitude",inv.getLongitude() + "").
-                                                        add("date",inv.getDate()).
-                                                        add("nombre",inv.getNombre() + "").
-                                                        add("type_obs",inv.getType_obs()).
-                                                        add("nbMale",inv.getNbMale() + "").
-                                                        add("nbFemale",inv.getNbFemale() + "").
-                                                        add("presencePonte",inv.getPresencePonte()).
-                                                        add("activite",inv.getActivite()).
-                                                        add("statut",inv.getStatut()).
-                                                        add("nidif",inv.getNidif()).
-                                                        add("indice_abondance",inv.getIndiceAbondance() + "").
-                                                        build();
-        return requestBody;
-    }
+        private final Request mRequete;
+        private long _id;
+        private String errMsg;
 
-    protected void interpreteConnexionByJson(JSONObject json){
-        int err = -1;
-        int con = -1;
-        String titre = "";
-        String msg = "";
-        try {
-            err = json.getInt("err");
-            con = json.getInt("con");
-            titre = json.getString("titre");
-            msg = json.getString("msg");
-        } catch (JSONException e) {
-            e.printStackTrace();
+        SendDataTask(Request requete) {
+            mRequete = requete;
         }
-        if(err == 0){
-            if(con == 0){
-                Log.w(titre,msg);
-            }else if(con == 1){
-                Log.w("Connexion","Connexion réussi");
-                RequestBody requestBody = createRequestBodyToSend();
-                final Request request = new Request.Builder().url(URL).post(requestBody).build();
-                new Thread(new Runnable() {
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            snackbar.show();
+
+            try {
+                Response response = client.newCall(mRequete).execute();
+                if (!response.isSuccessful()) {
+                    throw new IOException(response.toString());
+                }
+
+                final String body = response.body().string();
+
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        try {
-                            Response response = client.newCall(request).execute();
-                            if (!response.isSuccessful()) {
-                                throw new IOException(response.toString());
-                            }
-
-                            String body = response.body().string();
-                            JSONObject json = parseStringToJsonObject(body);
-
-
-                        }catch(IOException e){
-                            e.printStackTrace();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Snackbar.make(txtJson, "Mauvaise forme de json",Snackbar.LENGTH_LONG).show();
-                        }
+                        txtJson.setText(body);
+                        snackbar.dismiss();
                     }
                 });
-            }else {
-                Log.w("Déconnexion", "Se déconnecte");
+
+                JSONObject js = parseStringToJsonObject(body);
+                return interpreteJson(js);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Snackbar.make(txtJson, "Mauvaise forme de json",Snackbar.LENGTH_LONG).show();
+            } return false;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            //showProgress(false);
+
+            if (success) {
+                Snackbar.make(txtJson,"Synchronisation réussie",Snackbar.LENGTH_SHORT).show();
+                dao.deleteInventaire(_id);
+            } else {
+                if(errMsg != null){
+                    Snackbar.make(txtJson, errMsg,Snackbar.LENGTH_SHORT).show();
+                }else{
+                    Snackbar.make(txtJson,"Erreur sur l'inventaire " + _id,Snackbar.LENGTH_SHORT).show();
+                }
             }
+        }
+
+        @Override
+        protected void onCancelled() {
+            //showProgress(false);
+        }
+
+        private boolean interpreteJson(JSONObject json){
+            int err = -1;
+            _id = -1;
+            boolean importStatus = false;
+            try{
+                err = json.getInt("err");
+                _id = json.getLong("_id");
+                importStatus = json.getBoolean("import");
+            } catch (JSONException e) {
+                e.printStackTrace();
+                errMsg = "Mauvais parsage de JSON";
+                return false;
+            }
+            return importStatus;
+        }
+    }
+
+    private class AttemptLoginTask extends AsyncTask<Void,Void,Boolean>{
+
+        private final Request mRequete;
+
+        AttemptLoginTask(Request requete) {
+            mRequete = requete;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            snackbar.show();
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    psswText.setError(null);
+                }
+            });
+
+            try {
+                Response response = client.newCall(mRequete).execute();
+                if (!response.isSuccessful()) {
+                    throw new IOException(response.toString());
+                }
+
+                final String body = response.body().string();
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        txtJson.setText(body);
+                        snackbar.dismiss();
+                    }
+                });
+
+                JSONObject js = parseStringToJsonObject(body);
+                return interpreteJson(js);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Snackbar.make(txtJson, "Mauvaise forme de json",Snackbar.LENGTH_LONG).show();
+            } return false;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            //showProgress(false);
+
+            if (success) {
+                Snackbar.make(txtJson,"Connexion réussie",Snackbar.LENGTH_SHORT).show();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        psswLayout.setVisibility(View.GONE);
+                        launchSync.setVisibility(View.VISIBLE);
+                    }
+                });
+            } else {
+                psswText.setError(getString(R.string.error_incorrect_login));
+                psswText.requestFocus();
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            //showProgress(false);
+        }
+
+        protected boolean interpreteJson(JSONObject json){
+            int err = -1;
+            int con = -1;
+            String titre = "";
+            String msg = "";
+            try {
+                err = json.getInt("err");
+                con = json.getInt("con");
+                titre = json.getString("titre");
+                msg = json.getString("msg");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            if(err == 0){
+                if(con == 0){
+                    Log.w(titre,msg);
+                    return false;
+                }else if(con == 1){
+                    Log.w("Connexion","Connexion réussi");
+                    return true;
+                }else {
+                    Log.w("Déconnexion", "Se déconnecte");
+                    return false;
+                }
+            }return false;
         }
     }
 
@@ -207,5 +306,29 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
     protected void onDestroy() {
         super.onDestroy();
         dao.close();
+    }
+
+    private RequestBody createRequestBodyToSend(){
+
+        Inventaire inv = dao.getInventaireOfTheUsr(usrId);
+
+        RequestBody requestBody = new FormBody.Builder().add("_id",inv.get_id() + "").
+                add("ref_taxon",inv.getRef_taxon() + "").
+                add("ref_user",inv.getUser() + "").
+                add("typeTaxon",inv.getTypeTaxon() + "").
+                add("latitude",inv.getLatitude() + "").
+                add("longitude",inv.getLongitude() + "").
+                add("date",inv.getDate()).
+                add("nombre",inv.getNombre() + "").
+                add("type_obs",inv.getType_obs()).
+                add("nbMale",inv.getNbMale() + "").
+                add("nbFemale",inv.getNbFemale() + "").
+                add("presencePonte",inv.getPresencePonte()).
+                add("activite",inv.getActivite()).
+                add("statut",inv.getStatut()).
+                add("nidif",inv.getNidif()).
+                add("indice_abondance",inv.getIndiceAbondance() + "").
+                build();
+        return requestBody;
     }
 }
