@@ -7,12 +7,10 @@ public class User {
 
     private long _id;
     private String login;
-    private String mdp;
 
-    public User(long _id, String login, String mdp){
+    public User(long _id, String login){
         this._id = _id;
         this.login = login;
-        this.mdp = mdp;
     }
 
     public long get_id() {
@@ -30,13 +28,4 @@ public class User {
     public void setLogin(String login) {
         this.login = login;
     }
-
-    public String getMdp() {
-        return mdp;
-    }
-
-    public void setMdp(String mdp) {
-        this.mdp = mdp;
-    }
-
 }

@@ -98,12 +98,34 @@
                 android:textAllCaps="false"
                 android:layout_margin="@dimen/formLabelMargin"/>
             <TextView
-                android:id="@+id/lineLength_perimeter_position"
+                android:id="@+id/lineLength"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#FFFFFF"
                 android:textAllCaps="false"
                 android:layout_margin="@dimen/formLabelMargin"/>
+            <TextView
+                android:id="@+id/perimeter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:textAllCaps="false"
+                android:layout_margin="@dimen/formLabelMargin"/>
+            <TextView
+                android:id="@+id/positionWGS"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:textAllCaps="false"
+                android:layout_margin="@dimen/formLabelMargin"/>
+            <TextView
+                android:id="@+id/positionL93"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:textAllCaps="false"
+                android:layout_margin="@dimen/formLabelMargin"/>
+
             <EditText
                 android:id="@+id/nomRel"
                 android:layout_width="match_parent"

@@ -46,11 +46,10 @@ public class MainActivityRel extends MainActivity {
 
     protected ImageButton lineButton, polygonButton, pointButton;
     protected EditText nomReleve;
-    protected TextView lineLength_perimeterText_positionPoint;
+    protected TextView lineLengthText,perimeterText,positionWGSText,positionL93Text;
     protected LinearLayout nomReleveForm;
     protected Button validNom, finReleve, mesReleve;
 
-    protected String currentName;
     protected Releve releveToAdd;
 
     protected Handler handler;
@@ -94,7 +93,10 @@ public class MainActivityRel extends MainActivity {
         validNom = (Button) findViewById(R.id.validerNom);
         finReleve = (Button) findViewById(R.id.finReleve);
         mesReleve = (Button) findViewById(R.id.mesReleves);
-        lineLength_perimeterText_positionPoint = (TextView) findViewById(R.id.lineLength_perimeter_position);
+        lineLengthText = (TextView) findViewById(R.id.lineLength);
+        perimeterText = (TextView) findViewById(R.id.perimeter);
+        positionWGSText = (TextView) findViewById(R.id.positionWGS);
+        positionL93Text = (TextView) findViewById(R.id.positionL93);
 
         mesReleve.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -250,7 +252,12 @@ public class MainActivityRel extends MainActivity {
     }
 
     protected void stopPoint(){
+        setPositionText();
+    }
 
+    protected void setPositionText(){
+        positionWGSText.setText(getString(R.string.positionWGS));
+        positionL93Text.setText(getString(R.string.positionL93));
     }
 
     /***
@@ -279,7 +286,7 @@ public class MainActivityRel extends MainActivity {
     }
 
     protected void setLineLengthText(){
-        lineLength_perimeterText_positionPoint.setText(getString(R.string.longueur) + lineLength);
+        lineLengthText.setText(getString(R.string.longueur) + lineLength);
     }
 
     protected double polylineLengthInMeters(List<LatLong> polyline){
@@ -312,7 +319,7 @@ public class MainActivityRel extends MainActivity {
     }
 
     protected void setPerimeterText(){
-        lineLength_perimeterText_positionPoint.setText(getString(R.string.perimetre) + polygonPerimeter);
+        perimeterText.setText(getString(R.string.perimetre) + polygonPerimeter);
     }
 
     /**

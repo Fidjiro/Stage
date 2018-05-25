@@ -8,8 +8,6 @@ import com.example.florian.myapplication.Database.CampagneDatabase.CampagneDAO;
 import com.example.florian.myapplication.Database.CampagneDatabase.Inventaire;
 import com.example.florian.myapplication.R;
 
-import org.w3c.dom.Text;
-
 /**
  * Permet de tester si un inventaire à bien été inséré
  */
@@ -41,7 +39,7 @@ public class TestActivity extends AppCompatActivity {
 
         dao = new CampagneDAO(this);
         dao.open();
-        Inventaire inv = dao.getInventaire();
+        Inventaire inv = dao.getInventaireOfTheUsr();
 
         ref_taxon.setText(ref_taxon.getText() + "" + inv.getRef_taxon());
         latitude.setText(latitude.getText() + "" + inv.getLatitude());

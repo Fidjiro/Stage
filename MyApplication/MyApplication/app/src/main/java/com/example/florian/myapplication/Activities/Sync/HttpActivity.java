@@ -23,12 +23,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.List;
 
-import okhttp3.Cookie;
 import okhttp3.CookieJar;
 import okhttp3.FormBody;
-import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -46,7 +43,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
     private CookieJar cookieJar;
     private OkHttpClient client;
     private String username;
-    private String password;
+    private long usrId;
     static final String URL = "http://vps122669.ovh.net:8080/connexion.php";
 
     private CampagneDAO dao;
@@ -66,7 +63,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
 
         SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         username = loginPreferences.getString("username","");
-        password = loginPreferences.getString("password","");
+        usrId = loginPreferences.getLong("usrId" , 0);
 
         snackbar = Snackbar.make(txtJson, "Requête en cours d'exécution",
                 Snackbar.LENGTH_INDEFINITE);
@@ -86,8 +83,8 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         }
         snackbar.show();
 
-        System.out.println("Log: " + username + ", mdp: " + password);
-        RequestBody requestBody = new FormBody.Builder().add("log",username).add("mdp",password).build();
+        System.out.println("Log: " + username );
+        RequestBody requestBody = new FormBody.Builder().add("log",username).build();
         final Request request = new Request.Builder().url(URL).post(requestBody).build();
         Log.e("Requête",request.toString());
 
@@ -111,11 +108,10 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
                             snackbar.dismiss();
                         }
                     });
-                    String jsonErr = "{\"err\":0,\"con\":0,\"titre\":\"Erreur connexion\",\"msg\":\"N'a pas réussi à se connecter\"}";
-                    String jsonWin = "{\"err\":0,\"con\":1}";
-                    String jsonDeco = "{\"err\":0}";
+
                     JSONObject js = parseStringToJsonObject(body);
                     interpreteConnexionByJson(js);
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (JSONException e) {
@@ -127,8 +123,10 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private RequestBody createRequestBodyToSend(){
-        Inventaire inv = dao.getInventaire();
-        RequestBody requestBody = new FormBody.Builder().add("ref_taxon",inv.getRef_taxon() + "").
+        Inventaire inv = dao.getInventaireOfTheUsr(usrId);
+
+        RequestBody requestBody = new FormBody.Builder().add("_id",inv.get_id() + "").
+                                                        add("ref_taxon",inv.getRef_taxon() + "").
                                                         add("ref_user",inv.getUser() + "").
                                                         add("typeTaxon",inv.getTypeTaxon() + "").
                                                         add("latitude",inv.getLatitude() + "").
@@ -175,8 +173,16 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
                             if (!response.isSuccessful()) {
                                 throw new IOException(response.toString());
                             }
+
+                            String body = response.body().string();
+                            JSONObject json = parseStringToJsonObject(body);
+
+
                         }catch(IOException e){
                             e.printStackTrace();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Snackbar.make(txtJson, "Mauvaise forme de json",Snackbar.LENGTH_LONG).show();
                         }
                     }
                 });

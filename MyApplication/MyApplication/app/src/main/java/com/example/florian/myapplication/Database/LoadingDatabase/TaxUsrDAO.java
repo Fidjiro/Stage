@@ -31,7 +31,6 @@ public class TaxUsrDAO {
 
     public static final String USERS = "Users";
     public static final String LOGIN = "login";
-    public static final String MDP = "mdp";
 
     public TaxUsrDAO(Context pContext) {
         this.mHandler = new TaxUsrDatabaseHandler(pContext, NAME, null, VERSION);
@@ -62,7 +61,6 @@ public class TaxUsrDAO {
         ContentValues cv = new ContentValues();
         cv.put(KEY,usr.get_id());
         cv.put(LOGIN,usr.getLogin());
-        cv.put(MDP,usr.getMdp());
         return mDb.insert(USERS,null,cv);
     }
 
@@ -73,7 +71,7 @@ public class TaxUsrDAO {
      * @return Le cursor indexé avant la ligne de l'user défini par ce login mot de passe ou devant rien si le couple n'existe pas
      */
     public Cursor checkUsrValid(String[] logMdp){
-        String request = "SELECT " + LOGIN + ", " + MDP + " FROM " + USERS + " WHERE " + LOGIN + " = ? AND " + MDP + " = ?";
+        String request = "SELECT * FROM " + USERS + " WHERE " + LOGIN + " = ?";
         return mDb.rawQuery(request,logMdp);
     }
 
@@ -84,7 +82,7 @@ public class TaxUsrDAO {
      * @return Le cursor indexé devant la ligne correspondante au login/mdp
      */
     public Cursor selectUsrId(String[] logMdp){
-        String request = "SELECT " + KEY + " FROM " + USERS + " WHERE LOGIN = ? AND MDP = ?";
+        String request = "SELECT " + KEY + " FROM " + USERS + " WHERE LOGIN = ?";
         return mDb.rawQuery(request,logMdp);
     }
 

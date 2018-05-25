@@ -14,14 +14,11 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.example.florian.myapplication.Database.LoadingDatabase.TaxUsrDAO;
 import com.example.florian.myapplication.Parser.TaxRefParser;
@@ -45,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
 
     // UI references.
     private EditText mLoginView;
-    private EditText mPasswordView;
+  //  private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
     private SharedPreferences loginPreferences;
@@ -67,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
 
         mLoginView.setText(loginPreferences.getString("username",""));
 
-        mPasswordView = (EditText) findViewById(R.id.password);
+       /* mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -77,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 return false;
             }
-        });
+        });*/
 
         Button mSignInButton = (Button) findViewById(R.id.sign_in_button);
         mSignInButton.setOnClickListener(new OnClickListener() {
@@ -147,21 +144,21 @@ public class LoginActivity extends AppCompatActivity {
 
         // Reset errors.
         mLoginView.setError(null);
-        mPasswordView.setError(null);
+       // mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
         String login = mLoginView.getText().toString();
-        String password = mPasswordView.getText().toString();
+       // String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+      /*  if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
-        }
+        }*/
 
         // Check for a valid login.
         if (TextUtils.isEmpty(login)) {
@@ -182,7 +179,8 @@ public class LoginActivity extends AppCompatActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(login, password);
+            //mAuthTask = new UserLoginTask(login, password);
+            mAuthTask = new UserLoginTask(login);
             mAuthTask.execute((Void) null);
         }
     }
@@ -192,9 +190,9 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
 
-    private boolean isPasswordValid(String password) {
+  /*  private boolean isPasswordValid(String password) {
         return true;
-    }
+    }*/
 
     @Override
     public void onDestroy() {
@@ -240,7 +238,7 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * Représente une tâche asynchrone qui permet de connecter l'utilisateur
-     */
+     *//*
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mLogin;
@@ -283,6 +281,53 @@ public class LoginActivity extends AppCompatActivity {
             long usrId = dao.getUsrId(new String[]{mLogin,mPassword});
             loginPrefsEditor.putString("username", mLogin);
             loginPrefsEditor.putString("password",mPassword);
+            loginPrefsEditor.putLong("usrId",usrId);
+            loginPrefsEditor.commit();
+        }
+    }*/
+
+    /**
+     * Représente une tâche asynchrone qui permet de connecter l'utilisateur
+     */
+    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+
+        private final String mLogin;
+
+        UserLoginTask(String login) {
+            mLogin = login;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            Cursor c = dao.checkUsrValid(new String[] {mLogin});
+            return c.moveToNext();
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            mAuthTask = null;
+            showProgress(false);
+
+            if (success) {
+                rememberUsrId();
+                Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
+                startActivity(intent);
+                LoginActivity.this.finish();
+            } else {
+                mLoginView.setError(getString(R.string.error_incorrect_login));
+                mLoginView.requestFocus();
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            mAuthTask = null;
+            showProgress(false);
+        }
+
+        private void rememberUsrId(){
+            long usrId = dao.getUsrId(new String[]{mLogin});
+            loginPrefsEditor.putString("username", mLogin);
             loginPrefsEditor.putLong("usrId",usrId);
             loginPrefsEditor.commit();
         }

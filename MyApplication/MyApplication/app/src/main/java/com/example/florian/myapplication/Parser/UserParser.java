@@ -19,9 +19,8 @@ public class UserParser extends CSVParser {
     protected long insertCurrentLine(String[] columns, TaxUsrDAO dao) {
         long usrId = Long.valueOf(columns[0]);
         String login = columns[1].trim();
-        String mdp = columns[2].trim();
 
-        User usr = new User(usrId,login,mdp);
+        User usr = new User(usrId,login);
 
         return dao.insertUsr(usr);
     }

@@ -95,10 +95,11 @@ public class CampagneDAO {
      * Récupère tous les champs des inventaires présent dans la base puis renvoit le dernier de la liste
      *
      * @return Le dernier Inventaire présent dans la base
+     * @param usrId
      */
-    public Inventaire getInventaire(){
-        String request = "SELECT * FROM " + CAMPAGNE;
-        Cursor c = mDb.rawQuery(request,new String[]{});
+    public Inventaire getInventaireOfTheUsr(long usrId){
+        String request = "SELECT * FROM " + CAMPAGNE + " WHERE " + REF_USR + " = ?";
+        Cursor c = mDb.rawQuery(request,new String[]{usrId + ""});
 
         c.moveToLast();
         return new Inventaire(c.getLong(c.getColumnIndex(REF_TAXON)),c.getLong(c.getColumnIndex(REF_USR)), c.getInt(c.getColumnIndex(TYPE_TAXON)), c.getDouble(c.getColumnIndex(LATITUDE)),c.getDouble(c.getColumnIndex(LONGITUDE)),c.getString(c.getColumnIndex(DATE)),c.getInt(c.getColumnIndex(NB)),c.getString(c.getColumnIndex(TYPE_OBS)),c.getInt(c.getColumnIndex(NBMALE)),c.getInt(c.getColumnIndex(NBFEMALE)),c.getString(c.getColumnIndex(PRESENCE_PONTE)),c.getString(c.getColumnIndex(ACTIVITE)),c.getString(c.getColumnIndex(STATUT)),c.getString(c.getColumnIndex(NIDIF)),c.getInt(c.getColumnIndex(ABONDANCE)));

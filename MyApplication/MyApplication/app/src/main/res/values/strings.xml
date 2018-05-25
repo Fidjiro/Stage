@@ -9,12 +9,8 @@
 
     <!-- Strings related to login -->
     <string name="prompt_email">Login</string>
-    <string name="prompt_password">Mot de passe</string>
     <string name="valider">Valider</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_email">Le login est invalide</string>
-    <string name="error_invalid_password">Le mot de passe est trop petit</string>
-    <string name="error_incorrect_password">Login ou mot de passe incorrect</string>
+    <string name="error_incorrect_login">Login incorrect</string>
     <string name="error_field_required">Ce champ est requis pour continuer</string>
 
     <!-- Strings pour la page home -->
@@ -37,7 +33,9 @@
     <string name="mesReleves">Mes relevés</string>
     <string name="point">Point</string>
     <string name="line">Ligne</string>
-    <string name="polygon">Polygonne</string>
+    <string name="polygon">Polygone</string>
+    <string name="positionWGS">Position du point en WGS84</string>
+    <string name="positionL93">Position du point en L93</string>
 
     <!-- Pour le layout qui s'affiche après appui sur bouton recenser -->
     <string name="layoutTitle">Recensement espèce</string>

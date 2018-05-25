@@ -22,7 +22,6 @@ public class TaxUsrDatabaseHandler extends SQLiteOpenHelper {
     public static final String USERS_TABLE_NAME = "Users";
     public static final String USERS_KEY = "_id";
     public static final String USERS_LOGIN = "login";
-    public static final String USERS_MDP = "mdp";
 
     public static final String TAXREF_TABLE_CREATE = "CREATE TABLE " + TAXREF_TABLE_NAME + " (" +
             TAXREF_KEY + " INTEGER PRIMARY KEY, " +
@@ -37,7 +36,6 @@ public class TaxUsrDatabaseHandler extends SQLiteOpenHelper {
     public static final String USERS_TABLE_CREATE = "CREATE TABLE " + USERS_TABLE_NAME + " (" +
             USERS_KEY + " INTEGER PRIMARY KEY, " +
             USERS_LOGIN + " TEXT NOT NULL, " +
-            USERS_MDP + " TEXT NOT NULL, " +
             "CONSTRAINT login_unique UNIQUE (" + USERS_LOGIN + "));";
 
     public static final String TAXREF_TABLE_DROP = "DROP TABLE IF EXISTS " + TAXREF_TABLE_NAME + ";";
