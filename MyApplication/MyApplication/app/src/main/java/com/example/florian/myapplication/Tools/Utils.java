@@ -164,7 +164,9 @@ public final class Utils {
     }
 
     public static String getTime(){
-        return c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE);
+        int hours = c.get(Calendar.HOUR_OF_DAY);
+        int minutes = c.get(Calendar.MINUTE);
+        return formatInt(hours) + ":" + formatInt(minutes);
     }
 
     /**

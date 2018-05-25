@@ -46,11 +46,12 @@ public class MainActivityRel extends MainActivity {
 
     protected ImageButton lineButton, polygonButton, pointButton;
     protected EditText nomReleve;
-    protected TextView lineLength_perimeterText;
+    protected TextView lineLength_perimeterText_positionPoint;
     protected LinearLayout nomReleveForm;
     protected Button validNom, finReleve, mesReleve;
 
     protected String currentName;
+    protected Releve releveToAdd;
 
     protected Handler handler;
     protected Runnable pointsTaker;
@@ -93,7 +94,7 @@ public class MainActivityRel extends MainActivity {
         validNom = (Button) findViewById(R.id.validerNom);
         finReleve = (Button) findViewById(R.id.finReleve);
         mesReleve = (Button) findViewById(R.id.mesReleves);
-        lineLength_perimeterText = (TextView) findViewById(R.id.lineLength_perimeter);
+        lineLength_perimeterText_positionPoint = (TextView) findViewById(R.id.lineLength_perimeter_position);
 
         mesReleve.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,7 +136,8 @@ public class MainActivityRel extends MainActivity {
         validNom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                currentName = nomReleve.getText().toString();
+                releveToAdd.setNom(nomReleve.getText().toString());
+                dao.insertInventaire(releveToAdd);
                 nomReleveForm.setVisibility(View.INVISIBLE);
                 final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(nomReleve.getWindowToken(),0);
@@ -150,6 +152,9 @@ public class MainActivityRel extends MainActivity {
             public void onClick(View view) {
                 Marker marker = Utils.createMarker(MainActivityRel.this,R.drawable.marker_green,getUsrLatLong());
                 addLayer(marker);
+                stopReleve();
+                setCurrentReleve(NO_RELEVE);
+                finReleve.setVisibility(View.INVISIBLE);
             }
         });
     }
@@ -157,7 +162,7 @@ public class MainActivityRel extends MainActivity {
     private Releve createReleveToInsert(){
         SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         long creatorId = loginPreferences.getLong("usrId",0);
-        return new Releve(creatorId,currentName,getCurrentReleveType(),Utils.getDate(),Utils.getTime());
+        return new Releve(creatorId,"",getCurrentReleveType(),Utils.getDate(),Utils.getTime());
     }
 
     /**
@@ -198,6 +203,12 @@ public class MainActivityRel extends MainActivity {
         latLongsLine = polyline.getLatLongs();
     }
 
+    private void finirReleve(){
+        stopReleve();
+        setCurrentReleve(NO_RELEVE);
+        finReleve.setVisibility(View.INVISIBLE);
+    }
+
     /**
      * Créer un dialog d'avertissement pour éviter les fin de relevé par mégarde
      *
@@ -213,9 +224,7 @@ public class MainActivityRel extends MainActivity {
         builder.setPositiveButton(getString(R.string.oui), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                stopReleve();
-                setCurrentReleve(NO_RELEVE);
-                finReleve.setVisibility(View.INVISIBLE);
+                finirReleve();
             }
         });
         builder.setNegativeButton(getString(R.string.non), new DialogInterface.OnClickListener() {
@@ -240,16 +249,22 @@ public class MainActivityRel extends MainActivity {
         pointsTaker.run();
     }
 
+    protected void stopPoint(){
+
+    }
+
     /***
      * Stop le relevé en cours d'exécution
      */
     protected void stopReleve(){
-        Releve rel = createReleveToInsert();
-        dao.insertInventaire(rel);
+        releveToAdd = createReleveToInsert();
         if(currentReleveIsLine())
             stopLine();
         else if(currentReleveIsPolygon())
             stopPolygon();
+        else{
+            stopPoint();
+        }
         nomReleve.setText("");
         nomReleveForm.setVisibility(View.VISIBLE);
     }
@@ -264,7 +279,7 @@ public class MainActivityRel extends MainActivity {
     }
 
     protected void setLineLengthText(){
-        lineLength_perimeterText.setText(getString(R.string.longueur) + lineLength);
+        lineLength_perimeterText_positionPoint.setText(getString(R.string.longueur) + lineLength);
     }
 
     protected double polylineLengthInMeters(List<LatLong> polyline){
@@ -297,7 +312,7 @@ public class MainActivityRel extends MainActivity {
     }
 
     protected void setPerimeterText(){
-        lineLength_perimeterText.setText(getString(R.string.perimetre) + polygonPerimeter);
+        lineLength_perimeterText_positionPoint.setText(getString(R.string.perimetre) + polygonPerimeter);
     }
 
     /**
