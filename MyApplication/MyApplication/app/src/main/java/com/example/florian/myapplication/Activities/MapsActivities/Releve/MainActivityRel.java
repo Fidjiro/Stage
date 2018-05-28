@@ -75,6 +75,8 @@ public class MainActivityRel extends MainActivity {
             Style.STROKE);
     public static final int PAINT_STROKE = AndroidGraphicFactory.INSTANCE.createColor(Color.BLUE);
 
+    private static final int BOITE_FIN_RELEVE = 3;
+    private static final int BOITE_FIN_NOMMAGE_RELEVE = 4;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -109,7 +111,7 @@ public class MainActivityRel extends MainActivity {
         View.OnClickListener stopListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createAvertissementDialog().show();
+                createAvertissementDialog(BOITE_FIN_RELEVE).show();
             }
         };
 
@@ -138,11 +140,14 @@ public class MainActivityRel extends MainActivity {
         validNom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                releveToAdd.setNom(nomReleve.getText().toString());
-                dao.insertInventaire(releveToAdd);
-                nomReleveForm.setVisibility(View.INVISIBLE);
-                final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(nomReleve.getWindowToken(),0);
+                if(!nomReleve.getText().toString().isEmpty()) {
+                    releveToAdd.setNom(nomReleve.getText().toString());
+                    dao.insertInventaire(releveToAdd);
+                    nomReleveForm.setVisibility(View.INVISIBLE);
+                    final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(nomReleve.getWindowToken(), 0);
+                }else
+                    createAvertissementDialog(BOITE_FIN_NOMMAGE_RELEVE).show();
             }
         });
 
@@ -216,26 +221,39 @@ public class MainActivityRel extends MainActivity {
      *
      * @return Un dialog d'avertissement
      */
-    protected Dialog createAvertissementDialog(){
+    protected Dialog createAvertissementDialog(int identifiant){
         AlertDialog box;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        switch (identifiant) {
+            case BOITE_FIN_RELEVE:
+                builder.setMessage(R.string.confirmMessage);
+                builder.setTitle(getString(R.string.avertissement));
+                builder.setCancelable(false);
+                builder.setPositiveButton(getString(R.string.oui), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finirReleve();
+                    }
+                });
+                builder.setNegativeButton(getString(R.string.non), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                break;
+            case BOITE_FIN_NOMMAGE_RELEVE:
+                builder.setMessage(getString(R.string.nommezReleve));
+                builder.setTitle(getString(R.string.avertissement));
+                builder.setCancelable(false);
+                builder.setPositiveButton(getString(R.string.accord), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
 
-        builder.setMessage(R.string.confirmMessage);
-        builder.setTitle(getString(R.string.avertissement));
-        builder.setCancelable(false);
-        builder.setPositiveButton(getString(R.string.oui), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                finirReleve();
-            }
-        });
-        builder.setNegativeButton(getString(R.string.non), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
-
+        }
         box = builder.create();
         return box;
     }

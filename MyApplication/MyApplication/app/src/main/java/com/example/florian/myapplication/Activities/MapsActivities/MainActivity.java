@@ -38,7 +38,6 @@ public abstract class MainActivity extends AppCompatActivity{
 
     protected static final int BOITE_AVERTISSEMENT = 1;
     protected static final int BOITE_GPS_MANQUANT = 2;
-    protected static final int BOITE_FIN_RELEVE = 3;
     protected MyLocationListener locationListener = new MyLocationListener();
 
     protected MyMapView myMap;
@@ -166,23 +165,6 @@ public abstract class MainActivity extends AppCompatActivity{
                     }
                 });
                 break;
-            case BOITE_FIN_RELEVE:
-                builder.setMessage(R.string.confirmMessage);
-                builder.setTitle(getString(R.string.avertissement));
-                builder.setCancelable(false);
-                builder.setPositiveButton(getString(R.string.oui), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS) ;
-                        startActivity(intent);
-                    }
-                });
-                builder.setNegativeButton(getString(R.string.non), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        finish();
-                    }
-                });
         }
         box = builder.create();
         return box;
