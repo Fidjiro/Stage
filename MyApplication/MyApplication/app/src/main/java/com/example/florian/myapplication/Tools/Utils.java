@@ -44,8 +44,6 @@ import java.util.Calendar;
  */
 public final class Utils {
 
-    public static Calendar c = Calendar.getInstance();
-
     /**
      * Compatibility method.
      *
@@ -154,6 +152,7 @@ public final class Utils {
      * @return La date au format JJ/MM/AAAA
      */
     public static String getDate(){
+        Calendar c = Calendar.getInstance();
         int day = c.get(Calendar.DAY_OF_MONTH);
         // On réalise un +1 car Janvier est considéré comme 0
         int month = c.get(Calendar.MONTH) + 1;
@@ -164,6 +163,7 @@ public final class Utils {
     }
 
     public static String getTime(){
+        Calendar c = Calendar.getInstance();
         int hours = c.get(Calendar.HOUR_OF_DAY);
         int minutes = c.get(Calendar.MINUTE);
         int secondes = c.get(Calendar.SECOND);

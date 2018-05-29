@@ -22,6 +22,7 @@ import com.example.florian.myapplication.Database.ReleveDatabase.HistoryDao;
 import com.example.florian.myapplication.Database.ReleveDatabase.Releve;
 import com.example.florian.myapplication.R;
 import com.example.florian.myapplication.Tools.Utils;
+import com.google.gson.Gson;
 
 import org.mapsforge.core.graphics.Color;
 import org.mapsforge.core.graphics.Paint;
@@ -56,11 +57,11 @@ public class MainActivityRel extends MainActivity {
     protected Runnable pointsTaker;
 
     protected Polyline polyline;
-    protected List<LatLong> latLongsLine;
     protected double lineLength;
-    protected List<LatLong> latLongsPolygon;
     protected double polygonPerimeter;
     protected Polygon polygon;
+    protected List<LatLong> latLongs;
+    protected LatLong lastMarkerPosition;
 
     protected int currentReleve;
     protected final int POLYGON = 2;
@@ -158,10 +159,9 @@ public class MainActivityRel extends MainActivity {
             @Override
             public void onClick(View view) {
                 Marker marker = Utils.createMarker(MainActivityRel.this,R.drawable.marker_green,getUsrLatLong());
+                lastMarkerPosition = marker.getLatLong();
                 addLayer(marker);
-                stopReleve();
-                setCurrentReleve(NO_RELEVE);
-                finReleve.setVisibility(View.INVISIBLE);
+                finirReleve();
             }
         });
     }
@@ -169,7 +169,57 @@ public class MainActivityRel extends MainActivity {
     private Releve createReleveToInsert(){
         SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         long creatorId = loginPreferences.getLong("usrId",0);
-        return new Releve(creatorId,"",getCurrentReleveType(),Utils.getDate(),Utils.getTime());
+        String latitude;
+        String longitude;
+        String formatedLatLongs = "";
+        if(currentReleveIsPolygon() ||currentReleveIsLine()){
+            StringTuple tuple = getStringsFromLatLongs();
+            latitude = tuple.fst();
+            longitude = tuple.snd();
+            formatedLatLongs = getFormatedLatLongs();
+        } else{
+            latitude = lastMarkerPosition.getLatitude() + "";
+            longitude = lastMarkerPosition.getLongitude() + "";
+        }
+        return new Releve(creatorId,"",getCurrentReleveType(), latitude, longitude, formatedLatLongs, "false", Utils.getDate(),Utils.getTime());
+    }
+
+    private StringTuple getStringsFromLatLongs(){
+        String lats = "";
+        String longs = "";
+        for(LatLong latLong : latLongs){
+            double lat = latLong.getLatitude();
+            double lon = latLong.getLongitude();
+            lats += lat + ";";
+            longs += lon + ";";
+        }
+        return new StringTuple(lats,longs);
+    }
+
+    private String getFormatedLatLongs(){
+        Gson gson = new Gson();
+        return gson.toJson(latLongs);
+    }
+
+    private class StringTuple{
+
+        private String fst;
+        private String snd;
+
+        public StringTuple(String fst, String snd) {
+            this.fst = fst;
+            this.snd = snd;
+        }
+
+        public String fst(){
+            return fst;
+        }
+
+        public String snd(){
+            return snd;
+        }
+
+
     }
 
     /**
@@ -207,7 +257,7 @@ public class MainActivityRel extends MainActivity {
                 (int) (4 * myMap.getModel().displayModel.getScaleFactor()),
                 Style.STROKE), AndroidGraphicFactory.INSTANCE);
 
-        latLongsLine = polyline.getLatLongs();
+        latLongs = polyline.getLatLongs();
     }
 
     private void finirReleve(){
@@ -314,7 +364,7 @@ public class MainActivityRel extends MainActivity {
      */
     protected void stopLine() {
         handler.removeCallbacks(pointsTaker);
-        lineLength = polylineLengthInMeters(latLongsLine);
+        lineLength = polylineLengthInMeters(latLongs);
         makeLineLengthTextVisible();
         setLineLengthText();
     }
@@ -368,7 +418,7 @@ public class MainActivityRel extends MainActivity {
      */
     protected void stopPolygon() {
         handler.removeCallbacks(pointsTaker);
-        polygonPerimeter = getPolygonPerimeter(latLongsPolygon);
+        polygonPerimeter = getPolygonPerimeter(latLongs);
         makePerimeterTextVisible();
         setPerimeterText();
     }
@@ -384,7 +434,7 @@ public class MainActivityRel extends MainActivity {
      */
     protected void instantiatePolygon() {
         polygon = new Polygon(paintFill, paintStroke, AndroidGraphicFactory.INSTANCE);;
-        latLongsPolygon = polygon.getLatLongs();
+        latLongs = polygon.getLatLongs();
     }
 
     /**

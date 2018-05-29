@@ -26,7 +26,7 @@ public class Releve {
     }
 
     public Releve(long _id, long creator, String nom, String type, String latitudes, String longitudes, String lat_long, String importStatus, String date, String heure) {
-        this(creator,nom,type, latitudes, longitudes, lat_long, importStatus,date,heure);
+        this(creator, nom, type, latitudes, longitudes, lat_long, importStatus, date, heure);
         this._id = _id;
     }
 
