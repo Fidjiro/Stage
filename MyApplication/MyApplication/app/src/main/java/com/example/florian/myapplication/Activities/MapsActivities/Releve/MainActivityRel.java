@@ -23,6 +23,7 @@ import com.example.florian.myapplication.Database.ReleveDatabase.Releve;
 import com.example.florian.myapplication.R;
 import com.example.florian.myapplication.Tools.Utils;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.mapsforge.core.graphics.Color;
 import org.mapsforge.core.graphics.Paint;
@@ -34,6 +35,7 @@ import org.mapsforge.map.layer.overlay.Marker;
 import org.mapsforge.map.layer.overlay.Polyline;
 import org.mapsforge.map.layer.overlay.Polygon;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -248,14 +250,18 @@ public class MainActivityRel extends MainActivity {
         } return getString(R.string.point);
     }
 
+    public Polyline createPolyline(){
+        return new Polyline(Utils.createPaint(
+                PAINT_STROKE,
+                (int) (4 * myMap.getModel().displayModel.getScaleFactor()),
+                Style.STROKE), AndroidGraphicFactory.INSTANCE);
+    }
+
     /**
      * Instantie la polyLine
      */
     protected void instantiatePolyline(){
-        polyline = new Polyline(Utils.createPaint(
-                PAINT_STROKE,
-                (int) (4 * myMap.getModel().displayModel.getScaleFactor()),
-                Style.STROKE), AndroidGraphicFactory.INSTANCE);
+        polyline = createPolyline();
 
         latLongs = polyline.getLatLongs();
     }
@@ -433,7 +439,7 @@ public class MainActivityRel extends MainActivity {
      * Instantie le polygonne
      */
     protected void instantiatePolygon() {
-        polygon = new Polygon(paintFill, paintStroke, AndroidGraphicFactory.INSTANCE);;
+        polygon = new Polygon(paintFill, paintStroke, AndroidGraphicFactory.INSTANCE);
         latLongs = polygon.getLatLongs();
     }
 
@@ -511,5 +517,36 @@ public class MainActivityRel extends MainActivity {
     protected void onDestroy() {
         super.onDestroy();
         dao.close();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Gson gson = new Gson();
+        Intent intent = getIntent();
+        Releve rel = intent.getParcelableExtra("releve");
+        System.out.println("passage dans le on resume");
+        if(rel != null){
+            String relType = rel.getType();
+            System.out.println("Passage dans rel != null");
+            if(relType.equals("Point")){
+                LatLong latLong = new LatLong(Double.parseDouble(rel.getLatitudes()),Double.parseDouble(rel.getLongitudes()));
+                Marker m = Utils.createMarker(MainActivityRel.this,R.drawable.marker_green,latLong);
+                addLayer(m);
+            }else {
+                Type type = new TypeToken<List<LatLong>>() {}.getType();
+                String relLatLongsString = rel.getLat_long();
+                List<LatLong> relLatLongs = gson.fromJson(relLatLongsString, type);
+                if (relType.equals("Ligne")) {
+                    Polyline polylineRel = createPolyline();
+                    polylineRel.getLatLongs().addAll(relLatLongs);
+                    addLayer(polylineRel);
+                }else{
+                    Polygon relPolygon = new Polygon(paintFill, paintStroke, AndroidGraphicFactory.INSTANCE);
+                    relPolygon.getLatLongs().addAll(relLatLongs);
+                    addLayer(relPolygon);
+                }
+            }
+        }
     }
 }

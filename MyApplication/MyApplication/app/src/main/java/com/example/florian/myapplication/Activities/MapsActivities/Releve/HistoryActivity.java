@@ -1,5 +1,6 @@
 package com.example.florian.myapplication.Activities.MapsActivities.Releve;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -39,6 +40,10 @@ public class HistoryActivity extends AppCompatActivity {
                 TextView heureRelTxt = (TextView)view.findViewById(R.id.heureReleve);
 
                 Releve rel = dao.getReleveFromNomTypeDateHeure(new String[]{nomRelTxt.getText().toString(), typeRelTxt.getText().toString(), dateRelTxt.getText().toString(), heureRelTxt.getText().toString()});
+
+                Intent intent = new Intent(HistoryActivity.this,MainActivityRel.class);
+                intent.putExtra("releve",rel);
+                startActivity(intent);
             }
         });
     }

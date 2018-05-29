@@ -1,6 +1,22 @@
 package com.example.florian.myapplication.Database.ReleveDatabase;
 
-public class Releve {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.example.florian.myapplication.Activities.MapsActivities.Releve.MainActivityRel;
+import com.example.florian.myapplication.R;
+import com.example.florian.myapplication.Tools.Utils;
+
+import org.mapsforge.core.graphics.Style;
+import org.mapsforge.core.model.LatLong;
+import org.mapsforge.map.android.graphics.AndroidGraphicFactory;
+import org.mapsforge.map.layer.Layer;
+import org.mapsforge.map.layer.overlay.Marker;
+import org.mapsforge.map.layer.overlay.Polyline;
+
+import java.util.ArrayList;
+
+public class Releve implements Parcelable{
 
     private long _id;
     private long creator;
@@ -28,6 +44,48 @@ public class Releve {
     public Releve(long _id, long creator, String nom, String type, String latitudes, String longitudes, String lat_long, String importStatus, String date, String heure) {
         this(creator, nom, type, latitudes, longitudes, lat_long, importStatus, date, heure);
         this._id = _id;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeLong(_id);
+        parcel.writeLong(creator);
+        parcel.writeString(nom);
+        parcel.writeString(type);
+        parcel.writeString(latitudes);
+        parcel.writeString(longitudes);
+        parcel.writeString(lat_long);
+        parcel.writeString(importStatus);
+        parcel.writeString(date);
+        parcel.writeString(heure);
+    }
+
+    public static final Parcelable.Creator<Releve> CREATOR = new Parcelable.Creator<Releve>() {
+        public Releve createFromParcel(Parcel in) {
+            return new Releve(in);
+        }
+
+        public Releve[] newArray(int size) {
+            return new Releve[size];
+        }
+    };
+
+    private Releve(Parcel in) {
+        _id = in.readLong();
+        creator = in.readLong();
+        nom = in.readString();
+        type = in.readString();
+        latitudes = in.readString();
+        longitudes = in.readString();
+        lat_long = in.readString();
+        importStatus = in.readString();
+        date = in.readString();
+        heure = in.readString();
     }
 
     public long get_id() {

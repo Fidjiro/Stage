@@ -40,7 +40,7 @@ public abstract class MainActivity extends AppCompatActivity{
     protected static final int BOITE_GPS_MANQUANT = 2;
     protected MyLocationListener locationListener = new MyLocationListener();
 
-    protected MyMapView myMap;
+    public MyMapView myMap;
     protected LocationManager locationManager;
     protected LatLong usrPosition;
 
