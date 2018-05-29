@@ -1,12 +1,12 @@
 package com.example.florian.myapplication.Activities.MapsActivities.Releve;
 
 import android.content.SharedPreferences;
-import android.database.MatrixCursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.florian.myapplication.Database.ReleveDatabase.HistoryDao;
 import com.example.florian.myapplication.Database.ReleveDatabase.Releve;
@@ -28,19 +28,28 @@ public class HistoryActivity extends AppCompatActivity {
         dao.open();
 
         setContentView(R.layout.activity_history);
+
+        listReleves = (ListView) findViewById(R.id.listView);
+        listReleves.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                TextView nomRelTxt = (TextView)view.findViewById(R.id.nomRel);
+                TextView typeRelTxt = (TextView)view.findViewById(R.id.typeReleve);
+                TextView dateRelTxt = (TextView)view.findViewById(R.id.dateReleve);
+                TextView heureRelTxt = (TextView)view.findViewById(R.id.heureReleve);
+
+                Releve rel = dao.getReleveFromNomTypeDateHeure(new String[]{nomRelTxt.getText().toString(), typeRelTxt.getText().toString(), dateRelTxt.getText().toString(), heureRelTxt.getText().toString()});
+            }
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        listReleves = (ListView) findViewById(R.id.listView);
-        listReleves.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                System.out.println("coucou");
-            }
-        });
+        setAdapter();
+    }
 
+    private void setAdapter(){
         List<Releve> releves = dao.getReleveOfTheUsr(getCurrentUsrId());
 
         ReleveAdapter adapter = new ReleveAdapter(this,releves);

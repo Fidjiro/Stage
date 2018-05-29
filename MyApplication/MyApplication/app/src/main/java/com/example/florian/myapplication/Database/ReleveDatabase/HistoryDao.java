@@ -81,6 +81,29 @@ public class HistoryDao {
         return dealWithCursor(c);
     }
 
+    private Cursor selectReleveFromNomTypeDateHeure(String[] fields){
+        String request = "SELECT * FROM " + TABLE_NAME + " WHERE " + NOM + " = ? AND " + TYPE + " = ? AND " + DATE + " = ? AND " + TIME + " = ?;";
+        return mDb.rawQuery(request,fields);
+    }
+
+    public Releve getReleveFromNomTypeDateHeure(String[] fields){
+        Cursor c = selectReleveFromNomTypeDateHeure(fields);
+        c.moveToNext();
+
+        long _id = c.getLong(c.getColumnIndex(KEY));
+        long creator = c.getLong(c.getColumnIndex(CREATOR));
+        String nom = c.getString(c.getColumnIndex(NOM));
+        String type = c.getString(c.getColumnIndex(TYPE));
+        String latitudes = c.getString(c.getColumnIndex(LATITUDES));
+        String longitudes = c.getString(c.getColumnIndex(LONGITUDES));
+        String lat_long = c.getString(c.getColumnIndex(LAT_LONG));
+        String importStatus = c.getString(c.getColumnIndex(IMPORT));
+        String date = c.getString(c.getColumnIndex(DATE));
+        String heure = c.getString(c.getColumnIndex(TIME));
+
+        return new Releve(_id,creator,nom,type,latitudes,longitudes,lat_long,importStatus,date,heure);
+    }
+
     protected List<Releve> dealWithCursor(Cursor c){
         List<Releve> res = new ArrayList<>();
 
