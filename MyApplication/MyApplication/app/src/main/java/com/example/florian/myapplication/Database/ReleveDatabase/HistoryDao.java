@@ -24,6 +24,10 @@ public class HistoryDao {
     public static final String CREATOR = "creator";
     public static final String NOM = "nom";
     public static final String TYPE = "type";
+    public static final String LATITUDES = "latitudes";
+    public static final String LONGITUDES = "longitudes";
+    public static final String LAT_LONG = "lat_longs";
+    public static final String IMPORT = "import";
     public static final String DATE = "date";
     public static final String TIME = "heure";
 
@@ -62,6 +66,10 @@ public class HistoryDao {
         cv.put(CREATOR,rel.getCreator());
         cv.put(NOM,rel.getNom());
         cv.put(TYPE,rel.getType());
+        cv.put(LATITUDES,rel.getLatitudes());
+        cv.put(LONGITUDES,rel.getLongitudes());
+        cv.put(LAT_LONG,rel.getLat_long());
+        cv.put(IMPORT,rel.getImportStatus());
         cv.put(DATE,rel.getDate());
         cv.put(TIME,rel.getHeure());
         return cv;
@@ -82,10 +90,14 @@ public class HistoryDao {
                 long creator = c.getLong(c.getColumnIndex(CREATOR));
                 String nom = c.getString(c.getColumnIndex(NOM));
                 String type = c.getString(c.getColumnIndex(TYPE));
+                String latitudes = c.getString(c.getColumnIndex(LATITUDES));
+                String longitudes = c.getString(c.getColumnIndex(LONGITUDES));
+                String lat_long = c.getString(c.getColumnIndex(LAT_LONG));
+                String importStatus = c.getString(c.getColumnIndex(IMPORT));
                 String date = c.getString(c.getColumnIndex(DATE));
                 String heure = c.getString(c.getColumnIndex(TIME));
 
-                Releve rel = new Releve(_id,creator,nom,type,date,heure);
+                Releve rel = new Releve(_id,creator,nom,type,latitudes,longitudes,lat_long,importStatus,date,heure);
 
                 res.add(rel);
             } while(c.moveToNext());
