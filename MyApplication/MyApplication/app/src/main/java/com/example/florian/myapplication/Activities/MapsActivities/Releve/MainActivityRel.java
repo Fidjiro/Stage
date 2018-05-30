@@ -106,7 +106,7 @@ public class MainActivityRel extends MainActivity {
         mesReleve.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivityRel.this,HistoryActivity.class);
+                Intent intent = new Intent(MainActivityRel.this,HistoryReleveActivity.class);
                 startActivity(intent);
             }
         });
@@ -338,7 +338,10 @@ public class MainActivityRel extends MainActivity {
     }
 
     protected void setPositionText(){
-        positionWGSText.setText(getString(R.string.positionWGS));
+        double lat = lastMarkerPosition.getLatitude();
+        double lon = lastMarkerPosition.getLongitude();
+
+        positionWGSText.setText(getString(R.string.positionWGS) + " " + lat + " ; " + lon);
         positionL93Text.setText(getString(R.string.positionL93));
     }
 
@@ -371,6 +374,7 @@ public class MainActivityRel extends MainActivity {
     protected void stopLine() {
         handler.removeCallbacks(pointsTaker);
         lineLength = polylineLengthInMeters(latLongs);
+
         makeLineLengthTextVisible();
         setLineLengthText();
     }
@@ -431,6 +435,7 @@ public class MainActivityRel extends MainActivity {
 
     private double getPolygonPerimeter(List<LatLong> list){
         List<LatLong> tmp = new ArrayList<>(list);
+
         tmp.add(list.get(0));
         return polylineLengthInMeters(tmp);
     }
@@ -522,31 +527,38 @@ public class MainActivityRel extends MainActivity {
     @Override
     public void onResume() {
         super.onResume();
-        Gson gson = new Gson();
         Intent intent = getIntent();
         Releve rel = intent.getParcelableExtra("releve");
-        System.out.println("passage dans le on resume");
-        if(rel != null){
-            String relType = rel.getType();
-            System.out.println("Passage dans rel != null");
-            if(relType.equals("Point")){
-                LatLong latLong = new LatLong(Double.parseDouble(rel.getLatitudes()),Double.parseDouble(rel.getLongitudes()));
-                Marker m = Utils.createMarker(MainActivityRel.this,R.drawable.marker_green,latLong);
-                addLayer(m);
-            }else {
-                Type type = new TypeToken<List<LatLong>>() {}.getType();
-                String relLatLongsString = rel.getLat_long();
-                List<LatLong> relLatLongs = gson.fromJson(relLatLongsString, type);
-                if (relType.equals("Ligne")) {
-                    Polyline polylineRel = createPolyline();
-                    polylineRel.getLatLongs().addAll(relLatLongs);
-                    addLayer(polylineRel);
-                }else{
-                    Polygon relPolygon = new Polygon(paintFill, paintStroke, AndroidGraphicFactory.INSTANCE);
-                    relPolygon.getLatLongs().addAll(relLatLongs);
-                    addLayer(relPolygon);
-                }
+        if (rel != null) {
+            redrawReleve(rel);
+        }
+    }
+
+    private void redrawReleve(Releve rel){
+        Gson gson = new Gson();
+        String relType = rel.getType();
+        if (relType.equals("Point")) {
+            redrawPointReleve(rel);
+        } else {
+            Type type = new TypeToken<List<LatLong>>() {
+            }.getType();
+            String relLatLongsString = rel.getLat_long();
+            List<LatLong> relLatLongs = gson.fromJson(relLatLongsString, type);
+            if (relType.equals("Ligne")) {
+                Polyline polylineRel = createPolyline();
+                polylineRel.getLatLongs().addAll(relLatLongs);
+                addLayer(polylineRel);
+            } else {
+                Polygon relPolygon = new Polygon(paintFill, paintStroke, AndroidGraphicFactory.INSTANCE);
+                relPolygon.getLatLongs().addAll(relLatLongs);
+                addLayer(relPolygon);
             }
         }
+    }
+
+    private void redrawPointReleve(Releve rel){
+        LatLong latLong = new LatLong(Double.parseDouble(rel.getLatitudes()), Double.parseDouble(rel.getLongitudes()));
+        Marker m = Utils.createMarker(MainActivityRel.this, R.drawable.marker_green, latLong);
+        addLayer(m);
     }
 }

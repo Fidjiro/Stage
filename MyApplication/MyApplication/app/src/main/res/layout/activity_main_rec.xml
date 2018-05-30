@@ -4,13 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.MapsActivities.MainActivityRec"
+    tools:context=".Activities.MapsActivities.Recensement.MainActivityRec"
     tools:layout_editor_absoluteY="81dp">
 
     <org.mapsforge.map.android.view.MapView
         android:id="@+id/mapViewOSM"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/mesCampagnes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:drawableTop="@drawable/face"
+        android:layout_margin="@dimen/formLayoutsMargin"
+        android:text="@string/mesCampagnes"
+        android:textAllCaps="false" />
 
     <LinearLayout
         android:id="@+id/recensementLayout"

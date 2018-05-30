@@ -16,7 +16,7 @@ import com.example.florian.myapplication.Tools.ReleveAdapter;
 
 import java.util.List;
 
-public class HistoryActivity extends AppCompatActivity {
+public class HistoryReleveActivity extends AppCompatActivity {
 
     protected ListView listReleves;
     protected HistoryDao dao;
@@ -30,7 +30,7 @@ public class HistoryActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_history);
 
-        listReleves = (ListView) findViewById(R.id.listView);
+        listReleves = (ListView) findViewById(R.id.listViewReleve);
         listReleves.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -41,7 +41,7 @@ public class HistoryActivity extends AppCompatActivity {
 
                 Releve rel = dao.getReleveFromNomTypeDateHeure(new String[]{nomRelTxt.getText().toString(), typeRelTxt.getText().toString(), dateRelTxt.getText().toString(), heureRelTxt.getText().toString()});
 
-                Intent intent = new Intent(HistoryActivity.this,MainActivityRel.class);
+                Intent intent = new Intent(HistoryReleveActivity.this,MainActivityRel.class);
                 intent.putExtra("releve",rel);
                 startActivity(intent);
             }

@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.example.florian.myapplication.Activities.MapsActivities.MainActivityRec;
+import com.example.florian.myapplication.Activities.MapsActivities.Recensement.MainActivityRec;
 import com.example.florian.myapplication.Database.LoadingDatabase.Taxon;
 import com.example.florian.myapplication.R;
 

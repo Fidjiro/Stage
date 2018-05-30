@@ -1,9 +1,8 @@
 package com.example.florian.myapplication.AutoComplete.AutoCompleteListeners;
 
 import android.content.Context;
-import android.util.Log;
 
-import com.example.florian.myapplication.Activities.MapsActivities.MainActivityRec;
+import com.example.florian.myapplication.Activities.MapsActivities.Recensement.MainActivityRec;
 import com.example.florian.myapplication.AutoComplete.ArrayAdapter.AutocompleteCustomFrArrayAdapter;
 import com.example.florian.myapplication.Database.LoadingDatabase.Taxon;
 import com.example.florian.myapplication.R;

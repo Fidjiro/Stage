@@ -9,16 +9,16 @@
     android:background="@drawable/back">
 
     <TextView
-        android:id="@+id/titleViewReleve"
+        android:id="@+id/titleViewRecensement"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="@string/titleHistoryReleve"
+        android:text="@string/titleHistoryRecensement"
         android:textSize="@dimen/formTitleTextSize"
         android:textStyle="bold" />
 
     <ListView
-        android:id="@+id/listViewReleve"
+        android:id="@+id/listViewRecensement"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     </ListView>

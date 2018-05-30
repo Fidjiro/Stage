@@ -1,4 +1,4 @@
-package com.example.florian.myapplication.Activities.MapsActivities;
+package com.example.florian.myapplication.Activities.MapsActivities.Recensement;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -15,6 +15,7 @@ import com.example.florian.myapplication.Activities.FormActivities.Faune.Amphibi
 import com.example.florian.myapplication.Activities.FormActivities.Faune.FauneActivity;
 import com.example.florian.myapplication.Activities.FormActivities.Faune.OiseauxActivity;
 import com.example.florian.myapplication.Activities.FormActivities.Flore.FloreActivity;
+import com.example.florian.myapplication.Activities.MapsActivities.MainActivity;
 import com.example.florian.myapplication.AutoComplete.ArrayAdapter.AutocompleteCustomArrayAdapter;
 import com.example.florian.myapplication.AutoComplete.ArrayAdapter.AutocompleteCustomFrArrayAdapter;
 import com.example.florian.myapplication.AutoComplete.ArrayAdapter.AutocompleteCustomLatinArrayAdapter;
@@ -48,6 +49,7 @@ public class MainActivityRec extends MainActivity {
 
         Button recenser = (Button) findViewById(R.id.recenser);
         Button validerRecensement = (Button) findViewById(R.id.validerRecensement);
+        Button mesRecensement = (Button) findViewById(R.id.mesCampagnes);
 
         loadAutoComplete();
 
@@ -80,6 +82,13 @@ public class MainActivityRec extends MainActivity {
             }
         });
 
+        mesRecensement.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivityRec.this,HistoryRecensementActivity.class);
+                startActivity(intent);
+            }
+        });
 
         recenser.setOnClickListener(new View.OnClickListener() {
             @Override

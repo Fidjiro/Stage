@@ -23,13 +23,14 @@
     <string name="protocole">Protocole de suivi</string>
     <string name="relevé">Outil de relevé de terrain</string>
     <string name="sync">Synchroniser</string>
-    <string name="chargement">Chargement de la carte...</string>
+    <string name="chargement">Chargement de la carte &#8230;</string>
     <string name="syncData">Synchroniser les données</string>
 
     <!-- Boutons sur la map -->
     <string name="recenser">Recenser</string>
     <string name="finMission">Fin de mission</string>
     <string name="finReleve">Fin de relevé</string>
+    <string name="mesCampagnes">Mes campagnes</string>
 
     <!--Strings pour la MainActivityRel-->
     <string name="nommerReleve">Donnez un nom à votre relevé : </string>
@@ -40,8 +41,8 @@
     <string name="point">Point</string>
     <string name="line">Ligne</string>
     <string name="polygon">Polygone</string>
-    <string name="positionWGS">Position du point en WGS84</string>
-    <string name="positionL93">Position du point en L93</string>
+    <string name="positionWGS">Position du point en WGS84 :</string>
+    <string name="positionL93">Position du point en L93 : </string>
     <string name="nommezReleve">Veuillez nommez votre relevé</string>
 
     <!-- Pour le layout qui s'affiche après appui sur bouton recenser -->
@@ -109,5 +110,8 @@
     <string name="emptyNidif">Veuillez choisir un statut de nidification</string>
 
     <!--Strings pour l'historique des relevés-->
-    <string name="titleHistory">Historique des relevés</string>
+    <string name="titleHistoryReleve">Historique des relevés</string>
+
+    <!--Historique recensement-->
+    <string name="titleHistoryRecensement">Historique des inventaires</string>
 </resources>
