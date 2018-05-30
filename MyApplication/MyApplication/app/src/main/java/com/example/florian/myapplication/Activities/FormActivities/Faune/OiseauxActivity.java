@@ -84,7 +84,7 @@ public class OiseauxActivity extends FauneActivity {
 
     @Override
     protected Inventaire createPersonalInventaire() {
-        return new Inventaire(ref_taxon, usrId, nomFrString, typeTaxon, lat, lon, dat, nb, obs, nbMale, nbFemale, activiteValue, statutValue, nidificationValue);
+        return new Inventaire(ref_taxon, usrId, nomFrString, nomLatinString, typeTaxon, lat, lon, dat, heure, nb, obs, nbMale, nbFemale, activiteValue, statutValue, nidificationValue);
     }
 
     @Override

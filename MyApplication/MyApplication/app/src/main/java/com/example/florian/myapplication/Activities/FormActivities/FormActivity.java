@@ -37,7 +37,7 @@ public abstract class FormActivity extends AppCompatActivity {
 
     protected long usrId,ref_taxon;
     protected double lat,lon;
-    protected String dat;
+    protected String dat, heure;
     protected int nb;
 
     /**
@@ -203,6 +203,7 @@ public abstract class FormActivity extends AppCompatActivity {
         lat = intent.getDoubleExtra("latitude",0.0);
         lon = intent.getDoubleExtra("longitude",0.0);
         dat = Utils.getDate();
+        heure = intent.getStringExtra("heure");
         nomFrString = intent.getStringExtra("nomfr");
         nomLatinString = intent.getStringExtra("nomlatin");
 

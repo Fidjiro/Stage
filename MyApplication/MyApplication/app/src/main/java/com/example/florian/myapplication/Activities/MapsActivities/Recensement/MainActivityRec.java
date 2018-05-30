@@ -24,6 +24,7 @@ import com.example.florian.myapplication.AutoComplete.AutoCompleteListeners.Cust
 import com.example.florian.myapplication.AutoComplete.CustomAutoCompleteView;
 import com.example.florian.myapplication.Database.LoadingDatabase.Taxon;
 import com.example.florian.myapplication.R;
+import com.example.florian.myapplication.Tools.Utils;
 
 /**
  * Activité carte pour le recensement d'espèces
@@ -124,6 +125,7 @@ public class MainActivityRec extends MainActivity {
         intent.putExtra("longitude",getUsrLatLong().getLongitude());
         intent.putExtra("nomfr",nomFrInput);
         intent.putExtra("nomlatin",nomLatinInput);
+        intent.putExtra("heure", Utils.getTime());
 
         return intent;
     }

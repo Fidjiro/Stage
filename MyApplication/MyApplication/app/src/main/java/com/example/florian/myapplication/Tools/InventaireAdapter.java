@@ -31,7 +31,7 @@ public class InventaireAdapter extends ArrayAdapter<Inventaire>{
             viewHolder.nomEspece = (TextView) convertView.findViewById(R.id.nomEspecInv);
             viewHolder.denombrement = (TextView) convertView.findViewById(R.id.denombrementInv);
             viewHolder.date = (TextView) convertView.findViewById(R.id.dateInv);
-            //viewHolder.heure = (TextView) convertView.findViewById(R.id.heureReleve);
+            viewHolder.heure = (TextView) convertView.findViewById(R.id.heureInventaire);
 
             convertView.setTag(viewHolder);
         }
@@ -40,7 +40,14 @@ public class InventaireAdapter extends ArrayAdapter<Inventaire>{
         Inventaire inv = getItem(position);
 
         //il ne reste plus qu'à remplir notre vue
-        viewHolder.nomEspece.setText(inv.getNomFr());
+        String nom;
+        String nomFr = inv.getNomFr();
+        if(nomFr.isEmpty())
+            nom = inv.getNomLatin();
+        else
+            nom = nomFr;
+
+        viewHolder.nomEspece.setText(nom);
         int nb = inv.getNombre();
         // Si le dénombrement n'a pas été défini
         if(nb == 0)
@@ -48,7 +55,7 @@ public class InventaireAdapter extends ArrayAdapter<Inventaire>{
         else
             viewHolder.denombrement.setText(nb + "");
         viewHolder.date.setText(inv.getDate());
-        //viewHolder.heure.setText(rel.getHeure());
+        viewHolder.heure.setText(inv.getHeure());
 
         return convertView;
     }
@@ -57,7 +64,7 @@ public class InventaireAdapter extends ArrayAdapter<Inventaire>{
         public TextView nomEspece;
         public TextView denombrement;
         public TextView date;
-        //public TextView heure;
+        public TextView heure;
     }
 
 }
