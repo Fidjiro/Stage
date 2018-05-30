@@ -39,7 +39,7 @@ public class FauneActivity extends FormActivity {
 
     @Override
     protected Inventaire createPersonalInventaire() {
-        return new Inventaire(ref_taxon, usrId, typeTaxon, lat, lon, dat, nb, obs, nbMale, nbFemale);
+        return new Inventaire(ref_taxon, usrId, nomFrString, typeTaxon, lat, lon, dat, nb, obs, nbMale, nbFemale);
     }
 
     /**

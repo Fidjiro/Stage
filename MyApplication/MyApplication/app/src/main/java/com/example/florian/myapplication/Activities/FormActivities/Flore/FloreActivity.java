@@ -36,7 +36,7 @@ public class FloreActivity extends FormActivity {
      */
     @Override
     protected Inventaire createPersonalInventaire() {
-        return new Inventaire(ref_taxon, usrId, typeTaxon, lat, lon, dat, nb, "Vu", indiceAbondanceValue);
+        return new Inventaire(ref_taxon, usrId, nomFrString, typeTaxon, lat, lon, dat, nb, "Vu", indiceAbondanceValue);
     }
 
     /**

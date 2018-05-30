@@ -31,6 +31,7 @@ public abstract class FormActivity extends AppCompatActivity {
     protected int typeTaxon;
 
     protected TextView nomfr, nomlatin, date;
+    protected String nomFrString, nomLatinString;
     protected EditText nombre;
     protected CampagneDAO campagneDao;
     protected TaxUsrDAO taxDao;
@@ -146,7 +147,7 @@ public abstract class FormActivity extends AppCompatActivity {
      */
     protected void setValuesFromUsrInput(){
         setUsrId();
-        ref_taxon = taxDao.getRefTaxon(new String[]{nomlatin.getText().toString(),nomfr.getText().toString()});
+        ref_taxon = taxDao.getRefTaxon(new String[]{nomLatinString,nomFrString});
         try{
             nb = getDenombrement();
         } catch (NumberFormatException e) {
@@ -206,8 +207,11 @@ public abstract class FormActivity extends AppCompatActivity {
         lat = intent.getDoubleExtra("latitude",0.0);
         lon = intent.getDoubleExtra("longitude",0.0);
         dat = Utils.getDate();
-        nomfr.setText(intent.getStringExtra("nomfr"));
-        nomlatin.setText(intent.getStringExtra("nomlatin"));
+        nomFrString = intent.getStringExtra("nomfr");
+        nomLatinString = intent.getStringExtra("nomlatin");
+
+        nomfr.setText(nomFrString);
+        nomlatin.setText(nomLatinString);
         date.setText(dat);
     }
 
