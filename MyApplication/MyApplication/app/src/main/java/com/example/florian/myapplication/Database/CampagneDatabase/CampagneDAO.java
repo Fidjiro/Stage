@@ -25,10 +25,12 @@ public class CampagneDAO {
     public static final String REF_USR = "ref_usr";
     public static final String REF_TAXON = "ref_taxon";
     public static final String NOM_FR = "nom_fr";
+    public static final String NOM_LATIN = "nom_latin";
     public static final String TYPE_TAXON = "type_taxon";
     public static final String LATITUDE = "latitude";
     public static final String LONGITUDE = "longitude";
     public static final String DATE = "date";
+    public static final String HEURE = "heure";
     public static final String NB = "nombre";
     public static final String TYPE_OBS = "type_obs";
     public static final String NBMALE = "nombre_mâle";
@@ -84,10 +86,12 @@ public class CampagneDAO {
         cv.put(REF_TAXON,inv.getRef_taxon());
         cv.put(REF_USR,inv.getUser());
         cv.put(NOM_FR,inv.getNomFr());
+        cv.put(NOM_LATIN,inv.getNomLatin());
         cv.put(TYPE_TAXON,inv.getTypeTaxon());
         cv.put(LATITUDE,inv.getLatitude());
         cv.put(LONGITUDE,inv.getLongitude());
         cv.put(DATE,inv.getDate());
+        cv.put(HEURE,inv.getHeure());
         cv.put(TYPE_OBS,inv.getType_obs());
         cv.put(NB,inv.getNombre());
         cv.put(NBMALE,inv.getNbMale());
@@ -111,7 +115,7 @@ public class CampagneDAO {
         Cursor c = mDb.rawQuery(request,new String[]{usrId + ""});
 
         c.moveToLast();
-        return new Inventaire(c.getLong(c.getColumnIndex(KEY)),c.getLong(c.getColumnIndex(REF_TAXON)),c.getLong(c.getColumnIndex(REF_USR)), c.getString(c.getColumnIndex(NOM_FR)), c.getInt(c.getColumnIndex(TYPE_TAXON)), c.getDouble(c.getColumnIndex(LATITUDE)),c.getDouble(c.getColumnIndex(LONGITUDE)),c.getString(c.getColumnIndex(DATE)),c.getInt(c.getColumnIndex(NB)),c.getString(c.getColumnIndex(TYPE_OBS)),c.getInt(c.getColumnIndex(NBMALE)),c.getInt(c.getColumnIndex(NBFEMALE)),c.getString(c.getColumnIndex(PRESENCE_PONTE)),c.getString(c.getColumnIndex(ACTIVITE)),c.getString(c.getColumnIndex(STATUT)),c.getString(c.getColumnIndex(NIDIF)),c.getInt(c.getColumnIndex(ABONDANCE)));
+        return new Inventaire(c.getLong(c.getColumnIndex(KEY)),c.getLong(c.getColumnIndex(REF_TAXON)),c.getLong(c.getColumnIndex(REF_USR)), c.getString(c.getColumnIndex(NOM_FR)), c.getString(c.getColumnIndex(NOM_LATIN)), c.getInt(c.getColumnIndex(TYPE_TAXON)), c.getDouble(c.getColumnIndex(LATITUDE)),c.getDouble(c.getColumnIndex(LONGITUDE)),c.getString(c.getColumnIndex(DATE)), c.getString(c.getColumnIndex(HEURE)), c.getInt(c.getColumnIndex(NB)),c.getString(c.getColumnIndex(TYPE_OBS)),c.getInt(c.getColumnIndex(NBMALE)),c.getInt(c.getColumnIndex(NBFEMALE)),c.getString(c.getColumnIndex(PRESENCE_PONTE)),c.getString(c.getColumnIndex(ACTIVITE)),c.getString(c.getColumnIndex(STATUT)),c.getString(c.getColumnIndex(NIDIF)),c.getInt(c.getColumnIndex(ABONDANCE)));
     }
 
     public List<Inventaire> getInventairesOfTheUsr(long usrId){
@@ -130,10 +134,12 @@ public class CampagneDAO {
                 long ref_taxon = c.getLong(c.getColumnIndex(REF_TAXON));
                 long ref_usr = c.getLong(c.getColumnIndex(REF_USR));
                 String nomFr = c.getString(c.getColumnIndex(NOM_FR));
+                String nomLatin = c.getString(c.getColumnIndex(NOM_LATIN));
                 int type_taxon = c.getInt(c.getColumnIndex(TYPE_TAXON));
                 double latitude = c.getDouble(c.getColumnIndex(LATITUDE));
                 double longitude = c.getDouble(c.getColumnIndex(LONGITUDE));
                 String date = c.getString(c.getColumnIndex(DATE));
+                String heure = c.getString(c.getColumnIndex(HEURE));
                 int nb = c.getInt(c.getColumnIndex(NB));
                 String type_obs = c.getString(c.getColumnIndex(TYPE_OBS));
                 int nbMale = c.getInt(c.getColumnIndex(NBMALE));
@@ -144,7 +150,7 @@ public class CampagneDAO {
                 String nidif = c.getString(c.getColumnIndex(NIDIF));
                 int indiceAbondance = c.getInt(c.getColumnIndex(ABONDANCE));
 
-                Inventaire tmp = new Inventaire(_id,ref_taxon,ref_usr, nomFr, type_taxon, latitude,longitude,date,nb,type_obs,nbMale,nbFemale,presencePonte,activite,statut,nidif,indiceAbondance);
+                Inventaire tmp = new Inventaire(_id,ref_taxon,ref_usr, nomFr, nomLatin, type_taxon, latitude,longitude,date, heure, nb,type_obs,nbMale,nbFemale,presencePonte,activite,statut,nidif,indiceAbondance);
 
                 res.add(tmp);
             }while(c.moveToNext());

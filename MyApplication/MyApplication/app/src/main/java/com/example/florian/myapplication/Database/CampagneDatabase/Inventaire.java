@@ -15,10 +15,12 @@ public class Inventaire {
     private long ref_taxon;
     private long user;
     private String nomFr;
+    private String nomLatin;
     private int typeTaxon;
     private double latitude;
     private double longitude;
     private String date;
+    private String heure;
     private int nombre;
     private String type_obs;
     private int nbMale;
@@ -47,15 +49,17 @@ public class Inventaire {
      * @param nidif
      * @param indiceAbondance
      */
-    public Inventaire(long _id,long ref_taxon, long user, String nomFr, int typeTaxon, double latitude, double longitude, String date, int nombre, String type_obs, int nbMale, int nbFemale, String presencePonte, String activite, String statut, String nidif, int indiceAbondance) {
+    public Inventaire(long _id,long ref_taxon, long user, String nomFr, String nomLatin, int typeTaxon, double latitude, double longitude, String date, String heure, int nombre, String type_obs, int nbMale, int nbFemale, String presencePonte, String activite, String statut, String nidif, int indiceAbondance) {
         this._id = _id;
         this.ref_taxon = ref_taxon;
         this.user = user;
         this.nomFr = nomFr;
+        this.nomLatin = nomLatin;
         this.typeTaxon = typeTaxon;
         this.latitude = latitude;
         this.longitude = longitude;
         this.date = date;
+        this.heure = heure;
         this.nombre = nombre;
         this.type_obs = type_obs;
         this.nbMale = nbMale;
@@ -85,13 +89,15 @@ public class Inventaire {
      * @param nombre
      * @param type_obs
      */
-    public Inventaire(long ref_taxon, long user, String nomFr, int typeTaxon, double latitude, double longitude, String date, int nombre, String type_obs) {
+    public Inventaire(long ref_taxon, long user, String nomFr, String nomLatin, int typeTaxon, double latitude, double longitude, String date, String heure, int nombre, String type_obs) {
         this.ref_taxon = ref_taxon;
         this.nomFr = nomFr;
+        this.nomLatin = nomLatin;
         this.typeTaxon = typeTaxon;
         this.latitude = latitude;
         this.longitude = longitude;
         this.date = date;
+        this.heure = heure;
         this.type_obs = type_obs;
         this.user = user;
         this.nombre = nombre;
@@ -113,8 +119,8 @@ public class Inventaire {
      * @param nbMale
      * @param nbFemale
      */
-    public Inventaire(long ref_taxon, long user, String nomFr, int typeTaxon, double latitude, double longitude, String date, int nombre, String type_obs, int nbMale, int nbFemale) {
-        this(ref_taxon, user, nomFr, typeTaxon, latitude, longitude, date, nombre, type_obs);
+    public Inventaire(long ref_taxon, long user, String nomFr, String nomLatin, int typeTaxon, double latitude, double longitude, String date, String heure, int nombre, String type_obs, int nbMale, int nbFemale) {
+        this(ref_taxon, user, nomFr, nomLatin, typeTaxon, latitude, longitude, date, heure, nombre, type_obs);
         this.nbMale = nbMale;
         this.nbFemale = nbFemale;
     }
@@ -135,8 +141,8 @@ public class Inventaire {
      * @param statut
      * @param nidif
      */
-    public Inventaire(long ref_taxon, long user, String nomFr, int typeTaxon, double latitude, double longitude, String date, int nombre, String type_obs, int nbMale, int nbFemale, String activite, String statut, String nidif) {
-        this(ref_taxon, user, nomFr, typeTaxon, latitude, longitude, date, nombre, type_obs, nbMale, nbFemale);
+    public Inventaire(long ref_taxon, long user, String nomFr, String nomLatin, int typeTaxon, double latitude, double longitude, String date, String heure, int nombre, String type_obs, int nbMale, int nbFemale, String activite, String statut, String nidif) {
+        this(ref_taxon, user, nomFr, nomLatin, typeTaxon, latitude, longitude, date, heure, nombre, type_obs, nbMale, nbFemale);
         this.activite = activite;
         this.statut = statut;
         this.nidif = nidif;
@@ -156,8 +162,8 @@ public class Inventaire {
      * @param nbFemale
      * @param presencePonte
      */
-    public Inventaire(long ref_taxon, long user, String nomFr, int typeTaxon, double latitude, double longitude, String date, int nombre, String type_obs, int nbMale, int nbFemale, String presencePonte) {
-        this(ref_taxon, user, nomFr, typeTaxon, latitude, longitude, date, nombre, type_obs, nbMale, nbFemale);
+    public Inventaire(long ref_taxon, long user, String nomFr, String nomLatin,  int typeTaxon, double latitude, double longitude, String date, String heure, int nombre, String type_obs, int nbMale, int nbFemale, String presencePonte) {
+        this(ref_taxon, user, nomFr, nomLatin, typeTaxon, latitude, longitude, date, heure, nombre, type_obs, nbMale, nbFemale);
         this.presencePonte = presencePonte;
     }
 
@@ -172,8 +178,8 @@ public class Inventaire {
      * @param type_obs
      * @param indiceAbondance
      */
-    public Inventaire(long ref_taxon, long user, String nomFr, int typeTaxon, double latitude, double longitude, String date, int nombre, String type_obs, int indiceAbondance) {
-        this(ref_taxon, user, nomFr, typeTaxon, latitude, longitude, date, nombre, type_obs);
+    public Inventaire(long ref_taxon, long user, String nomFr, String nomLatin,  int typeTaxon, double latitude, double longitude, String date, String heure, int nombre, String type_obs, int indiceAbondance) {
+        this(ref_taxon, user, nomFr, nomLatin, typeTaxon, latitude, longitude, date, heure, nombre, type_obs);
         this.indiceAbondance = indiceAbondance;
     }
 
@@ -311,5 +317,21 @@ public class Inventaire {
 
     public void setNomFr(String nomFr) {
         this.nomFr = nomFr;
+    }
+
+    public String getNomLatin() {
+        return nomLatin;
+    }
+
+    public void setNomLatin(String nomLatin) {
+        this.nomLatin = nomLatin;
+    }
+
+    public String getHeure() {
+        return heure;
+    }
+
+    public void setHeure(String heure) {
+        this.heure = heure;
     }
 }
