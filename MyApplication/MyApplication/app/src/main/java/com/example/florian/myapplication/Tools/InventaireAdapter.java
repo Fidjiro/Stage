@@ -1,6 +1,7 @@
 package com.example.florian.myapplication.Tools;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,14 +9,18 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.florian.myapplication.Database.CampagneDatabase.Inventaire;
+import com.example.florian.myapplication.Database.LoadingDatabase.TaxUsrDAO;
 import com.example.florian.myapplication.R;
 
 import java.util.List;
 
 public class InventaireAdapter extends ArrayAdapter<Inventaire>{
 
+    private TaxUsrDAO dao;
+
     public InventaireAdapter(Context context, List<Inventaire> inventaires) {
         super(context, 0, inventaires);
+        dao = new TaxUsrDAO(context);
     }
 
     @Override
@@ -39,10 +44,17 @@ public class InventaireAdapter extends ArrayAdapter<Inventaire>{
         //getItem(position) va récupérer l'item [position] de la List<Tweet> tweets
         Inventaire inv = getItem(position);
 
-        //il ne reste plus qu'à remplir notre vue
         String nom;
         String nomFr= inv.getNomFr();
+        //il ne reste plus qu'à remplir notre vue
         nom = inv.getNomLatin();
+        dao.open();
+        int nv = dao.getNiveau(new String[]{nom,nomFr});
+        dao.close();
+
+        nom = addSpToString(nv,nom);
+
+        setNiceColorToView(nv, viewHolder.nomEspece);
 
         if(!nomFr.isEmpty())
             nom += " - " + nomFr;
@@ -58,6 +70,21 @@ public class InventaireAdapter extends ArrayAdapter<Inventaire>{
         viewHolder.heure.setText(inv.getHeure());
 
         return convertView;
+    }
+
+    private String addSpToString(int nv, String name){
+        if(nv == 5)
+            return name + " sp.";
+        return name;
+    }
+
+    private void setNiceColorToView(int nv, TextView view){
+        if(nv == 5){
+            view.setTextColor(Color.BLUE);
+        } else if(nv == 6)
+            view.setTextColor(Color.BLACK);
+        else if(nv == 7)
+            view.setTextColor(Color.GRAY);
     }
 
     private class InventaireViewHolder {

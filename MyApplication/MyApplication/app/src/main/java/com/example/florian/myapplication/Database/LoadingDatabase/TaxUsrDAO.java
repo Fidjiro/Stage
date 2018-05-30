@@ -202,6 +202,11 @@ public class TaxUsrDAO {
         return c;
     }
 
+    public int getNiveau(String[] noms){
+        Cursor c = selectByNoms(noms);
+        return c.getInt(c.getColumnIndex(NIVEAU));
+    }
+
     /**
      * Récupère le regne d'un Taxon
      *
