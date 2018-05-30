@@ -42,14 +42,27 @@
         <activity
             android:name=".Activities.HomeActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activities.TestActivity" />
-        <activity android:name=".Activities.HttpActivity" />
-        <activity android:name=".Activities.FormActivities.Faune.FauneActivity" />
-        <activity android:name=".Activities.FormActivities.Flore.FloreActivity" />
-        <activity android:name=".Activities.FormActivities.Faune.AmphibienActivity" />
-        <activity android:name=".Activities.FormActivities.Faune.OiseauxActivity" />
-        <activity android:name=".Activities.MapsActivities.Releve.HistoryReleveActivity" />
-        <activity android:name=".Activities.MapsActivities.Recensement.HistoryRecensementActivity"></activity>
+        <activity
+            android:name=".Activities.HttpActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activities.FormActivities.Faune.FauneActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activities.FormActivities.Flore.FloreActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activities.FormActivities.Faune.AmphibienActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activities.FormActivities.Faune.OiseauxActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activities.MapsActivities.Releve.HistoryReleveActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activities.MapsActivities.Recensement.HistoryRecensementActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

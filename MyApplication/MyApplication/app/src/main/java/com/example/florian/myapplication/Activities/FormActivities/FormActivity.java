@@ -14,14 +14,11 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.florian.myapplication.Activities.TestActivity;
 import com.example.florian.myapplication.Database.CampagneDatabase.CampagneDAO;
 import com.example.florian.myapplication.Database.CampagneDatabase.Inventaire;
 import com.example.florian.myapplication.Database.LoadingDatabase.TaxUsrDAO;
 import com.example.florian.myapplication.R;
 import com.example.florian.myapplication.Tools.Utils;
-
-import java.util.Calendar;
 
 /**
  * Activité Formulaire qui sert de base aux 4 formulaires différents
@@ -73,8 +70,7 @@ public abstract class FormActivity extends AppCompatActivity {
                 if(formIsValidable()){
                     Inventaire inv = createInventaireFromFields();
                     campagneDao.insertInventaire(inv);
-                    Intent intent = new Intent(FormActivity.this,TestActivity.class);
-                    startActivity(intent);
+                    FormActivity.this.finish();
                 } else{
                     actionWhenFormNotValidable();
                 }
