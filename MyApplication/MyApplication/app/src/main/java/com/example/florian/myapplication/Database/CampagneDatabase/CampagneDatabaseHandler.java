@@ -13,6 +13,7 @@ public class CampagneDatabaseHandler extends SQLiteOpenHelper {
     public static final String CAMPAGNE_KEY = "_id";
     public static final String CAMPAGNE_REF_TAXON = "ref_taxon";
     public static final String CAMPAGNE_REF_USR = "ref_usr";
+    public static final String CAMPAGNE_NOM_FR = "nom_fr";
     public static final String CAMPAGNE_TYPE_TAXON = "type_taxon";
     public static final String CAMPAGNE_LATITUDE = "latitude";
     public static final String CAMPAGNE_LONGITUDE = "longitude";
@@ -30,6 +31,7 @@ public class CampagneDatabaseHandler extends SQLiteOpenHelper {
             CAMPAGNE_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             CAMPAGNE_REF_TAXON + " INTEGER NOT NULL, " +
             CAMPAGNE_REF_USR + " INTEGER NOT NULL, " +
+            CAMPAGNE_NOM_FR + " STRING NOT NULL, " +
             CAMPAGNE_TYPE_TAXON + " INTEGER NOT NULL, " +
             CAMPAGNE_LATITUDE + " REAL NOT NULL, " +
             CAMPAGNE_LONGITUDE + " REAL NOT NULL, " +
