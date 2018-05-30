@@ -36,6 +36,9 @@ public class MainActivityRec extends MainActivity {
     public CustomAutoCompleteView myAutoCompleteLatin;
     public CustomAutoCompleteView myAutoCompleteFr;
 
+    protected LinearLayout recensementLayout;
+    protected Button mesRecensement;
+
     protected String nomLatinInput;
     protected String nomFrInput;
 
@@ -49,7 +52,7 @@ public class MainActivityRec extends MainActivity {
 
         Button recenser = (Button) findViewById(R.id.recenser);
         Button validerRecensement = (Button) findViewById(R.id.validerRecensement);
-        Button mesRecensement = (Button) findViewById(R.id.mesCampagnes);
+        mesRecensement = (Button) findViewById(R.id.mesCampagnes);
 
         loadAutoComplete();
 
@@ -94,10 +97,17 @@ public class MainActivityRec extends MainActivity {
             @Override
             public void onClick(View view) {
                 recensementLayout.setVisibility(View.VISIBLE);
+                mesRecensement.setVisibility(View.GONE);
                 myAutoCompleteFr.setText("");
                 myAutoCompleteLatin.setText("");
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mesRecensement.setVisibility(View.VISIBLE);
     }
 
     /**

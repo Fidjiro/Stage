@@ -42,6 +42,7 @@ public class InventaireAdapter extends ArrayAdapter<Inventaire>{
         //il ne reste plus qu'à remplir notre vue
         viewHolder.nomEspece.setText(inv.getNomFr());
         int nb = inv.getNombre();
+        // Si le dénombrement n'a pas été défini
         if(nb == 0)
             viewHolder.denombrement.setText("Présence");
         else

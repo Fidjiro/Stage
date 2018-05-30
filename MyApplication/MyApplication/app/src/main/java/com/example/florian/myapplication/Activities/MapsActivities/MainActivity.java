@@ -50,7 +50,7 @@ public abstract class MainActivity extends AppCompatActivity{
     protected static final int REQUEST_ACCESS_FINE_LOCATION = 987;
 
     protected String provider;
-    protected LinearLayout recensementLayout;
+
 
     protected ProgressDialog progressDialog;
 
