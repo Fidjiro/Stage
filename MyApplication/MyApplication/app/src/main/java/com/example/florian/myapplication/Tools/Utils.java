@@ -159,7 +159,11 @@ public final class Utils {
         int year = c.get(Calendar.YEAR);
         c.get(Calendar.HOUR_OF_DAY);
 
-        return formatInt(day) + "/" + formatInt(month) + "/" + year;
+        return formatInt(day) + "/" + formatInt(month) + "/" + getYearIn2Digit(year);
+    }
+
+    public static int getYearIn2Digit(int year){
+        return year % 100;
     }
 
     public static String getTime(){

@@ -3,6 +3,8 @@ package com.example.florian.myapplication.Activities.MapsActivities.Recensement;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.florian.myapplication.Database.CampagneDatabase.CampagneDAO;
@@ -27,6 +29,12 @@ public class HistoryRecensementActivity extends AppCompatActivity {
         dao.open();
 
         listInv = (ListView) findViewById(R.id.listViewRecensement);
+        listInv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+            }
+        });
     }
 
     @Override

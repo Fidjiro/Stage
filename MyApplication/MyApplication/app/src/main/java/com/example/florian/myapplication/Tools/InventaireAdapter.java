@@ -41,11 +41,11 @@ public class InventaireAdapter extends ArrayAdapter<Inventaire>{
 
         //il ne reste plus qu'à remplir notre vue
         String nom;
-        String nomFr = inv.getNomFr();
-        if(nomFr.isEmpty())
-            nom = inv.getNomLatin();
-        else
-            nom = nomFr;
+        String nomFr= inv.getNomFr();
+        nom = inv.getNomLatin();
+
+        if(!nomFr.isEmpty())
+            nom += " - " + nomFr;
 
         viewHolder.nomEspece.setText(nom);
         int nb = inv.getNombre();
