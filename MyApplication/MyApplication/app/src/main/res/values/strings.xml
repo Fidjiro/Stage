@@ -30,7 +30,7 @@
     <string name="recenser">Recenser</string>
     <string name="finMission">Fin de mission</string>
     <string name="finReleve">Fin de relevé</string>
-    <string name="mesCampagnes">Mes campagnes</string>
+    <string name="mesCampagnes">Mes inventaires</string>
 
     <!--Strings pour la MainActivityRel-->
     <string name="nommerReleve">Donnez un nom à votre relevé : </string>

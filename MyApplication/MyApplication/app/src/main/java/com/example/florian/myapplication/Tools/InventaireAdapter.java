@@ -41,7 +41,7 @@ public class InventaireAdapter extends ArrayAdapter<Inventaire>{
 
         //il ne reste plus qu'à remplir notre vue
         viewHolder.nomEspece.setText(inv.getNomFr());
-        viewHolder.denombrement.setText(inv.getNombre());
+        viewHolder.denombrement.setText(inv.getNombre() + "");
         viewHolder.date.setText(inv.getDate());
         //viewHolder.heure.setText(rel.getHeure());
 
