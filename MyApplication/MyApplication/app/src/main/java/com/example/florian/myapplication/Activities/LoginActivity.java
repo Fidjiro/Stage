@@ -25,8 +25,13 @@ import com.example.florian.myapplication.Parser.TaxRefParser;
 import com.example.florian.myapplication.Parser.UserParser;
 import com.example.florian.myapplication.R;
 
+import org.mapsforge.core.model.LatLong;
+
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import static java.lang.Math.PI;
 import static java.lang.Math.log;
@@ -55,8 +60,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        tryConvertL93ToWgs84();
-
         dao = new TaxUsrDAO(this);
         dao.open();
         loadData();
@@ -80,32 +83,6 @@ public class LoginActivity extends AppCompatActivity {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-    }
-
-    private double atanh(double x){
-        return (log(1+x) - log(1-x))/2;
-    }
-
-    private void tryConvertL93ToWgs84(){
-        // récupération des coordonnées
-        double latitude= 50.66760;
-        double longitude= 1.83971;
-
-// définition des constantes
-        double c= 11754255.426096; //constante de la projection
-        double e= 0.0818191910428158; //première exentricité de l'ellipsoïde
-        double n= 0.725607765053267; //exposant de la projection
-        double xs= 700000; //coordonnées en projection du pole
-        double ys= 12655612.049876; //coordonnées en projection du pole
-
-// pré-calculs
-        double lat_rad= latitude/180*Math.PI; //latitude en rad
-        double lat_iso= atanh(Math.sin(lat_rad))-e*atanh(e*Math.sin(lat_rad)); //latitude isométrique
-
-//calcul
-        double x= ((c*Math.exp(-n*(lat_iso)))*Math.sin(n*(longitude-3)/180*Math.PI)+xs);
-        double y= (ys-(c*Math.exp(-n*(lat_iso)))*Math.cos(n*(longitude-3)/180*Math.PI));
-        System.out.println("Latitude lambert : " + x + ", longitude lambert : " + y);
     }
 
     /**

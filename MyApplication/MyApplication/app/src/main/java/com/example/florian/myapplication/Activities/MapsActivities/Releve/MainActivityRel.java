@@ -37,8 +37,11 @@ import org.mapsforge.map.layer.overlay.Polygon;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+
+import static java.lang.Math.log;
 
 /**
  * Activité carte pour les relevés de terrain
@@ -89,6 +92,8 @@ public class MainActivityRel extends MainActivity {
 
         dao = new HistoryDao(this);
         dao.open();
+
+        tryGetArea();
 
         lineButton = (ImageButton) findViewById(R.id.bouton_releve_ligne);
         polygonButton = (ImageButton) findViewById(R.id.bouton_releve_polygone);
@@ -166,6 +171,98 @@ public class MainActivityRel extends MainActivity {
                 finirReleve();
             }
         });
+    }
+
+    private void tryGetArea(){
+        List<LatLong> latLongs = new ArrayList<>();
+        latLongs.add(new LatLong(-5.9838563,-1.3630812));
+        latLongs.add(new LatLong(-5.9838501,-1.3630816));
+        latLongs.add(new LatLong(-5.9838498,-1.3630753));
+        latLongs.add(new LatLong(-5.9838560,-1.3630750));
+        latLongs.add(new LatLong(-5.9838563,-1.3630812));
+        System.out.println("area :" + getArea(latLongs));
+    }
+
+    private double atanh(double x){
+        return (log(1+x) - log(1-x))/2;
+    }
+
+    private XY convertWgs84ToL93(LatLong latLong){
+
+        double latitude = latLong.getLatitude();
+        double longitude = latLong.getLongitude();
+
+// définition des constantes
+        double c= 11754255.426096; //constante de la projection
+        double e= 0.0818191910428158; //première exentricité de l'ellipsoïde
+        double n= 0.725607765053267; //exposant de la projection
+        double xs= 700000; //coordonnées en projection du pole
+        double ys= 12655612.049876; //coordonnées en projection du pole
+
+// pré-calculs
+        double lat_rad= latitude/180*Math.PI; //latitude en rad
+        double lat_iso= atanh(Math.sin(lat_rad))-e*atanh(e*Math.sin(lat_rad)); //latitude isométrique
+
+//calcul
+        double x= ((c*Math.exp(-n*(lat_iso)))*Math.sin(n*(longitude-3)/180*Math.PI)+xs);
+        double y= (ys-(c*Math.exp(-n*(lat_iso)))*Math.cos(n*(longitude-3)/180*Math.PI));
+        return new XY(x,y);
+    }
+
+    protected List<XY> convertLatLongsListToL93List(List<LatLong> latLongs){
+        List<XY> coordList = new ArrayList<>();
+
+        for(LatLong latLong : latLongs){
+            coordList.add(convertWgs84ToL93(latLong));
+        }
+
+        return coordList;
+    }
+
+    //Fonctionne mais attention, le point d'origine doit également se retrouver à la fin de la liste
+    protected double getArea(List<LatLong> latLongs){
+        // transformer chaque latLong en L93
+        List<XY> listFormatedCoord = convertLatLongsListToL93List(latLongs);
+
+        int nbCoord = listFormatedCoord.size();
+        Iterator<XY> it = listFormatedCoord.iterator();
+
+        if(nbCoord < 3) {
+            return 0;
+        }
+
+        XY pp = new XY();
+        XY cp = it.next();
+        XY np = it.next();
+        double x0 = cp.x;
+        np.x -= x0;
+        double sum = 0;
+
+        int i = 1;
+        while(it.hasNext()){
+            pp.y = cp.y;
+            cp.x = np.x;
+            cp.y = np.y;
+            np = it.next();
+            np.x -= x0;
+            sum += cp.x * (np.y - pp.y);
+        }
+        return Math.abs(-sum /2);
+    }
+
+    private class XY{
+        public double x;
+        public double y;
+
+        public XY(){
+            x = 0;
+            y = 0;
+        }
+
+        public XY(double x, double y) {
+            this.x = x;
+            this.y = y;
+        }
     }
 
     private Releve createReleveToInsert(){
