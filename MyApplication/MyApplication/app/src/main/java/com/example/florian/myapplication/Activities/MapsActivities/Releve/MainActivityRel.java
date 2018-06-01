@@ -52,7 +52,7 @@ public class MainActivityRel extends MainActivity {
 
     protected ImageButton lineButton, polygonButton, pointButton;
     protected EditText nomReleve;
-    protected TextView lineLengthText,perimeterText,positionWGSText,positionL93Text;
+    protected TextView lineLengthText,perimeterText, polygonAreaText, positionWGSText,positionL93Text;
     protected LinearLayout nomReleveForm;
     protected Button validNom, finReleve, mesReleve;
 
@@ -63,7 +63,7 @@ public class MainActivityRel extends MainActivity {
 
     protected Polyline polyline;
     protected double lineLength;
-    protected double polygonPerimeter;
+    protected double polygonPerimeter, polygonArea;
     protected Polygon polygon;
     protected List<LatLong> latLongs;
     protected LatLong lastMarkerPosition;
@@ -105,6 +105,7 @@ public class MainActivityRel extends MainActivity {
         mesReleve = (Button) findViewById(R.id.mesReleves);
         lineLengthText = (TextView) findViewById(R.id.lineLength);
         perimeterText = (TextView) findViewById(R.id.perimeter);
+        polygonAreaText = (TextView) findViewById(R.id.polygonArea);
         positionWGSText = (TextView) findViewById(R.id.positionWGS);
         positionL93Text = (TextView) findViewById(R.id.positionL93);
 
@@ -238,7 +239,6 @@ public class MainActivityRel extends MainActivity {
         np.x -= x0;
         double sum = 0;
 
-        int i = 1;
         while(it.hasNext()){
             pp.y = cp.y;
             cp.x = np.x;
@@ -317,7 +317,6 @@ public class MainActivityRel extends MainActivity {
         public String snd(){
             return snd;
         }
-
 
     }
 
@@ -425,6 +424,7 @@ public class MainActivityRel extends MainActivity {
     private void makePositionsTextVisible(){
         lineLengthText.setVisibility(View.GONE);
         perimeterText.setVisibility(View.GONE);
+        polygonAreaText.setVisibility(View.GONE);
         positionL93Text.setVisibility(View.VISIBLE);
         positionWGSText.setVisibility(View.VISIBLE);
     }
@@ -437,23 +437,26 @@ public class MainActivityRel extends MainActivity {
     protected void setPositionText(){
         double lat = lastMarkerPosition.getLatitude();
         double lon = lastMarkerPosition.getLongitude();
+        XY convertedCoord = convertWgs84ToL93(lastMarkerPosition);
 
         positionWGSText.setText(getString(R.string.positionWGS) + " " + lat + " ; " + lon);
-        positionL93Text.setText(getString(R.string.positionL93));
+        positionL93Text.setText(getString(R.string.positionL93) + " " + convertedCoord.x + " ; " + convertedCoord.y);
     }
 
     /***
      * Stop le relevé en cours d'exécution
      */
     protected void stopReleve(){
-        releveToAdd = createReleveToInsert();
-        if(currentReleveIsLine())
+        if(currentReleveIsLine()) {
             stopLine();
-        else if(currentReleveIsPolygon())
+        }
+        else if(currentReleveIsPolygon()) {
             stopPolygon();
+        }
         else{
             stopPoint();
         }
+        releveToAdd = createReleveToInsert();
         nomReleve.setText("");
         nomReleveForm.setVisibility(View.VISIBLE);
     }
@@ -461,6 +464,7 @@ public class MainActivityRel extends MainActivity {
     private void makeLineLengthTextVisible(){
         lineLengthText.setVisibility(View.VISIBLE);
         perimeterText.setVisibility(View.GONE);
+        polygonAreaText.setVisibility(View.GONE);
         positionL93Text.setVisibility(View.GONE);
         positionWGSText.setVisibility(View.GONE);
     }
@@ -509,15 +513,17 @@ public class MainActivityRel extends MainActivity {
         pointsTaker.run();
     }
 
-    private void makePerimeterTextVisible(){
+    private void makePolygonsTextVisible(){
         lineLengthText.setVisibility(View.GONE);
         perimeterText.setVisibility(View.VISIBLE);
+        polygonAreaText.setVisibility(View.VISIBLE);
         positionL93Text.setVisibility(View.GONE);
         positionWGSText.setVisibility(View.GONE);
     }
 
-    protected void setPerimeterText(){
+    protected void setPolygonsText(){
         perimeterText.setText(getString(R.string.perimetre) + polygonPerimeter);
+        polygonAreaText.setText(getString(R.string.polygonArea) + polygonArea);
     }
 
     /**
@@ -525,9 +531,19 @@ public class MainActivityRel extends MainActivity {
      */
     protected void stopPolygon() {
         handler.removeCallbacks(pointsTaker);
+
+        //On ajoute le premier point du polygone si il est différent du dernier
+        LatLong firstPoint = latLongs.get(0);
+        if(!firstPoint.equals(latLongs.get(latLongs.size() - 1)))
+            latLongs.add(firstPoint);
+
+        polygon.requestRedraw();
+
         polygonPerimeter = getPolygonPerimeter(latLongs);
-        makePerimeterTextVisible();
-        setPerimeterText();
+        polygonArea = getArea(latLongs);
+
+        makePolygonsTextVisible();
+        setPolygonsText();
     }
 
     private double getPolygonPerimeter(List<LatLong> list){

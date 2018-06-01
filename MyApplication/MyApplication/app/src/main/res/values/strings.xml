@@ -44,6 +44,7 @@
     <string name="positionWGS">Position du point en WGS84 :</string>
     <string name="positionL93">Position du point en L93 : </string>
     <string name="nommezReleve">Veuillez nommez votre relevé</string>
+    <string name="polygonArea">Surface du polygone : </string>
 
     <!-- Pour le layout qui s'affiche après appui sur bouton recenser -->
     <string name="layoutTitle">Recensement espèce</string>

@@ -116,6 +116,14 @@
                 android:layout_margin="@dimen/formLabelMargin"
                 android:visibility="gone"/>
             <TextView
+                android:id="@+id/polygonArea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:textAllCaps="false"
+                android:layout_margin="@dimen/formLabelMargin"
+                android:visibility="gone"/>
+            <TextView
                 android:id="@+id/positionWGS"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
