@@ -17,23 +17,60 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <TextView
-                    android:id="@+id/nbInvToSync"
+                android:orientation="vertical"
+                android:background="?android:attr/selectableItemBackground">
+                <LinearLayout
+                    android:id="@+id/invToSyncLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/formLayoutsMargin"
-                    android:textSize="@dimen/textInvRelToSyncSize"
-                    android:gravity="center"
-                    android:clickable="true"/>
-                <TextView
-                    android:id="@+id/nbRelToSync"
+                    android:orientation="horizontal"
+                    android:weightSum="1"
+                    android:clickable="true"
+                    android:background="?android:attr/selectableItemBackground">
+                    <TextView
+                        android:id="@+id/nbInvToSync"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/formLayoutsMargin"
+                        android:textSize="@dimen/textInvRelToSyncSize"
+                        android:gravity="center"
+                        android:layout_weight="0.75"/>
+                    <ImageView
+                        android:id="@+id/nbInvImage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/fleche_vers_la_droite"
+                        android:layout_margin="@dimen/formLabelMargin"
+                        android:layout_gravity="center"
+                        android:layout_weight="0.25"
+                        android:visibility="invisible"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/relToSyncLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/formLayoutsMargin"
-                    android:textSize="@dimen/textInvRelToSyncSize"
-                    android:gravity="center"
-                    android:clickable="true"/>
+                    android:orientation="horizontal"
+                    android:weightSum="1"
+                    android:clickable="true"
+                    android:background="?android:attr/selectableItemBackground">
+                    <TextView
+                        android:id="@+id/nbRelToSync"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/formLayoutsMargin"
+                        android:textSize="@dimen/textInvRelToSyncSize"
+                        android:gravity="center"
+                        android:layout_weight="0.75"/>
+                    <ImageView
+                        android:id="@+id/nbRelImage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/fleche_vers_la_droite"
+                        android:layout_margin="@dimen/formLabelMargin"
+                        android:layout_gravity="center"
+                        android:layout_weight="0.25"
+                        android:visibility="invisible"/>
+                </LinearLayout>
                 <TextView
                     android:id="@+id/tvJsonItem"
                     android:layout_width="wrap_content"
