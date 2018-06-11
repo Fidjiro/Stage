@@ -75,9 +75,16 @@ public class HistoryDao {
         return cv;
     }
 
+    public int getNbReleveOfTheUsr(long creatorId){
+        String request = "SELECT * FROM " + TABLE_NAME + " WHERE " + CREATOR + " = ? AND " + IMPORT + " = ?;";
+        Cursor c = mDb.rawQuery(request,new String[]{creatorId +"","false"});
+        return c.getCount();
+    }
+
     public List<Releve> getReleveOfTheUsr(long creatorId){
         String request = "SELECT * FROM " + TABLE_NAME + " WHERE " + CREATOR + " = ?;";
         Cursor c = mDb.rawQuery(request,new String[]{creatorId +""});
+
         return dealWithCursor(c);
     }
 

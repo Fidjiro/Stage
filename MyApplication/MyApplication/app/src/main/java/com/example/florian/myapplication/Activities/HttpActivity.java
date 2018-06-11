@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.example.florian.myapplication.Database.CampagneDatabase.CampagneDAO;
 import com.example.florian.myapplication.Database.CampagneDatabase.Inventaire;
+import com.example.florian.myapplication.Database.ReleveDatabase.HistoryDao;
 import com.example.florian.myapplication.R;
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
@@ -52,15 +53,17 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
     static final String URL_CONNEXION = "http://vps122669.ovh.net:8080/connexion.php";
     static final String URL_ADD_DATA = "http://vps122669.ovh.net:8080/addData.php";
 
-    private CampagneDAO dao;
+    private CampagneDAO campagneDao;
+    private HistoryDao releveDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_http);
 
-        dao = new CampagneDAO(this);
-        dao.open();
+        campagneDao = new CampagneDAO(this);
+        releveDao = new HistoryDao(this);
+        campagneDao.open();
 
         cookieJar = new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(this));
         client = new OkHttpClient.Builder().cookieJar(cookieJar).build();
@@ -161,7 +164,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
 
             if (success) {
                 Snackbar.make(txtJson,"Synchronisation réussie",Snackbar.LENGTH_SHORT).show();
-                dao.deleteInventaire(_id);
+                campagneDao.deleteInventaire(_id);
             } else {
                 if(errMsg != null){
                     Snackbar.make(txtJson, errMsg,Snackbar.LENGTH_SHORT).show();
@@ -305,12 +308,12 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        dao.close();
+        campagneDao.close();
     }
 
     private RequestBody createRequestBodyToSend(){
 
-        Inventaire inv = dao.getInventaireOfTheUsr(usrId);
+        Inventaire inv = campagneDao.getInventaireOfTheUsr(usrId);
 
         RequestBody requestBody = new FormBody.Builder().add("_id",inv.get_id() + "").
                 add("ref_taxon",inv.getRef_taxon() + "").

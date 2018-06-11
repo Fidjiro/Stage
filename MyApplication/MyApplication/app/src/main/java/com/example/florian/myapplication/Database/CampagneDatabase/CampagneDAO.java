@@ -111,16 +111,25 @@ public class CampagneDAO {
      * @param usrId
      */
     public Inventaire getInventaireOfTheUsr(long usrId){
-        String request = "SELECT * FROM " + CAMPAGNE + " WHERE " + REF_USR + " = ?";
-        Cursor c = mDb.rawQuery(request,new String[]{usrId + ""});
+        Cursor c = selectInvOfTheUsr(usrId);
 
         c.moveToLast();
         return new Inventaire(c.getLong(c.getColumnIndex(KEY)),c.getLong(c.getColumnIndex(REF_TAXON)),c.getLong(c.getColumnIndex(REF_USR)), c.getString(c.getColumnIndex(NOM_FR)), c.getString(c.getColumnIndex(NOM_LATIN)), c.getInt(c.getColumnIndex(TYPE_TAXON)), c.getDouble(c.getColumnIndex(LATITUDE)),c.getDouble(c.getColumnIndex(LONGITUDE)),c.getString(c.getColumnIndex(DATE)), c.getString(c.getColumnIndex(HEURE)), c.getInt(c.getColumnIndex(NB)),c.getString(c.getColumnIndex(TYPE_OBS)),c.getInt(c.getColumnIndex(NBMALE)),c.getInt(c.getColumnIndex(NBFEMALE)),c.getString(c.getColumnIndex(PRESENCE_PONTE)),c.getString(c.getColumnIndex(ACTIVITE)),c.getString(c.getColumnIndex(STATUT)),c.getString(c.getColumnIndex(NIDIF)),c.getInt(c.getColumnIndex(ABONDANCE)));
     }
 
-    public List<Inventaire> getInventairesOfTheUsr(long usrId){
+    private Cursor selectInvOfTheUsr(long usrId){
         String request = "SELECT * FROM " + CAMPAGNE + " WHERE " + REF_USR + " = ?";
-        Cursor c = mDb.rawQuery(request,new String[]{usrId + ""});
+        return mDb.rawQuery(request,new String[]{usrId + ""});
+    }
+
+    public int getNbInventairesOfTheUsr(long usrId){
+        Cursor c = selectInvOfTheUsr(usrId);
+
+        return c.getCount();
+    }
+
+    public List<Inventaire> getInventairesOfTheUsr(long usrId){
+        Cursor c = selectInvOfTheUsr(usrId);
 
         return dealWihCursor(c);
     }
