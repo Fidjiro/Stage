@@ -12,4 +12,6 @@
     <dimen name="formTitleTextSize">20dp</dimen>
     <dimen name="formLabelMargin">5dp</dimen>
     <dimen name="formNombreWidth">50dp</dimen>
+
+    <dimen name="textInvRelToSyncSize">25dp</dimen>
 </resources>

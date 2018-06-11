@@ -1,6 +1,7 @@
 package com.example.florian.myapplication.Activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -15,6 +16,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.florian.myapplication.Activities.MapsActivities.Recensement.HistoryRecensementActivity;
+import com.example.florian.myapplication.Activities.MapsActivities.Releve.HistoryReleveActivity;
 import com.example.florian.myapplication.Database.CampagneDatabase.CampagneDAO;
 import com.example.florian.myapplication.Database.CampagneDatabase.Inventaire;
 import com.example.florian.myapplication.Database.ReleveDatabase.HistoryDao;
@@ -42,9 +45,11 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
 
     LinearLayout psswLayout;
     Button launchSync,validPssw;
-    TextView txtJson;
+    TextView txtJson, nbInvToSyncTxt, nbRelToSyncTxt;
     EditText psswText;
     private Snackbar snackbar;
+
+    int nbInvToSync, nbRelToSync;
 
     private CookieJar cookieJar;
     private OkHttpClient client;
@@ -64,6 +69,8 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         campagneDao = new CampagneDAO(this);
         releveDao = new HistoryDao(this);
         campagneDao.open();
+        releveDao.open();
+
 
         cookieJar = new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(this));
         client = new OkHttpClient.Builder().cookieJar(cookieJar).build();
@@ -73,6 +80,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         username = loginPreferences.getString("username","");
         usrId = loginPreferences.getLong("usrId" , 0);
+        getNbDataToSync();
 
         snackbar = Snackbar.make(txtJson, "Requête en cours d'exécution",
                 Snackbar.LENGTH_INDEFINITE);
@@ -100,6 +108,32 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
         launchSync.setOnClickListener(this);
+        nbInvToSyncTxt = (TextView) findViewById(R.id.nbInvToSync);
+        nbRelToSyncTxt = (TextView) findViewById(R.id.nbRelToSync);
+        nbInvToSyncTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HttpActivity.this, HistoryRecensementActivity.class);
+                startActivity(intent);
+            }
+        });
+        nbRelToSyncTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HttpActivity.this, HistoryReleveActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void getNbDataToSync(){
+        nbInvToSync = campagneDao.getNbInventairesOfTheUsr(usrId);
+        nbRelToSync = releveDao.getNbReleveOfTheUsr(usrId);
+    }
+
+    protected void setTxtNbDatas(){
+        nbInvToSyncTxt.setText(nbInvToSync + " " + getString(R.string.invToSync));
+        nbRelToSyncTxt.setText(nbRelToSync + " " + getString(R.string.relToSync));
     }
 
     @Override
@@ -110,11 +144,17 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         }
         snackbar.show();
 
-        RequestBody requestBody = createRequestBodyToSend();
-        final Request request = new Request.Builder().url(URL_ADD_DATA).post(requestBody).build();
+        RequestBody requestBody;
+        try {
+            requestBody = createRequestBodyToSend();
+            final Request request = new Request.Builder().url(URL_ADD_DATA).post(requestBody).build();
 
-        SendDataTask task = new SendDataTask(request);
-        task.execute((Void) null);
+            SendDataTask task = new SendDataTask(request);
+            task.execute((Void) null);
+        } catch (IOException e) {
+            Snackbar.make(txtJson, "Aucun inventaire à synchroniser", Snackbar.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
     }
 
     private class SendDataTask extends AsyncTask<Void,Void,Boolean>{
@@ -172,6 +212,13 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
                     Snackbar.make(txtJson,"Erreur sur l'inventaire " + _id,Snackbar.LENGTH_SHORT).show();
                 }
             }
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    getNbDataToSync();
+                    setTxtNbDatas();
+                }
+            });
         }
 
         @Override
@@ -253,6 +300,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
                     public void run() {
                         psswLayout.setVisibility(View.GONE);
                         launchSync.setVisibility(View.VISIBLE);
+                        setTxtNbDatas();
                     }
                 });
             } else {
@@ -311,9 +359,12 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         campagneDao.close();
     }
 
-    private RequestBody createRequestBodyToSend(){
+    private RequestBody createRequestBodyToSend() throws IOException {
 
         Inventaire inv = campagneDao.getInventaireOfTheUsr(usrId);
+
+        if(inv == null)
+            throw new IOException("No inventory to send");
 
         RequestBody requestBody = new FormBody.Builder().add("_id",inv.get_id() + "").
                 add("ref_taxon",inv.getRef_taxon() + "").
