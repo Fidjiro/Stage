@@ -22,8 +22,8 @@ public abstract class ReleveInfoPopup extends AppCompatActivity {
     protected Button redraw;
 
     protected HistoryDao dao;
-    
-    protected Context ctx;
+
+    protected Releve rel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,12 +38,22 @@ public abstract class ReleveInfoPopup extends AppCompatActivity {
 
         getWindow().setLayout((int)(width*.8),(int)(height*.8));
 
-        setCtx();
-        
+        dao = new HistoryDao(this);
+        dao.open();
+
+        Intent intent = getIntent();
+        rel = intent.getParcelableExtra("releve");
+
         initView();
+        setViewsContent();
     }
 
-    protected abstract Context setCtx();
+    protected void setViewsContent(){
+        nom.setText(rel.getNom());
+        type.setText(rel.getType());
+        date.setText(rel.getDate());
+        heure.setText(rel.getHeure());
+    }
 
     protected abstract void setContentView();
 
@@ -59,18 +69,17 @@ public abstract class ReleveInfoPopup extends AppCompatActivity {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                dao.deleteReleve(rel);
+                finishPopUp();
             }
         });
 
         redraw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = getIntent();
-                Releve rel = intent.getParcelableExtra("releve");
-                Intent inten = new Intent(ReleveInfoPopup.this,MainActivityRel.class);
-                inten.putExtra("releve",rel);
-                startActivity(inten);
+                Intent intent = new Intent(ReleveInfoPopup.this,MainActivityRel.class);
+                intent.putExtra("releve",rel);
+                startActivity(intent);
                 finishPopUp();
         }
         });

@@ -394,4 +394,10 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
                 build();
         return requestBody;
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setTxtNbDatas();
+    }
 }

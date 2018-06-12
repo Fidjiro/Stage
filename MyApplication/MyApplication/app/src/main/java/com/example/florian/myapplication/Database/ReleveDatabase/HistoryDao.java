@@ -149,4 +149,8 @@ public class HistoryDao {
         return res;
     }
 
+    public long deleteReleve(Releve rel){
+        return mDb.delete(TABLE_NAME,KEY + " = ?",new String[]{rel.get_id() + ""});
+    }
+
 }
