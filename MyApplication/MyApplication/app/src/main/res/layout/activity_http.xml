@@ -8,10 +8,12 @@
     android:background="@drawable/back">
 
     <LinearLayout
+        android:id="@+id/syncContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="invisible">
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -37,13 +39,11 @@
                         android:gravity="center"
                         android:layout_weight="0.90"/>
                     <ImageView
-                        android:id="@+id/nbInvImage"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:src="@drawable/fleche_vers_la_droite"
                         android:layout_gravity="center"
-                        android:layout_weight="0.10"
-                        android:visibility="invisible"/>
+                        android:layout_weight="0.10"/>
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/relToSyncLayout"
@@ -62,14 +62,12 @@
                         android:gravity="center"
                         android:layout_weight="0.90"/>
                     <ImageView
-                        android:id="@+id/nbRelImage"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:src="@drawable/fleche_vers_la_droite"
                         android:layout_margin="@dimen/formLabelMargin"
                         android:layout_gravity="center"
-                        android:layout_weight="0.10"
-                        android:visibility="invisible"/>
+                        android:layout_weight="0.10"/>
                 </LinearLayout>
                 <TextView
                     android:id="@+id/tvJsonItem"
@@ -84,8 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textAllCaps="false"
-            android:text="@string/syncData"
-            android:visibility="gone"/>
+            android:text="@string/syncData"/>
     </LinearLayout>
 
     <LinearLayout

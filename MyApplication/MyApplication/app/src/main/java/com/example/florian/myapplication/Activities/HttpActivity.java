@@ -46,10 +46,9 @@ import okhttp3.Response;
  */
 public class HttpActivity extends AppCompatActivity implements View.OnClickListener {
 
-    LinearLayout psswLayout,nbInvLayout, nbRelLayout;
+    LinearLayout psswLayout,nbInvLayout, nbRelLayout, syncLayout;
     Button launchSync,validPssw;
     TextView txtJson, nbInvToSyncTxt, nbRelToSyncTxt;
-    ImageView invImage, relImage;
     EditText psswText;
     private Snackbar snackbar;
 
@@ -96,10 +95,9 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         validPssw = (Button) findViewById(R.id.validPssw);
         psswText = (EditText) findViewById(R.id.password);
         psswLayout = (LinearLayout) findViewById(R.id.passwordLayout);
+        syncLayout = (LinearLayout) findViewById(R.id.syncContainer);
         nbInvLayout = (LinearLayout) findViewById(R.id.invToSyncLayout);
         nbRelLayout = (LinearLayout) findViewById(R.id.relToSyncLayout);
-        invImage = (ImageView) findViewById(R.id.nbInvImage);
-        relImage = (ImageView) findViewById(R.id.nbRelImage);
         validPssw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -142,8 +140,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
     protected void setTxtNbDatas(){
         nbInvToSyncTxt.setText(nbInvToSync + " " + getString(R.string.invToSync));
         nbRelToSyncTxt.setText(nbRelToSync + " " + getString(R.string.relToSync));
-        invImage.setVisibility(View.VISIBLE);
-        relImage.setVisibility(View.VISIBLE);
+        syncLayout.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -309,7 +306,6 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void run() {
                         psswLayout.setVisibility(View.GONE);
-                        launchSync.setVisibility(View.VISIBLE);
                         setTxtNbDatas();
                         final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
