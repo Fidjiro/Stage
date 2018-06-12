@@ -63,13 +63,15 @@
         <activity
             android:name=".Activities.MapsActivities.Recensement.HistoryRecensementActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".Activities.MapsActivities.Releve.RelevesPopUp.ReleveInfoPopup"
+        <activity android:name=".Activities.MapsActivities.Releve.RelevesPopUp.PopUpPoint"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.CustomTheme" />
-        <activity android:name=".Activities.MapsActivities.Releve.RelevesPopUp.PopUpPoint" />
-        <activity android:name=".Activities.MapsActivities.Releve.RelevesPopUp.PopUpLigne" />
-        <activity android:name=".Activities.MapsActivities.Releve.RelevesPopUp.PopUpPolygone"></activity>
+            android:theme="@style/AppTheme.CustomTheme"/>
+        <activity android:name=".Activities.MapsActivities.Releve.RelevesPopUp.PopUpLigne"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.CustomTheme"/>
+        <activity android:name=".Activities.MapsActivities.Releve.RelevesPopUp.PopUpPolygone"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.CustomTheme"/>
     </application>
 
 </manifest>

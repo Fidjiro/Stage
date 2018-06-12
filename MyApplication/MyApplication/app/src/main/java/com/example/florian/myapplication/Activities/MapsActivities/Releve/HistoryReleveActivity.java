@@ -9,6 +9,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.florian.myapplication.Activities.MapsActivities.Releve.RelevesPopUp.PopUpLigne;
+import com.example.florian.myapplication.Activities.MapsActivities.Releve.RelevesPopUp.PopUpPoint;
+import com.example.florian.myapplication.Activities.MapsActivities.Releve.RelevesPopUp.PopUpPolygone;
 import com.example.florian.myapplication.Database.ReleveDatabase.HistoryDao;
 import com.example.florian.myapplication.Database.ReleveDatabase.Releve;
 import com.example.florian.myapplication.R;
@@ -41,11 +44,19 @@ public class HistoryReleveActivity extends AppCompatActivity {
 
                 Releve rel = dao.getReleveFromNomTypeDateHeure(new String[]{nomRelTxt.getText().toString(), typeRelTxt.getText().toString(), dateRelTxt.getText().toString(), heureRelTxt.getText().toString()});
 
-                Intent intent = new Intent(HistoryReleveActivity.this,MainActivityRel.class);
+                Intent intent = generateGoodIntent(typeRelTxt.getText().toString());
                 intent.putExtra("releve",rel);
                 startActivity(intent);
             }
         });
+    }
+
+    protected Intent generateGoodIntent(String typeReleve){
+        if(typeReleve.equals(getString(R.string.point)))
+            return new Intent(HistoryReleveActivity.this, PopUpPoint.class);
+        if(typeReleve.equals(getString(R.string.line)))
+            return new Intent(HistoryReleveActivity.this, PopUpLigne.class);
+        return new Intent(HistoryReleveActivity.this, PopUpPolygone.class);
     }
 
     @Override

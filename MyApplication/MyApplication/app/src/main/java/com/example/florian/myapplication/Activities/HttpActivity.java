@@ -12,6 +12,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -310,6 +311,8 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
                         psswLayout.setVisibility(View.GONE);
                         launchSync.setVisibility(View.VISIBLE);
                         setTxtNbDatas();
+                        final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
                     }
                 });
             } else {

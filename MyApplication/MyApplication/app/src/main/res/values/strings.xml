@@ -47,6 +47,11 @@
     <string name="positionL93">Position du point en L93 : </string>
     <string name="nommezReleve">Veuillez nommez votre relevé</string>
     <string name="polygonArea">Surface du polygone : </string>
+    <!--Pour les pop up infos de releve-->
+    <string name="popUpTitle">Informations sur le relevé</string>
+    <string name="nom">Nom :</string>
+    <string name="type">Type :</string>
+    <string name="visualise">Visualiser</string>
 
     <!-- Pour le layout qui s'affiche après appui sur bouton recenser -->
     <string name="layoutTitle">Recensement espèce</string>
