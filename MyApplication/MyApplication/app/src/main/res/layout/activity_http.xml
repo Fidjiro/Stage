@@ -8,12 +8,10 @@
     android:background="@drawable/back">
 
     <LinearLayout
-        android:id="@+id/syncContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="invisible">
+        android:orientation="vertical">
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -28,8 +26,8 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:weightSum="1"
-                    android:clickable="true"
-                    android:background="?android:attr/selectableItemBackground">
+                    android:background="?android:attr/selectableItemBackground"
+                    android:visibility="gone">
                     <TextView
                         android:id="@+id/nbInvToSync"
                         android:layout_width="0dp"
@@ -39,6 +37,7 @@
                         android:gravity="center"
                         android:layout_weight="0.90"/>
                     <ImageView
+                        android:id="@+id/nbInvImage"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:src="@drawable/fleche_vers_la_droite"
@@ -51,8 +50,8 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:weightSum="1"
-                    android:clickable="true"
-                    android:background="?android:attr/selectableItemBackground">
+                    android:background="?android:attr/selectableItemBackground"
+                    android:visibility="gone">
                     <TextView
                         android:id="@+id/nbRelToSync"
                         android:layout_width="0dp"
@@ -62,11 +61,12 @@
                         android:gravity="center"
                         android:layout_weight="0.90"/>
                     <ImageView
+                        android:id="@+id/nbRelImage"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:src="@drawable/fleche_vers_la_droite"
-                        android:layout_margin="@dimen/formLabelMargin"
                         android:layout_gravity="center"
+                        android:layout_margin="@dimen/formLabelMargin"
                         android:layout_weight="0.10"/>
                 </LinearLayout>
                 <TextView
@@ -82,12 +82,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textAllCaps="false"
-            android:text="@string/syncData"/>
+            android:text="@string/syncData"
+            android:visibility="gone"/>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="horizontal"
         android:gravity="center"
         android:weightSum="1.0">
         <LinearLayout
@@ -130,5 +132,4 @@
                 android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
-
 </android.support.constraint.ConstraintLayout>

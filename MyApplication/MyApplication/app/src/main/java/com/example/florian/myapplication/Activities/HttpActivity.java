@@ -46,7 +46,7 @@ import okhttp3.Response;
  */
 public class HttpActivity extends AppCompatActivity implements View.OnClickListener {
 
-    LinearLayout psswLayout,nbInvLayout, nbRelLayout, syncLayout;
+    LinearLayout psswLayout,nbInvLayout, nbRelLayout;
     Button launchSync,validPssw;
     TextView txtJson, nbInvToSyncTxt, nbRelToSyncTxt;
     EditText psswText;
@@ -95,7 +95,6 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         validPssw = (Button) findViewById(R.id.validPssw);
         psswText = (EditText) findViewById(R.id.password);
         psswLayout = (LinearLayout) findViewById(R.id.passwordLayout);
-        syncLayout = (LinearLayout) findViewById(R.id.syncContainer);
         nbInvLayout = (LinearLayout) findViewById(R.id.invToSyncLayout);
         nbRelLayout = (LinearLayout) findViewById(R.id.relToSyncLayout);
         validPssw.setOnClickListener(new View.OnClickListener() {
@@ -140,7 +139,6 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
     protected void setTxtNbDatas(){
         nbInvToSyncTxt.setText(nbInvToSync + " " + getString(R.string.invToSync));
         nbRelToSyncTxt.setText(nbRelToSync + " " + getString(R.string.relToSync));
-        syncLayout.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -307,6 +305,9 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
                     public void run() {
                         psswLayout.setVisibility(View.GONE);
                         setTxtNbDatas();
+                        nbInvLayout.setVisibility(View.VISIBLE);
+                        nbRelLayout.setVisibility(View.VISIBLE);
+                        launchSync.setVisibility(View.VISIBLE);
                         final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
                     }
