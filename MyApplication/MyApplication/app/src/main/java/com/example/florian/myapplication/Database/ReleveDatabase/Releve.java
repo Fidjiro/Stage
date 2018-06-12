@@ -28,8 +28,11 @@ public class Releve implements Parcelable{
     private String importStatus;
     private String date;
     private String heure;
+    private double length;
+    private double perimeter;
+    private double area;
 
-    public Releve(long creator, String nom, String type, String latitudes, String longitudes, String lat_long, String importStatus, String date, String heure) {
+    public Releve(long creator, String nom, String type, String latitudes, String longitudes, String lat_long, String importStatus, String date, String heure, double length, double perimeter, double area) {
         this.creator = creator;
         this.nom = nom;
         this.type = type;
@@ -39,10 +42,13 @@ public class Releve implements Parcelable{
         this.importStatus = importStatus;
         this.date = date;
         this.heure = heure;
+        this.length = length;
+        this.perimeter = perimeter;
+        this.area = area;
     }
 
-    public Releve(long _id, long creator, String nom, String type, String latitudes, String longitudes, String lat_long, String importStatus, String date, String heure) {
-        this(creator, nom, type, latitudes, longitudes, lat_long, importStatus, date, heure);
+    public Releve(long _id, long creator, String nom, String type, String latitudes, String longitudes, String lat_long, String importStatus, String date, String heure, double length, double perimeter, double area) {
+        this(creator, nom, type, latitudes, longitudes, lat_long, importStatus, date, heure, length, perimeter, area);
         this._id = _id;
     }
 
@@ -63,6 +69,9 @@ public class Releve implements Parcelable{
         parcel.writeString(importStatus);
         parcel.writeString(date);
         parcel.writeString(heure);
+        parcel.writeDouble(length);
+        parcel.writeDouble(perimeter);
+        parcel.writeDouble(area);
     }
 
     public static final Parcelable.Creator<Releve> CREATOR = new Parcelable.Creator<Releve>() {
@@ -86,6 +95,9 @@ public class Releve implements Parcelable{
         importStatus = in.readString();
         date = in.readString();
         heure = in.readString();
+        length = in.readDouble();
+        perimeter = in.readDouble();
+        area = in.readDouble();
     }
 
     public long get_id() {
@@ -168,4 +180,27 @@ public class Releve implements Parcelable{
         this.heure = heure;
     }
 
+    public double getLength() {
+        return length;
+    }
+
+    public void setLength(double length) {
+        this.length = length;
+    }
+
+    public double getPerimeter() {
+        return perimeter;
+    }
+
+    public void setPerimeter(double perimeter) {
+        this.perimeter = perimeter;
+    }
+
+    public double getArea() {
+        return area;
+    }
+
+    public void setArea(double area) {
+        this.area = area;
+    }
 }

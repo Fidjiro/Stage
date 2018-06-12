@@ -30,6 +30,9 @@ public class HistoryDao {
     public static final String IMPORT = "import";
     public static final String DATE = "date";
     public static final String TIME = "heure";
+    public static final String LENGTH = "longueur";
+    public static final String PERIMETER = "perimetre";
+    public static final String AREA = "surface";
 
     public HistoryDao(Context pContext){
         this.mHandler = new HistoryDatabaseHandler(pContext, NAME, null, VERSION);
@@ -72,6 +75,9 @@ public class HistoryDao {
         cv.put(IMPORT,rel.getImportStatus());
         cv.put(DATE,rel.getDate());
         cv.put(TIME,rel.getHeure());
+        cv.put(LENGTH,rel.getLength());
+        cv.put(PERIMETER,rel.getPerimeter());
+        cv.put(AREA,rel.getArea());
         return cv;
     }
 
@@ -107,8 +113,11 @@ public class HistoryDao {
         String importStatus = c.getString(c.getColumnIndex(IMPORT));
         String date = c.getString(c.getColumnIndex(DATE));
         String heure = c.getString(c.getColumnIndex(TIME));
+        double length = c.getDouble(c.getColumnIndex(LENGTH));
+        double perimeter = c.getDouble(c.getColumnIndex(AREA));
+        double area = c.getDouble(c.getColumnIndex(PERIMETER));
 
-        return new Releve(_id,creator,nom,type,latitudes,longitudes,lat_long,importStatus,date,heure);
+        return new Releve(_id,creator,nom,type,latitudes,longitudes,lat_long,importStatus,date,heure,length,perimeter,area);
     }
 
     protected List<Releve> dealWithCursor(Cursor c){
@@ -126,8 +135,11 @@ public class HistoryDao {
                 String importStatus = c.getString(c.getColumnIndex(IMPORT));
                 String date = c.getString(c.getColumnIndex(DATE));
                 String heure = c.getString(c.getColumnIndex(TIME));
+                double length = c.getDouble(c.getColumnIndex(LENGTH));
+                double perimeter = c.getDouble(c.getColumnIndex(AREA));
+                double area = c.getDouble(c.getColumnIndex(PERIMETER));
 
-                Releve rel = new Releve(_id,creator,nom,type,latitudes,longitudes,lat_long,importStatus,date,heure);
+                Releve rel = new Releve(_id,creator,nom,type,latitudes,longitudes,lat_long,importStatus,date,heure,length,perimeter,area);
 
                 res.add(rel);
             } while(c.moveToNext());

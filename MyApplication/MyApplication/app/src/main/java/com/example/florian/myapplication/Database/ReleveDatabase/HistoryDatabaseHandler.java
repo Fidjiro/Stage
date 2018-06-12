@@ -17,6 +17,9 @@ public class HistoryDatabaseHandler extends SQLiteOpenHelper {
     public static final String HISTORY_IMPORT = "import";
     public static final String HISTORY_DATE = "date";
     public static final String HISTORY_TIME = "heure";
+    public static final String HISTORY_LENGTH = "longueur";
+    public static final String HISTORY_PERIMETER = "perimetre";
+    public static final String HISTORY_AREA = "surface";
     public static final String HISTORY_TABLE_CREATE = "CREATE TABLE " + HISTORY_TABLE_NAME + " (" +
             HISTORY_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             HISTORY_CREATOR + " INTEGER NOT NULL, " +
@@ -27,7 +30,10 @@ public class HistoryDatabaseHandler extends SQLiteOpenHelper {
             HISTORY_LAT_LONG + " TEXT NOT NULL, " +
             HISTORY_IMPORT + " TEXT NOT NULL, " +
             HISTORY_DATE + " TEXT NOT NULL, " +
-            HISTORY_TIME + " TEXT);";
+            HISTORY_TIME + " TEXT, " +
+            HISTORY_LENGTH + " REAL, " +
+            HISTORY_PERIMETER + " REAL, " +
+            HISTORY_AREA + " REAL);";
     public static final String HISTORY_TABLE_DROP = "DROP TABLE IF EXISTS " + HISTORY_TABLE_NAME + ";";
 
     public HistoryDatabaseHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {

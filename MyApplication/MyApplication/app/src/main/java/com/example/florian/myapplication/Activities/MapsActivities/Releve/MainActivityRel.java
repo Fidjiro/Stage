@@ -93,8 +93,6 @@ public class MainActivityRel extends MainActivity {
         dao = new HistoryDao(this);
         dao.open();
 
-        tryGetArea();
-
         lineButton = (ImageButton) findViewById(R.id.bouton_releve_ligne);
         polygonButton = (ImageButton) findViewById(R.id.bouton_releve_polygone);
         pointButton = (ImageButton) findViewById(R.id.bouton_releve_point);
@@ -172,16 +170,6 @@ public class MainActivityRel extends MainActivity {
                 finirReleve();
             }
         });
-    }
-
-    private void tryGetArea(){
-        List<LatLong> latLongs = new ArrayList<>();
-        latLongs.add(new LatLong(-5.9838563,-1.3630812));
-        latLongs.add(new LatLong(-5.9838501,-1.3630816));
-        latLongs.add(new LatLong(-5.9838498,-1.3630753));
-        latLongs.add(new LatLong(-5.9838560,-1.3630750));
-        latLongs.add(new LatLong(-5.9838563,-1.3630812));
-        System.out.println("area :" + getArea(latLongs));
     }
 
     private double atanh(double x){
@@ -280,7 +268,7 @@ public class MainActivityRel extends MainActivity {
             latitude = lastMarkerPosition.getLatitude() + "";
             longitude = lastMarkerPosition.getLongitude() + "";
         }
-        return new Releve(creatorId,"",getCurrentReleveType(), latitude, longitude, formatedLatLongs, "false", Utils.getDate(),Utils.getTime());
+        return new Releve(creatorId,"",getCurrentReleveType(), latitude, longitude, formatedLatLongs, "false", Utils.getDate(),Utils.getTime(),lineLength,polygonPerimeter,polygonArea);
     }
 
     private StringTuple getStringsFromLatLongs(){
