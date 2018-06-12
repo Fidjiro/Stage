@@ -44,25 +44,32 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.HttpActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.FormActivities.Faune.FauneActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.FormActivities.Flore.FloreActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.FormActivities.Faune.AmphibienActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.FormActivities.Faune.OiseauxActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.MapsActivities.Releve.HistoryReleveActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.MapsActivities.Recensement.HistoryRecensementActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.MapsActivities.Releve.RelevesPopUp.ReleveInfoPopup"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.CustomTheme" />
+        <activity android:name=".Activities.MapsActivities.Releve.RelevesPopUp.PopUpPoint" />
+        <activity android:name=".Activities.MapsActivities.Releve.RelevesPopUp.PopUpLigne" />
+        <activity android:name=".Activities.MapsActivities.Releve.RelevesPopUp.PopUpPolygone"></activity>
     </application>
 
 </manifest>

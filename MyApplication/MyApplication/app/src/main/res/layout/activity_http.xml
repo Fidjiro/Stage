@@ -29,20 +29,19 @@
                     android:background="?android:attr/selectableItemBackground">
                     <TextView
                         android:id="@+id/nbInvToSync"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/formLayoutsMargin"
                         android:textSize="@dimen/textInvRelToSyncSize"
                         android:gravity="center"
-                        android:layout_weight="0.75"/>
+                        android:layout_weight="0.90"/>
                     <ImageView
                         android:id="@+id/nbInvImage"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:src="@drawable/fleche_vers_la_droite"
-                        android:layout_margin="@dimen/formLabelMargin"
                         android:layout_gravity="center"
-                        android:layout_weight="0.25"
+                        android:layout_weight="0.10"
                         android:visibility="invisible"/>
                 </LinearLayout>
                 <LinearLayout
@@ -55,20 +54,20 @@
                     android:background="?android:attr/selectableItemBackground">
                     <TextView
                         android:id="@+id/nbRelToSync"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/formLayoutsMargin"
                         android:textSize="@dimen/textInvRelToSyncSize"
                         android:gravity="center"
-                        android:layout_weight="0.75"/>
+                        android:layout_weight="0.90"/>
                     <ImageView
                         android:id="@+id/nbRelImage"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:src="@drawable/fleche_vers_la_droite"
                         android:layout_margin="@dimen/formLabelMargin"
                         android:layout_gravity="center"
-                        android:layout_weight="0.25"
+                        android:layout_weight="0.10"
                         android:visibility="invisible"/>
                 </LinearLayout>
                 <TextView
