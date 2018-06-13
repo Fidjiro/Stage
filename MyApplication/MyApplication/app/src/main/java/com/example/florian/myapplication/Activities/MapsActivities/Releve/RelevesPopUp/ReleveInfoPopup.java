@@ -126,7 +126,6 @@ public abstract class ReleveInfoPopup extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        //showProgress(false);
     }
 
     protected abstract void finishPopUp();

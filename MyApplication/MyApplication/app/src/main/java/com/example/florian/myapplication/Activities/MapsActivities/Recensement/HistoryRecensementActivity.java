@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.florian.myapplication.Database.CampagneDatabase.CampagneDAO;
 import com.example.florian.myapplication.Database.CampagneDatabase.Inventaire;
@@ -32,7 +33,19 @@ public class HistoryRecensementActivity extends AppCompatActivity {
         listInv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                System.out.println("toto");
+                TextView nomsInvTxt = (TextView)view.findViewById(R.id.nomEspeceInv);
+                TextView dateInvTxt = (TextView)view.findViewById(R.id.dateInv);
+                TextView heureInvTxt = (TextView)view.findViewById(R.id.heureInventaire);
+
+                String noms = nomsInvTxt.getText().toString();
+                String[] splittedNoms;
+                if(noms.contains(" - "))
+                    splittedNoms = noms.split(" - ");
+                else
+                    splittedNoms = new String[]{noms,"*"};
+                String[] params = new String[] {splittedNoms[0],splittedNoms[1],dateInvTxt.getText().toString(),heureInvTxt.getText().toString()};
+                Inventaire selectedInventaire = dao.getInventaireFromHistory(params);
+                System.out.println("Nomfr: " + selectedInventaire.getNomFr() + ", nomlatin: " + selectedInventaire.getNomLatin() + ", date: " + selectedInventaire.getDate() + ", heure: " + selectedInventaire.getHeure());
             }
         });
     }

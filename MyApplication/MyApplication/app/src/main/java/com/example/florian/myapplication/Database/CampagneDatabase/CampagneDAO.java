@@ -75,6 +75,34 @@ public class CampagneDAO {
         return mDb.delete(CAMPAGNE,KEY + " = ?",new String[]{invId + ""});
     }
 
+    public Inventaire getInventaireFromHistory(String[] params){
+        String request = "SELECT * FROM " + CAMPAGNE + " WHERE " + NOM_LATIN + " = ? AND " + NOM_FR + " = ? AND " + DATE + " = ? AND " + HEURE + " = ?;";
+        Cursor c = mDb.rawQuery(request,params);
+        c.moveToNext();
+
+        long _id = c.getLong(c.getColumnIndex(KEY));
+        long ref_taxon = c.getLong(c.getColumnIndex(REF_TAXON));
+        long ref_usr = c.getLong(c.getColumnIndex(REF_USR));
+        String nomFr = c.getString(c.getColumnIndex(NOM_FR));
+        String nomLatin = c.getString(c.getColumnIndex(NOM_LATIN));
+        int type_taxon = c.getInt(c.getColumnIndex(TYPE_TAXON));
+        double latitude = c.getDouble(c.getColumnIndex(LATITUDE));
+        double longitude = c.getDouble(c.getColumnIndex(LONGITUDE));
+        String date = c.getString(c.getColumnIndex(DATE));
+        String heure = c.getString(c.getColumnIndex(HEURE));
+        int nb = c.getInt(c.getColumnIndex(NB));
+        String type_obs = c.getString(c.getColumnIndex(TYPE_OBS));
+        int nbMale = c.getInt(c.getColumnIndex(NBMALE));
+        int nbFemale = c.getInt(c.getColumnIndex(NBFEMALE));
+        String presencePonte = c.getString(c.getColumnIndex(PRESENCE_PONTE));
+        String activite = c.getString(c.getColumnIndex(ACTIVITE));
+        String statut = c.getString(c.getColumnIndex(STATUT));
+        String nidif = c.getString(c.getColumnIndex(NIDIF));
+        int indiceAbondance = c.getInt(c.getColumnIndex(ABONDANCE));
+
+        return new Inventaire(_id,ref_taxon,ref_usr, nomFr, nomLatin, type_taxon, latitude,longitude,date, heure, nb,type_obs,nbMale,nbFemale,presencePonte,activite,statut,nidif,indiceAbondance);
+    }
+
     /**
      * Récupère un {@link ContentValues} depuis l'inventaire en paramètre
      *

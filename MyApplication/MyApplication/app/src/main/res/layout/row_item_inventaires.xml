@@ -7,7 +7,7 @@
     android:weightSum="2">
 
     <TextView
-        android:id="@+id/nomEspecInv"
+        android:id="@+id/nomEspeceInv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:text="Large Text"

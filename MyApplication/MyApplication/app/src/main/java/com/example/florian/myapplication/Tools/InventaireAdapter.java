@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.florian.myapplication.Database.CampagneDatabase.Inventaire;
@@ -34,7 +33,7 @@ public class InventaireAdapter extends ArrayAdapter<Inventaire>{
         InventaireAdapter.InventaireViewHolder viewHolder = (InventaireAdapter.InventaireViewHolder) convertView.getTag();
         if(viewHolder == null){
             viewHolder = new InventaireAdapter.InventaireViewHolder();
-            viewHolder.nomEspece = (TextView) convertView.findViewById(R.id.nomEspecInv);
+            viewHolder.nomEspece = (TextView) convertView.findViewById(R.id.nomEspeceInv);
             viewHolder.denombrement = (TextView) convertView.findViewById(R.id.denombrementInv);
             viewHolder.date = (TextView) convertView.findViewById(R.id.dateInv);
             viewHolder.heure = (TextView) convertView.findViewById(R.id.heureInventaire);
