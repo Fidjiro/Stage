@@ -83,7 +83,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         username = loginPreferences.getString("username","");
         usrId = loginPreferences.getLong("usrId" , 0);
-        getNbDataToSync();
+        setTxtNbDatas();
 
         snackbar = Snackbar.make(txtJson, "Requête en cours d'exécution",
                 Snackbar.LENGTH_INDEFINITE);
@@ -137,6 +137,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     protected void setTxtNbDatas(){
+        getNbDataToSync();
         nbInvToSyncTxt.setText(nbInvToSync + " " + getString(R.string.invToSync));
         nbRelToSyncTxt.setText(nbRelToSync + " " + getString(R.string.relToSync));
     }
@@ -220,7 +221,6 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    getNbDataToSync();
                     setTxtNbDatas();
                 }
             });

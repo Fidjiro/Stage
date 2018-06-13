@@ -1,13 +1,19 @@
 package com.example.florian.myapplication.Activities.MapsActivities.Releve.RelevesPopUp;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.provider.Settings;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.florian.myapplication.Activities.MapsActivities.Releve.MainActivityRel;
@@ -69,20 +75,58 @@ public abstract class ReleveInfoPopup extends AppCompatActivity {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dao.deleteReleve(rel);
-                finishPopUp();
+                createDialog().show();
             }
         });
 
         redraw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                showProgress(true);
                 Intent intent = new Intent(ReleveInfoPopup.this,MainActivityRel.class);
                 intent.putExtra("releve",rel);
                 startActivity(intent);
                 finishPopUp();
         }
         });
+    }
+
+    public Dialog createDialog() {
+        AlertDialog box;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.avertissementDelete);
+        builder.setTitle(getString(R.string.avertissement));
+        builder.setPositiveButton(getString(R.string.oui), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dao.deleteReleve(rel);
+                        finishPopUp();
+                    }
+                });
+        builder.setNegativeButton(getString(R.string.non), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        box = builder.create();
+        return box;
+    }
+
+    /**
+     * Shows the progress UI and hides the login form.
+     */
+    protected void showProgress(final boolean show) {
+
+        TextView mProgressView = (TextView) findViewById(R.id.action_progress);
+
+        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //showProgress(false);
     }
 
     protected abstract void finishPopUp();
