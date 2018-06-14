@@ -1,5 +1,6 @@
 package com.example.florian.myapplication.Activities.MapsActivities.Recensement;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,8 +9,13 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.florian.myapplication.Activities.FormActivities.Faune.AmphibienActivity;
+import com.example.florian.myapplication.Activities.FormActivities.Faune.FauneActivity;
+import com.example.florian.myapplication.Activities.FormActivities.Faune.OiseauxActivity;
+import com.example.florian.myapplication.Activities.FormActivities.Flore.FloreActivity;
 import com.example.florian.myapplication.Database.CampagneDatabase.CampagneDAO;
 import com.example.florian.myapplication.Database.CampagneDatabase.Inventaire;
+import com.example.florian.myapplication.Database.LoadingDatabase.TaxUsrDAO;
 import com.example.florian.myapplication.R;
 import com.example.florian.myapplication.Tools.InventaireAdapter;
 
@@ -18,7 +24,8 @@ import java.util.List;
 public class HistoryRecensementActivity extends AppCompatActivity {
 
     protected ListView listInv;
-    protected CampagneDAO dao;
+    protected CampagneDAO campagneDao;
+    protected TaxUsrDAO taxUsrDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +33,11 @@ public class HistoryRecensementActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_history_recensement);
 
-        dao = new CampagneDAO(this);
-        dao.open();
+        campagneDao = new CampagneDAO(this);
+        taxUsrDao = new TaxUsrDAO(this);
+        campagneDao.open();
+        taxUsrDao.open();
+
 
         listInv = (ListView) findViewById(R.id.listViewRecensement);
         listInv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -41,14 +51,52 @@ public class HistoryRecensementActivity extends AppCompatActivity {
                 String[] splittedNoms;
                 if(noms.contains(" - "))
                     splittedNoms = noms.split(" - ");
-                else
-                    splittedNoms = new String[]{noms,"*"};
+                else {
+                    if(noms.contains(" sp."))
+                        noms.replace(" sp.","");
+                    splittedNoms = new String[]{noms, ""};
+                }
                 String[] params = new String[] {splittedNoms[0],splittedNoms[1],dateInvTxt.getText().toString(),heureInvTxt.getText().toString()};
-                Inventaire selectedInventaire = dao.getInventaireFromHistory(params);
-                System.out.println("Nomfr: " + selectedInventaire.getNomFr() + ", nomlatin: " + selectedInventaire.getNomLatin() + ", date: " + selectedInventaire.getDate() + ", heure: " + selectedInventaire.getHeure());
+                Inventaire selectedInventaire = campagneDao.getInventaireFromHistory(params);
+                startActivity(generateGoodIntent(selectedInventaire));
             }
         });
     }
+
+    protected Intent generateGoodIntent(Inventaire inv){
+        if(usrInputIsPlantae(inv)){
+            return new Intent(this, FloreActivity.class);
+        }else if(usrInputIsAves(inv)){
+            return new Intent(this, OiseauxActivity.class);
+        }else if(usrInputIsAmphibia(inv)){
+            return new Intent(this, AmphibienActivity.class);
+        } return new Intent(this, FauneActivity.class);
+    }
+       /** Vérifie si l'espèce inséré par l'utilisateur est une plante
+       * @return <code>True</code> si oui, <code>false</code> sinon
+       */
+        protected boolean usrInputIsPlantae(Inventaire inv){
+            String regne = taxUsrDao.getRegne(new String[]{inv.getNomLatin(),inv.getNomFr()});
+            return regne.equals(getString(R.string.plantae));
+        }
+
+        /**
+         * Vérifie si l'espèce inséré par l'utilisateur est un oiseau
+         * @return <code>True</code> si oui, <code>false</code> sinon
+        */
+        protected boolean usrInputIsAves(Inventaire inv){
+            String classe = taxUsrDao.getClasse(new String[]{inv.getNomLatin(),inv.getNomFr()});
+            return classe.equals(getString(R.string.aves));
+        }
+
+        /**
+         * Vérifie si l'espèce inséré par l'utilisateur est un amphibien
+         * @return <code>True</code> si oui, <code>false</code> sinon
+         */
+        protected boolean usrInputIsAmphibia(Inventaire inv){
+            String classe = taxUsrDao.getClasse(new String[]{inv.getNomLatin(),inv.getNomFr()});
+            return classe.equals(getString(R.string.amphibia));
+        }
 
     @Override
     protected void onResume() {
@@ -57,7 +105,7 @@ public class HistoryRecensementActivity extends AppCompatActivity {
     }
 
     private void setAdapter(){
-        List<Inventaire> inventaires = dao.getInventairesOfTheUsr(getCurrentUsrId());
+        List<Inventaire> inventaires = campagneDao.getInventairesOfTheUsr(getCurrentUsrId());
 
         InventaireAdapter adapter = new InventaireAdapter(this,inventaires);
         listInv.setAdapter(adapter);
@@ -71,6 +119,6 @@ public class HistoryRecensementActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        dao.close();
+        campagneDao.close();
     }
 }
