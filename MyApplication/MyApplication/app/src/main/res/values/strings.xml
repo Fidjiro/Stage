@@ -6,6 +6,9 @@
     <string name="non">Non</string>
     <string name="accord">D\'accord</string>
     <string name="gps_requis_message">Le GPS est requis pour continuer. Voulez-vous l\'activer ?</string>
+    <string name="plantae">Plantae</string>
+    <string name="aves">Aves</string>
+    <string name="amphibia">Amphibia</string>
 
     <!--Http activity-->
     <string name="givePssw">Veuillez insérez votre mot de passe pour continuer: </string>

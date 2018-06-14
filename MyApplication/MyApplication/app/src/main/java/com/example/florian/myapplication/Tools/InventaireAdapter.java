@@ -79,12 +79,16 @@ public class InventaireAdapter extends ArrayAdapter<Inventaire>{
     }
 
     private void setNiceColorToView(int nv, TextView view){
+        int color;
         if(nv == 5){
-            view.setTextColor(Color.BLUE);
+            color = Color.BLUE;
         } else if(nv == 6)
-            view.setTextColor(Color.BLACK);
+            color = Color.BLACK;
         else if(nv == 7)
-            view.setTextColor(Color.GRAY);
+            color = Color.GRAY;
+        else
+            color = Color.rgb(255,140,0);
+        view.setTextColor(color);
     }
 
     private class InventaireViewHolder {
