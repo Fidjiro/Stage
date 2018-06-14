@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,8 +34,8 @@ import org.mapsforge.core.model.LatLong;
 import org.mapsforge.map.android.graphics.AndroidGraphicFactory;
 import org.mapsforge.map.layer.Layer;
 import org.mapsforge.map.layer.overlay.Marker;
-import org.mapsforge.map.layer.overlay.Polyline;
 import org.mapsforge.map.layer.overlay.Polygon;
+import org.mapsforge.map.layer.overlay.Polyline;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -86,6 +88,7 @@ public class MainActivityRel extends MainActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         super.onCreate(savedInstanceState);
 
         handler = new Handler();
@@ -106,6 +109,12 @@ public class MainActivityRel extends MainActivity {
         polygonAreaText = (TextView) findViewById(R.id.polygonArea);
         positionWGSText = (TextView) findViewById(R.id.positionWGS);
         positionL93Text = (TextView) findViewById(R.id.positionL93);
+
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        int width = displaymetrics.widthPixels;
+
+        nomReleveForm.getLayoutParams().width = (int)(width*.75);
 
         mesReleve.setOnClickListener(new View.OnClickListener() {
             @Override
