@@ -1,7 +1,6 @@
 package com.example.florian.myapplication.Activities.MapsActivities.Releve;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,18 +8,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.example.florian.myapplication.Activities.MapsActivities.MainActivity;
-import com.example.florian.myapplication.Database.ReleveDatabase.HistoryDao;
 import com.example.florian.myapplication.Database.ReleveDatabase.Releve;
 import com.example.florian.myapplication.R;
 import com.example.florian.myapplication.Tools.Utils;
@@ -50,13 +43,9 @@ import static java.lang.Math.log;
  */
 public class MainActivityRel extends MainActivity {
 
-    protected HistoryDao dao;
-
     protected ImageButton lineButton, polygonButton, pointButton;
-    protected EditText nomReleve;
-    protected TextView lineLengthText,perimeterText, polygonAreaText, positionWGSText,positionL93Text;
-    protected LinearLayout nomReleveForm;
-    protected Button validNom, finReleve, mesReleve;
+
+    protected Button finReleve, mesReleve;
 
     protected Releve releveToAdd;
 
@@ -93,28 +82,11 @@ public class MainActivityRel extends MainActivity {
 
         handler = new Handler();
 
-        dao = new HistoryDao(this);
-        dao.open();
-
         lineButton = (ImageButton) findViewById(R.id.bouton_releve_ligne);
         polygonButton = (ImageButton) findViewById(R.id.bouton_releve_polygone);
         pointButton = (ImageButton) findViewById(R.id.bouton_releve_point);
-        nomReleve = (EditText) findViewById(R.id.nomRel);
-        nomReleveForm = (LinearLayout) findViewById(R.id.nomReleveLayout);
-        validNom = (Button) findViewById(R.id.validerNom);
         finReleve = (Button) findViewById(R.id.finReleve);
         mesReleve = (Button) findViewById(R.id.mesReleves);
-        lineLengthText = (TextView) findViewById(R.id.lineLength);
-        perimeterText = (TextView) findViewById(R.id.perimeter);
-        polygonAreaText = (TextView) findViewById(R.id.polygonArea);
-        positionWGSText = (TextView) findViewById(R.id.positionWGS);
-        positionL93Text = (TextView) findViewById(R.id.positionL93);
-
-        DisplayMetrics displaymetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-        int width = displaymetrics.widthPixels;
-
-        nomReleveForm.getLayoutParams().width = (int)(width*.75);
 
         mesReleve.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,20 +124,6 @@ public class MainActivityRel extends MainActivity {
                 }
             }
         };
-
-        validNom.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!nomReleve.getText().toString().isEmpty()) {
-                    releveToAdd.setNom(nomReleve.getText().toString());
-                    dao.insertInventaire(releveToAdd);
-                    nomReleveForm.setVisibility(View.INVISIBLE);
-                    final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(nomReleve.getWindowToken(), 0);
-                }else
-                    createAvertissementDialog(BOITE_FIN_NOMMAGE_RELEVE).show();
-            }
-        });
 
         lineButton.setOnClickListener(startLineListener);
         polygonButton.setOnClickListener(startPolygonListener);
@@ -363,6 +321,9 @@ public class MainActivityRel extends MainActivity {
         stopReleve();
         setCurrentReleve(NO_RELEVE);
         finReleve.setVisibility(View.INVISIBLE);
+        Intent intent = new Intent(this,NameRelevePopup.class);
+        intent.putExtra("releveToAdd",releveToAdd);
+        startActivity(intent);
     }
 
     /**
@@ -390,18 +351,6 @@ public class MainActivityRel extends MainActivity {
                         dialogInterface.dismiss();
                     }
                 });
-                break;
-            case BOITE_FIN_NOMMAGE_RELEVE:
-                builder.setMessage(getString(R.string.nommezReleve));
-                builder.setTitle(getString(R.string.avertissement));
-                builder.setCancelable(false);
-                builder.setPositiveButton(getString(R.string.accord), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
-
         }
         box = builder.create();
         return box;
@@ -418,28 +367,6 @@ public class MainActivityRel extends MainActivity {
         pointsTaker.run();
     }
 
-    private void makePositionsTextVisible(){
-        lineLengthText.setVisibility(View.GONE);
-        perimeterText.setVisibility(View.GONE);
-        polygonAreaText.setVisibility(View.GONE);
-        positionL93Text.setVisibility(View.VISIBLE);
-        positionWGSText.setVisibility(View.VISIBLE);
-    }
-
-    protected void stopPoint(){
-        makePositionsTextVisible();
-        setPositionText();
-    }
-
-    protected void setPositionText(){
-        double lat = lastMarkerPosition.getLatitude();
-        double lon = lastMarkerPosition.getLongitude();
-        XY convertedCoord = convertWgs84ToL93(lastMarkerPosition);
-
-        positionWGSText.setText(getString(R.string.positionWGS) + " " + lat + " ; " + lon);
-        positionL93Text.setText(getString(R.string.positionL93) + " " + convertedCoord.x + " ; " + convertedCoord.y);
-    }
-
     /***
      * Stop le relevé en cours d'exécution
      */
@@ -450,20 +377,7 @@ public class MainActivityRel extends MainActivity {
         else if(currentReleveIsPolygon()) {
             stopPolygon();
         }
-        else{
-            stopPoint();
-        }
         releveToAdd = createReleveToInsert();
-        nomReleve.setText("");
-        nomReleveForm.setVisibility(View.VISIBLE);
-    }
-
-    private void makeLineLengthTextVisible(){
-        lineLengthText.setVisibility(View.VISIBLE);
-        perimeterText.setVisibility(View.GONE);
-        polygonAreaText.setVisibility(View.GONE);
-        positionL93Text.setVisibility(View.GONE);
-        positionWGSText.setVisibility(View.GONE);
     }
 
     /**
@@ -472,13 +386,6 @@ public class MainActivityRel extends MainActivity {
     protected void stopLine() {
         handler.removeCallbacks(pointsTaker);
         lineLength = polylineLengthInMeters(latLongs);
-
-        makeLineLengthTextVisible();
-        setLineLengthText();
-    }
-
-    protected void setLineLengthText(){
-        lineLengthText.setText(getString(R.string.longueur) + lineLength);
     }
 
     protected double polylineLengthInMeters(List<LatLong> polyline){
@@ -510,19 +417,6 @@ public class MainActivityRel extends MainActivity {
         pointsTaker.run();
     }
 
-    private void makePolygonsTextVisible(){
-        lineLengthText.setVisibility(View.GONE);
-        perimeterText.setVisibility(View.VISIBLE);
-        polygonAreaText.setVisibility(View.VISIBLE);
-        positionL93Text.setVisibility(View.GONE);
-        positionWGSText.setVisibility(View.GONE);
-    }
-
-    protected void setPolygonsText(){
-        perimeterText.setText(getString(R.string.perimetre) + polygonPerimeter);
-        polygonAreaText.setText(getString(R.string.polygonArea) + polygonArea);
-    }
-
     /**
      * Arrête le relevé de polygone
      */
@@ -538,9 +432,6 @@ public class MainActivityRel extends MainActivity {
 
         polygonPerimeter = getPolygonPerimeter(latLongs);
         polygonArea = getArea(latLongs);
-
-        makePolygonsTextVisible();
-        setPolygonsText();
     }
 
     private double getPolygonPerimeter(List<LatLong> list){
