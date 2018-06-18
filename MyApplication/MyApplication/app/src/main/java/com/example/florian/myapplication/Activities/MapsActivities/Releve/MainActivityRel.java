@@ -58,6 +58,7 @@ public class MainActivityRel extends MainActivity {
     protected Polygon polygon;
     protected List<LatLong> latLongs;
     protected LatLong lastMarkerPosition;
+    protected Layer previousLayer;
 
     protected int currentReleve;
     protected final int POLYGON = 2;
@@ -73,7 +74,6 @@ public class MainActivityRel extends MainActivity {
     public static final int PAINT_STROKE = AndroidGraphicFactory.INSTANCE.createColor(Color.BLUE);
 
     private static final int BOITE_FIN_RELEVE = 3;
-    private static final int BOITE_FIN_NOMMAGE_RELEVE = 4;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -107,6 +107,7 @@ public class MainActivityRel extends MainActivity {
             @Override
             public void onClick(View view) {
                 if(noReleveInProgress()) {
+                    clearLayers();
                     setCurrentReleve(LINE);
                     startLine();
                     finReleve.setVisibility(View.VISIBLE);
@@ -118,6 +119,7 @@ public class MainActivityRel extends MainActivity {
             @Override
             public void onClick(View view) {
                 if(noReleveInProgress()) {
+                    clearLayers();
                     setCurrentReleve(POLYGON);
                     startPolygon();
                     finReleve.setVisibility(View.VISIBLE);
@@ -131,12 +133,22 @@ public class MainActivityRel extends MainActivity {
         pointButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                clearLayers();
                 Marker marker = Utils.createMarker(MainActivityRel.this,R.drawable.marker_green,getUsrLatLong());
                 lastMarkerPosition = marker.getLatLong();
                 addLayer(marker);
                 finirReleve();
             }
         });
+
+    }
+
+    private void clearLayers(){
+        try {
+            myMap.getLayers().remove(previousLayer);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private double atanh(double x){
@@ -508,6 +520,7 @@ public class MainActivityRel extends MainActivity {
      */
     protected void addLayer(Layer l){
         myMap.getLayers().add(l);
+        previousLayer = l;
     }
 
     /**
