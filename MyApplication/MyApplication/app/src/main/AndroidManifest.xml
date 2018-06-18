@@ -77,7 +77,8 @@
             android:theme="@style/AppTheme.CustomTheme" />
         <activity
             android:name=".Activities.MapsActivities.Releve.NameRelevePopup"
-            android:theme="@style/AppTheme.CustomTheme2"/>
+            android:theme="@style/AppTheme.CustomTheme2"
+            android:windowSoftInputMode="adjustResize"/>
     </application>
 
 </manifest>

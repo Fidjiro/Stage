@@ -9,9 +9,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.florian.myapplication.Activities.MapsActivities.Releve.RelevesPopUp.PopUpPoint;
@@ -28,6 +30,7 @@ public class NameRelevePopup extends AppCompatActivity {
     protected TextView lineLengthText,perimeterText, polygonAreaText, positionWGSText,positionL93Text;
     protected Button validNom;
     protected EditText nomReleve;
+    protected LinearLayout loginLayout;
 
     protected Releve releveToAdd;
 
@@ -47,8 +50,6 @@ public class NameRelevePopup extends AppCompatActivity {
         int width = dm.widthPixels;
         int height = dm.heightPixels;
 
-        getWindow().setLayout((int)(width*.75),(int)(height*.33));
-
         nomReleve = (EditText) findViewById(R.id.nomRel);
         validNom = (Button) findViewById(R.id.validerNom);
         lineLengthText = (TextView) findViewById(R.id.lineLength);
@@ -56,6 +57,9 @@ public class NameRelevePopup extends AppCompatActivity {
         polygonAreaText = (TextView) findViewById(R.id.polygonArea);
         positionWGSText = (TextView) findViewById(R.id.positionWGS);
         positionL93Text = (TextView) findViewById(R.id.positionL93);
+        loginLayout = (LinearLayout) findViewById(R.id.loginLayout);
+
+        loginLayout.getLayoutParams().width = (int)(width*0.75);
 
         Intent intent = getIntent();
         releveToAdd = intent.getParcelableExtra("releveToAdd");
