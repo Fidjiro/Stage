@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.LinearLayout;
 
+import com.example.florian.myapplication.Activities.HomeActivity;
 import com.example.florian.myapplication.Activities.MapsActivities.Recensement.MainActivityRec;
 import com.example.florian.myapplication.Activities.MapsActivities.Releve.MainActivityRel;
 import com.example.florian.myapplication.Database.LoadingDatabase.TaxUsrDAO;
@@ -66,6 +67,13 @@ public abstract class MainActivity extends AppCompatActivity{
         progressDialog = ProgressDialog.show(this, "",
                 "En attente du signal GPS...", true);
         progressDialog.setCancelable(true);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                startActivity(new Intent(MainActivity.this, HomeActivity.class));
+            }
+        });
 
         dao = new TaxUsrDAO(this);
         dao.open();
