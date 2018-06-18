@@ -98,20 +98,21 @@
         <item>Accouplement</item>
         <item>Alimentation</item>
         <item>Chasse</item>
+        <item>Couvaison</item>
         <item>En vol</item>
+        <item>Nourissage</item>
         <item>Parade</item>
-        <item>Transport matériaux</item>
-        <item>Poste de chant</item>
         <item>Ponte</item>
+        <item>Poste de chant</item>
         <item>Repos</item>
         <item>Toilette</item>
-        <item>Nourissage</item>
+        <item>Transport matériaux</item>
     </string-array>
     <string-array name="statuts">
         <item></item>
-        <item>Nicheur</item>
         <item>Hivernant</item>
         <item>Migrateur</item>
+        <item>Nicheur</item>
     </string-array>
     <string-array name="nidification">
         <item></item>

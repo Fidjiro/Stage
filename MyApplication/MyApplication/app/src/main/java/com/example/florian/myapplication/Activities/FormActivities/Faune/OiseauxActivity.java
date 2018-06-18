@@ -44,7 +44,7 @@ public class OiseauxActivity extends FauneActivity {
                 if(isAccouplementTextView(view) || isParadeTextView(view)) {
                     statut.setSelection(POS_STATUT_NICHEUR);
                     nidification.setSelection(POS_NIDIF_PROB);
-                } else if(isPonteTextView(view)){
+                } else if(isPonteTextView(view) || isCouvaisonTextView(view)){
                     statut.setSelection(POS_STATUT_NICHEUR);
                     nidification.setSelection(POS_NIDIF_CERTAINE);
                 }
@@ -134,6 +134,16 @@ public class OiseauxActivity extends FauneActivity {
      * @return <code>True</code> si le texte de v est égal à Ponte, <code>false</code> sinon
      */
     protected boolean isPonteTextView(View v){
+        return viewIsEqualsTo(v,"Ponte");
+    }
+
+    /**
+     * Vérifie si le texte de la view est égal à Couvaison
+     *
+     * @param v La view à comparer
+     * @return <code>True</code> si le texte de v est égal à Couvaison, <code>false</code> sinon
+     */
+    protected boolean isCouvaisonTextView(View v){
         return viewIsEqualsTo(v,"Ponte");
     }
 
