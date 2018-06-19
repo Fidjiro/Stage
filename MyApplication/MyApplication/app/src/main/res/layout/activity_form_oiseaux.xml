@@ -269,4 +269,31 @@
         android:layout_height="wrap_content"
         android:text="@string/valider"
         android:textAllCaps="false"/>
+
+    <RelativeLayout
+        android:id="@+id/buttonsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+        <Button
+            android:id="@+id/modifier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="@string/modifier"
+            android:textAllCaps="false"/>
+        <Button
+            android:id="@+id/visualiserInv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/visualise"
+            android:textAllCaps="false"/>
+        <ImageButton
+            android:id="@+id/deleteInv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/delete" />
+    </RelativeLayout>
 </LinearLayout>

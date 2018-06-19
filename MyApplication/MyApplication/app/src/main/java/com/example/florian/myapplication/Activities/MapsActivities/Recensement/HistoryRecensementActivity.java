@@ -64,13 +64,17 @@ public class HistoryRecensementActivity extends AppCompatActivity {
     }
 
     protected Intent generateGoodIntent(Inventaire inv){
-        if(usrInputIsPlantae(inv)){
-            return new Intent(this, FloreActivity.class);
-        }else if(usrInputIsAves(inv)){
-            return new Intent(this, OiseauxActivity.class);
-        }else if(usrInputIsAmphibia(inv)){
-            return new Intent(this, AmphibienActivity.class);
-        } return new Intent(this, FauneActivity.class);
+        Intent intent;
+        if(usrInputIsPlantae(inv))
+            intent = new Intent(this, FloreActivity.class);
+        else if(usrInputIsAves(inv))
+            intent = new Intent(this, OiseauxActivity.class);
+        else if(usrInputIsAmphibia(inv))
+            intent = new Intent(this, AmphibienActivity.class);
+        else
+            intent = new Intent(this, FauneActivity.class);
+        intent.putExtra("selectedInv",inv);
+        return intent;
     }
        /** Vérifie si l'espèce inséré par l'utilisateur est une plante
        * @return <code>True</code> si oui, <code>false</code> sinon

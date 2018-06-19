@@ -11,7 +11,9 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.florian.myapplication.Database.CampagneDatabase.CampagneDAO;
@@ -34,12 +36,15 @@ public abstract class FormActivity extends AppCompatActivity {
     protected CampagneDAO campagneDao;
     protected TaxUsrDAO taxDao;
 
-    protected Button valider;
+    protected Button valider,modif,visualise;
+    protected ImageButton delete;
+    protected RelativeLayout buttonsModifLayout;
 
     protected long usrId,ref_taxon;
     protected double lat,lon;
     protected String dat, heure;
     protected int nb;
+    protected Inventaire consultedInv;
 
     /**
      * Initialise les champs commun au différents formulaires
@@ -52,7 +57,10 @@ public abstract class FormActivity extends AppCompatActivity {
 
         setView();
 
+        openDatabase();
+
         initFields();
+
         LinearLayout layout = (LinearLayout) findViewById(R.id.container);
         layout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,7 +70,12 @@ public abstract class FormActivity extends AppCompatActivity {
         });
         nombre.addTextChangedListener(new UnsetError());
 
-        openDatabase();
+        Intent intent = getIntent();
+        try {
+            consultedInv = intent.getParcelableExtra("selectedInv");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         valider = (Button) findViewById(R.id.validerForm);
         valider.setOnClickListener(new View.OnClickListener() {
@@ -173,6 +186,34 @@ public abstract class FormActivity extends AppCompatActivity {
         nomlatin = (TextView) findViewById(R.id.nomLatin);
         date = (TextView) findViewById(R.id.date);
         nombre = (EditText) findViewById(R.id.nombre);
+        buttonsModifLayout = (RelativeLayout) findViewById(R.id.buttonsLayout);
+        modif = (Button) findViewById(R.id.modifier);
+        visualise = (Button) findViewById(R.id.visualiserInv);
+        delete = (ImageButton) findViewById(R.id.deleteInv);
+
+        modif.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setFormModifiable();
+                buttonsModifLayout.setVisibility(View.GONE);
+                valider.setVisibility(View.VISIBLE);
+            }
+        });
+
+        visualise.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                campagneDao.deleteInventaire(consultedInv.get_id());
+                finish();
+            }
+        });
     }
 
     /**

@@ -1,6 +1,9 @@
 package com.example.florian.myapplication.Database.CampagneDatabase;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Représente une ligne de la table Campagne <br>
  * Pour le typeTaxon:<br>&nbsp
@@ -9,7 +12,7 @@ package com.example.florian.myapplication.Database.CampagneDatabase;
  *  - 2 signifie Oiseaux<br>&nbsp
  *  - 3 signifie Amphibiens<br>
  */
-public class Inventaire {
+public class Inventaire implements Parcelable{
 
     private long _id;
     private long ref_taxon;
@@ -181,6 +184,66 @@ public class Inventaire {
     public Inventaire(long ref_taxon, long user, String nomFr, String nomLatin,  int typeTaxon, double latitude, double longitude, String date, String heure, int nombre, String type_obs, int indiceAbondance) {
         this(ref_taxon, user, nomFr, nomLatin, typeTaxon, latitude, longitude, date, heure, nombre, type_obs);
         this.indiceAbondance = indiceAbondance;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeLong(_id);
+        out.writeLong(ref_taxon);
+        out.writeLong(user);
+        out.writeString(nomFr);
+        out.writeString(nomLatin);
+        out.writeInt(typeTaxon);
+        out.writeDouble(latitude);
+        out.writeDouble(longitude);
+        out.writeString(date);
+        out.writeString(heure);
+        out.writeInt(nombre);
+        out.writeString(type_obs);
+        out.writeInt(nbMale);
+        out.writeInt(nbFemale);
+        out.writeString(presencePonte);
+        out.writeString(activite);
+        out.writeString(statut);
+        out.writeString(nidif);
+        out.writeInt(indiceAbondance);
+    }
+
+    public static final Parcelable.Creator<Inventaire> CREATOR = new Parcelable.Creator<Inventaire>() {
+        public Inventaire createFromParcel(Parcel in) {
+            return new Inventaire(in);
+        }
+
+        public Inventaire[] newArray(int size) {
+            return new Inventaire[size];
+        }
+    };
+
+    private Inventaire(Parcel in) {
+        _id = in.readLong();
+        ref_taxon= in.readLong();
+        user= in.readLong();
+        nomFr = in.readString();
+        nomLatin = in.readString();
+        typeTaxon = in.readInt();
+        latitude = in.readDouble();
+        longitude = in.readDouble();
+        date = in.readString();
+        heure = in.readString();
+        nombre = in.readInt();
+        type_obs = in.readString();
+        nbMale = in.readInt();
+        nbFemale = in.readInt();
+        presencePonte = in.readString();
+        activite = in.readString();
+        statut = in.readString();
+        nidif = in.readString();
+        indiceAbondance = in.readInt();
     }
 
     public int getNombre() {

@@ -70,6 +70,8 @@
     <string name="heure">Heure : </string>
     <string name="date">Date : </string>
     <string name="nombre">Dénombrement : </string>
+    <string name="modifier">Modifier</string>
+
     <!--Flore-->
     <string name="abondance">Indice d\'abondance : </string>
     <string-array name="indicesAbondance">
