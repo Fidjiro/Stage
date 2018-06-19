@@ -24,6 +24,12 @@ public class AmphibienActivity extends FauneActivity {
         return new Inventaire(ref_taxon, usrId, nomFrString, nomLatinString, typeTaxon, lat, lon, dat, heure, nb, obs, nbMale, nbFemale,presencePonteValue);
     }
 
+    @Override
+    protected void changeFieldsStates(boolean enabled) {
+        super.changeFieldsStates(enabled);
+        presencePonte.setEnabled(enabled);
+    }
+
     /**
      * Extension de la méthode initFields mère pour adapter au layout amphibien
      */

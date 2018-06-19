@@ -73,6 +73,14 @@ public class OiseauxActivity extends FauneActivity {
         });
     }
 
+    @Override
+    protected void changeFieldsStates(boolean enabled) {
+        super.changeFieldsStates(enabled);
+        activite.setEnabled(false);
+        statut.setEnabled(false);
+        nidification.setEnabled(false);
+    }
+
     /**
      * Permet de cacher le champ Nidification et de remettre à zéro sa valeur
      */

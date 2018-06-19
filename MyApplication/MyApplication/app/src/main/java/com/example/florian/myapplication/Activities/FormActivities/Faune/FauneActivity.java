@@ -20,9 +20,10 @@ public class FauneActivity extends FormActivity {
     protected RadioGroup rg;
     protected RadioButton rb;
     protected TextView maleTextView, femaleTextView;
-    protected static final String STRING_TO_ADD = " : ";
     protected EditText nbMaleText, nbFemaleText;
     protected CheckBox maleCheckbox,femaleCheckbox;
+
+    protected static final String STRING_TO_ADD = " : ";
     protected String obs;
 
     protected int nbMale;
@@ -40,6 +41,17 @@ public class FauneActivity extends FormActivity {
     @Override
     protected Inventaire createPersonalInventaire() {
         return new Inventaire(ref_taxon, usrId, nomFrString, nomLatinString, typeTaxon, lat, lon, dat, heure, nb, obs, nbMale, nbFemale);
+    }
+
+    @Override
+    protected void changeFieldsStates(boolean enabled) {
+        super.changeFieldsStates(enabled);
+        rg.getChildAt(0).setEnabled(enabled);
+        rb.setEnabled(enabled);
+        nbFemaleText.setEnabled(enabled);
+        nbMaleText.setEnabled(enabled);
+        maleCheckbox.setEnabled(enabled);
+        femaleCheckbox.setEnabled(enabled);
     }
 
     /**

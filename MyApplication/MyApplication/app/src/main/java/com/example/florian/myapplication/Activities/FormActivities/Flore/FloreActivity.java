@@ -29,6 +29,12 @@ public class FloreActivity extends FormActivity {
         setContentView(R.layout.activity_form_flore);
     }
 
+    @Override
+    protected void changeFieldsStates(boolean enabled) {
+        super.changeFieldsStates(enabled);
+        indiceAbondance.setEnabled(enabled);
+    }
+
     /**
      * Retourne un {@link Inventaire} pour une flaure avec l'attribut typeObs déjà à <bold>Vu</bold> car on est obligé de voir une fleur,
      * on ne peut pas l'entendre
