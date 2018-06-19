@@ -80,7 +80,7 @@
             android:theme="@style/AppTheme.CustomTheme2"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".Activities.MapsActivities.Releve.ShowRelActivity"
+            android:name=".Activities.MapsActivities.ShowInvRelActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />

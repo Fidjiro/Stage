@@ -1,10 +1,11 @@
-package com.example.florian.myapplication.Activities.MapsActivities.Releve;
+package com.example.florian.myapplication.Activities.MapsActivities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Window;
 
+import com.example.florian.myapplication.Database.CampagneDatabase.Inventaire;
 import com.example.florian.myapplication.Database.ReleveDatabase.Releve;
 import com.example.florian.myapplication.R;
 import com.example.florian.myapplication.Tools.MyMapView;
@@ -26,7 +27,7 @@ import org.mapsforge.map.layer.overlay.Polyline;
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class ShowRelActivity extends AppCompatActivity {
+public class ShowInvRelActivity extends AppCompatActivity {
 
     private MyMapView myMap;
 
@@ -49,8 +50,13 @@ public class ShowRelActivity extends AppCompatActivity {
         myMap = new MyMapView((MapView)findViewById(R.id.mapViewOSM));
 
         Intent intent = getIntent();
-        Releve rel = intent.getParcelableExtra("releve");
-        redrawReleve(rel);
+        try {
+            Releve rel = intent.getParcelableExtra("releve");
+            redrawReleve(rel);
+        }catch (Exception e){
+            Inventaire inv = intent.getParcelableExtra("inv");
+            drawPoint(new LatLong(inv.getLatitude(), inv.getLongitude()));
+        }
     }
 
     @Override
@@ -67,7 +73,7 @@ public class ShowRelActivity extends AppCompatActivity {
         Gson gson = new Gson();
         String relType = rel.getType();
         if (relType.equals("Point")) {
-            redrawPointReleve(rel);
+            drawPoint(new LatLong(Double.parseDouble(rel.getLatitudes()), Double.parseDouble(rel.getLongitudes())));
         } else {
             Type type = new TypeToken<List<LatLong>>() {
             }.getType();
@@ -89,9 +95,8 @@ public class ShowRelActivity extends AppCompatActivity {
         }
     }
 
-    private void redrawPointReleve(Releve rel){
-        LatLong latLong = new LatLong(Double.parseDouble(rel.getLatitudes()), Double.parseDouble(rel.getLongitudes()));
-        Marker m = Utils.createMarker(ShowRelActivity.this, R.drawable.marker_green, latLong);
+    private void drawPoint(LatLong latLong){
+        Marker m = Utils.createMarker(ShowInvRelActivity.this, R.drawable.marker_green, latLong);
         addLayer(m);
         myMap.centerOn(latLong);
     }
