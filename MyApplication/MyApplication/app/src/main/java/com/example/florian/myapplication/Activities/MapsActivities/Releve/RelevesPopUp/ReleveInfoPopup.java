@@ -17,6 +17,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.florian.myapplication.Activities.MapsActivities.Releve.MainActivityRel;
+import com.example.florian.myapplication.Activities.MapsActivities.Releve.ShowRelActivity;
 import com.example.florian.myapplication.Database.ReleveDatabase.HistoryDao;
 import com.example.florian.myapplication.Database.ReleveDatabase.Releve;
 import com.example.florian.myapplication.R;
@@ -83,7 +84,7 @@ public abstract class ReleveInfoPopup extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 showProgress(true);
-                Intent intent = new Intent(ReleveInfoPopup.this,MainActivityRel.class);
+                Intent intent = new Intent(ReleveInfoPopup.this,ShowRelActivity.class);
                 intent.putExtra("releve",rel);
                 startActivity(intent);
                 finishPopUp();

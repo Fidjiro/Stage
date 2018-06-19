@@ -77,7 +77,6 @@ public class MainActivityRel extends MainActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         super.onCreate(savedInstanceState);
 
         handler = new Handler();
@@ -536,43 +535,5 @@ public class MainActivityRel extends MainActivity {
     protected void onDestroy() {
         super.onDestroy();
         dao.close();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Intent intent = getIntent();
-        Releve rel = intent.getParcelableExtra("releve");
-        if (rel != null) {
-            redrawReleve(rel);
-        }
-    }
-
-    private void redrawReleve(Releve rel){
-        Gson gson = new Gson();
-        String relType = rel.getType();
-        if (relType.equals("Point")) {
-            redrawPointReleve(rel);
-        } else {
-            Type type = new TypeToken<List<LatLong>>() {
-            }.getType();
-            String relLatLongsString = rel.getLat_long();
-            List<LatLong> relLatLongs = gson.fromJson(relLatLongsString, type);
-            if (relType.equals("Ligne")) {
-                Polyline polylineRel = createPolyline();
-                polylineRel.getLatLongs().addAll(relLatLongs);
-                addLayer(polylineRel);
-            } else {
-                Polygon relPolygon = new Polygon(paintFill, paintStroke, AndroidGraphicFactory.INSTANCE);
-                relPolygon.getLatLongs().addAll(relLatLongs);
-                addLayer(relPolygon);
-            }
-        }
-    }
-
-    private void redrawPointReleve(Releve rel){
-        LatLong latLong = new LatLong(Double.parseDouble(rel.getLatitudes()), Double.parseDouble(rel.getLongitudes()));
-        Marker m = Utils.createMarker(MainActivityRel.this, R.drawable.marker_green, latLong);
-        addLayer(m);
     }
 }

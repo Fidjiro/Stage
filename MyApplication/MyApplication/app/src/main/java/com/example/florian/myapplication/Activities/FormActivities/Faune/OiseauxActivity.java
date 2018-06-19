@@ -17,7 +17,7 @@ public class OiseauxActivity extends FauneActivity {
 
     protected Spinner activite,statut,nidification;
     protected LinearLayout nidificationLayout;
-    protected final int POS_STATUT_NICHEUR = 1;
+    protected final int POS_STATUT_NICHEUR = 3;
     protected final int POS_NIDIF_PROB = 2;
     protected final int POS_NIDIF_CERTAINE = 3;
 
@@ -144,7 +144,7 @@ public class OiseauxActivity extends FauneActivity {
      * @return <code>True</code> si le texte de v est égal à Couvaison, <code>false</code> sinon
      */
     protected boolean isCouvaisonTextView(View v){
-        return viewIsEqualsTo(v,"Ponte");
+        return viewIsEqualsTo(v,"Couvaison");
     }
 
     @Override
