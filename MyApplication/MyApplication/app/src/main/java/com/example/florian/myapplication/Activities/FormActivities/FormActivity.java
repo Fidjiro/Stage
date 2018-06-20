@@ -105,7 +105,9 @@ public abstract class FormActivity extends AppCompatActivity {
         nomfr.setText(consultedInv.getNomFr());
         nomlatin.setText(consultedInv.getNomLatin());
         date.setText(consultedInv.getDate());
-        nombre.setText(consultedInv.getNombre() + "");
+        int invNombre = consultedInv.getNombre();
+        if(invNombre > 0)
+            nombre.setText( invNombre+ "");
     }
 
     /**
@@ -161,14 +163,18 @@ public abstract class FormActivity extends AppCompatActivity {
      * Récupère les données fournies par l'utilisateur et affecte les attributs de la classe appellante en conséquence
      */
     protected void setValuesFromUsrInput(){
-        setUsrId();
-        ref_taxon = taxDao.getRefTaxon(new String[]{nomLatinString,nomFrString});
+        if(consultedInv == null) {
+            setUsrId();
+            ref_taxon = taxDao.getRefTaxon(new String[]{nomLatinString, nomFrString});
+        }
         try{
             nb = getDenombrement();
         } catch (NumberFormatException e) {
             nb = 0;
         }
     }
+
+
 
     /**
      * Récupère les différentes View présente dans le layout de base
@@ -187,8 +193,14 @@ public abstract class FormActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(formIsValidable()){
-                    Inventaire inv = createInventaireFromFields();
-                    campagneDao.insertInventaire(inv);
+                    if(consultedInv != null) {
+                        modifConsultedInventaire();
+                        campagneDao.modifInventaire(consultedInv);
+                    }
+                    else {
+                        Inventaire inv = createInventaireFromFields();
+                        campagneDao.insertInventaire(inv);
+                    }
                     FormActivity.this.finish();
                 } else{
                     actionWhenFormNotValidable();
@@ -221,6 +233,11 @@ public abstract class FormActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    protected void modifConsultedInventaire() {
+        setValuesFromUsrInput();
+        consultedInv.setNombre(nb);
     }
 
     /**

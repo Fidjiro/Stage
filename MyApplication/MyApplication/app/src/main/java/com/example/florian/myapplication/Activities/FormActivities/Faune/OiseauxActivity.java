@@ -10,6 +10,9 @@ import android.widget.Toast;
 import com.example.florian.myapplication.Database.CampagneDatabase.Inventaire;
 import com.example.florian.myapplication.R;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * Activité formulaire pour les oiseaux
  */
@@ -76,9 +79,32 @@ public class OiseauxActivity extends FauneActivity {
     @Override
     protected void changeFieldsStates(boolean enabled) {
         super.changeFieldsStates(enabled);
-        activite.setEnabled(false);
-        statut.setEnabled(false);
-        nidification.setEnabled(false);
+        activite.setEnabled(enabled);
+        statut.setEnabled(enabled);
+        nidification.setEnabled(enabled);
+    }
+
+    @Override
+    protected void setFieldsFromConsultedInv() {
+        super.setFieldsFromConsultedInv();
+        setSpinnerSelection(activite,R.array.activités,consultedInv.getActivite());
+        setSpinnerSelection(statut,R.array.statuts,consultedInv.getStatut());
+        setSpinnerSelection(nidification,R.array.nidification,consultedInv.getNidif());
+    }
+
+    @Override
+    protected void modifConsultedInventaire() {
+        super.modifConsultedInventaire();
+
+        consultedInv.setActivite(activiteValue);
+        consultedInv.setStatut(statutValue);
+        consultedInv.setNidif(nidificationValue);
+    }
+
+    private void setSpinnerSelection(Spinner spinner, int id, String object){
+        String[] stringArray = getResources().getStringArray(id);
+        ArrayList<String> stringList = new ArrayList<>(Arrays.asList(stringArray));
+        spinner.setSelection(stringList.indexOf(object));
     }
 
     /**
@@ -163,7 +189,8 @@ public class OiseauxActivity extends FauneActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        nidificationLayout.setVisibility(View.GONE);
+        if(!statut.getSelectedItem().equals("Nicheur"))
+            nidificationLayout.setVisibility(View.GONE);
     }
 
     @Override

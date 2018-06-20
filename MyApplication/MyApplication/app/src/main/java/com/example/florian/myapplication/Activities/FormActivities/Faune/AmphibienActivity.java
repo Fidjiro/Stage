@@ -30,6 +30,20 @@ public class AmphibienActivity extends FauneActivity {
         presencePonte.setEnabled(enabled);
     }
 
+    @Override
+    protected void setFieldsFromConsultedInv() {
+        super.setFieldsFromConsultedInv();
+        if(consultedInv.getPresencePonte().equals("true"))
+            presencePonte.setChecked(true);
+    }
+
+    @Override
+    protected void modifConsultedInventaire() {
+        super.modifConsultedInventaire();
+
+        consultedInv.setPresencePonte(presencePonteValue);
+    }
+
     /**
      * Extension de la méthode initFields mère pour adapter au layout amphibien
      */

@@ -71,6 +71,13 @@ public class CampagneDAO {
         return mDb.insert(CAMPAGNE,null,cv);
     }
 
+    public long modifInventaire(Inventaire inv){
+        deleteInventaire(inv.get_id());
+        ContentValues cv = getCvFrom(inv);
+        cv.put(KEY,inv.get_id());
+        return mDb.insert(CAMPAGNE,null,cv);
+    }
+
     public long deleteInventaire(long invId){
         return mDb.delete(CAMPAGNE,KEY + " = ?",new String[]{invId + ""});
     }

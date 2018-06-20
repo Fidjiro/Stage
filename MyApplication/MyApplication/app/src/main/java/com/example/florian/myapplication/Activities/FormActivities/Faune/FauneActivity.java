@@ -18,7 +18,7 @@ import com.example.florian.myapplication.R;
 public class FauneActivity extends FormActivity {
 
     protected RadioGroup rg;
-    protected RadioButton rb;
+    protected RadioButton buttonEntendu,buttonVu;
     protected TextView maleTextView, femaleTextView;
     protected EditText nbMaleText, nbFemaleText;
     protected CheckBox maleCheckbox,femaleCheckbox;
@@ -46,12 +46,44 @@ public class FauneActivity extends FormActivity {
     @Override
     protected void changeFieldsStates(boolean enabled) {
         super.changeFieldsStates(enabled);
-        rg.getChildAt(0).setEnabled(enabled);
-        rb.setEnabled(enabled);
+        buttonVu.setEnabled(enabled);
+        buttonEntendu.setEnabled(enabled);
         nbFemaleText.setEnabled(enabled);
         nbMaleText.setEnabled(enabled);
         maleCheckbox.setEnabled(enabled);
         femaleCheckbox.setEnabled(enabled);
+    }
+
+    @Override
+    protected void setFieldsFromConsultedInv() {
+        super.setFieldsFromConsultedInv();
+
+        if(consultedInv.getType_obs().equals("Vu"))
+            buttonVu.setChecked(true);
+        else
+            buttonEntendu.setChecked(true);
+
+        int invNbMale = consultedInv.getNbMale();
+        int invNbFemale = consultedInv.getNbFemale();
+        setGenreFields(invNbMale,maleCheckbox,nbMaleText);
+        setGenreFields(invNbFemale,femaleCheckbox,nbFemaleText);
+    }
+
+    @Override
+    protected void modifConsultedInventaire() {
+        super.modifConsultedInventaire();
+
+        consultedInv.setType_obs(obs);
+        consultedInv.setNbFemale(nbFemale);
+        consultedInv.setNbMale(nbMale);
+    }
+
+    protected void setGenreFields(int nbGenre, CheckBox checkBox, EditText editText){
+        if(nbGenre > -1){
+            checkBox.setChecked(true);
+            if(nbGenre > 0)
+                editText.setText(nbGenre + "");
+        }
     }
 
     /**
@@ -62,7 +94,8 @@ public class FauneActivity extends FormActivity {
         super.initFields();
         typeTaxon = 0;
         rg = (RadioGroup) findViewById(R.id.typeObs);
-        rb = (RadioButton)rg.getChildAt(1);
+        buttonEntendu = (RadioButton) findViewById(R.id.buttonEntendu);
+        buttonVu = (RadioButton) findViewById(R.id.buttonVu);
         maleTextView = (TextView) findViewById(R.id.maleText);
         femaleTextView = (TextView) findViewById(R.id.femaleText);
         nbMaleText = (EditText) findViewById(R.id.nbMale);
@@ -77,7 +110,7 @@ public class FauneActivity extends FormActivity {
         rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                rb.setError(null);
+                buttonEntendu.setError(null);
             }
         });
 
@@ -244,8 +277,8 @@ public class FauneActivity extends FormActivity {
         super.actionWhenFormNotValidable();
 
         if(!isCheckedObsButton()) {
-            rb.setError(getString(R.string.error_radio_button));
-            rb.requestFocus();
+            buttonEntendu.setError(getString(R.string.error_radio_button));
+            buttonEntendu.requestFocus();
         }
         if(!coherantNumberGenre()){
             nombre.setError(getString(R.string.incoherantNbGenre));

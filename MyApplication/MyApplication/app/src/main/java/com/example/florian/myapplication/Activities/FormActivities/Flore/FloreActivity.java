@@ -35,6 +35,19 @@ public class FloreActivity extends FormActivity {
         indiceAbondance.setEnabled(enabled);
     }
 
+    @Override
+    protected void setFieldsFromConsultedInv() {
+        super.setFieldsFromConsultedInv();
+        indiceAbondance.setSelection(consultedInv.getIndiceAbondance());
+    }
+
+    @Override
+    protected void modifConsultedInventaire() {
+        super.modifConsultedInventaire();
+        setValuesFromUsrInput();
+        consultedInv.setIndiceAbondance(indiceAbondanceValue);
+    }
+
     /**
      * Retourne un {@link Inventaire} pour une flaure avec l'attribut typeObs déjà à <bold>Vu</bold> car on est obligé de voir une fleur,
      * on ne peut pas l'entendre

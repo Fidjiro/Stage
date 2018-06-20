@@ -104,6 +104,7 @@
                 android:orientation="horizontal">
 
                 <RadioButton
+                    android:id="@+id/buttonVu"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/formLabelMargin"
