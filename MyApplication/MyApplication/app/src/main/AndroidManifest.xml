@@ -84,6 +84,7 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Activities.MapsActivities.Recensement.SearchTaxonPopup"></activity>
     </application>
 
 </manifest>
