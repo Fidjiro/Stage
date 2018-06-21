@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.example.florian.myapplication.R;
+import com.example.florian.myapplication.Tools.Utils;
 
 public class PopUpPolygone extends ReleveInfoPopup {
 
@@ -36,7 +37,7 @@ public class PopUpPolygone extends ReleveInfoPopup {
     @Override
     protected void setViewsContent() {
         super.setViewsContent();
-        perimeter.setText(rel.getPerimeter() + "");
-        area.setText(rel.getArea() + "");
+        perimeter.setText(Utils.df.format(rel.getPerimeter()) + "");
+        area.setText(Utils.df.format(rel.getArea()) + "");
     }
 }

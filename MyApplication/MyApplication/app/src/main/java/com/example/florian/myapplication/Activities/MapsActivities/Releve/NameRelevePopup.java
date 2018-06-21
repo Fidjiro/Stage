@@ -20,6 +20,7 @@ import com.example.florian.myapplication.Activities.MapsActivities.Releve.Releve
 import com.example.florian.myapplication.Database.ReleveDatabase.HistoryDao;
 import com.example.florian.myapplication.Database.ReleveDatabase.Releve;
 import com.example.florian.myapplication.R;
+import com.example.florian.myapplication.Tools.Utils;
 
 import org.mapsforge.core.model.LatLong;
 
@@ -48,7 +49,6 @@ public class NameRelevePopup extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
         int width = dm.widthPixels;
-        int height = dm.heightPixels;
 
         nomReleve = (EditText) findViewById(R.id.nomRel);
         validNom = (Button) findViewById(R.id.validerNom);
@@ -94,12 +94,13 @@ public class NameRelevePopup extends AppCompatActivity {
             positionL93Text.setText(getString(R.string.positionL93) + " " + xy.x + " ; " + xy.y);
         } else if(type.equals(getString(R.string.line))){
             lineLengthText.setVisibility(View.VISIBLE);
-            lineLengthText.setText(getString(R.string.longueur) + releveToAdd.getLength());
+            System.out.println(releveToAdd.getLength());
+            lineLengthText.setText(getString(R.string.longueur) + " " + Utils.df.format(releveToAdd.getLength()));
         } else{
             polygonAreaText.setVisibility(View.VISIBLE);
             perimeterText.setVisibility(View.VISIBLE);
-            perimeterText.setText(getString(R.string.perimetre) + releveToAdd.getPerimeter());
-            polygonAreaText.setText(getString(R.string.polygonArea) + releveToAdd.getArea());
+            perimeterText.setText(getString(R.string.perimetre) + " " + Utils.df.format(releveToAdd.getPerimeter()));
+            polygonAreaText.setText(getString(R.string.polygonArea) + " " + Utils.df.format(releveToAdd.getArea()));
         }
     }
 

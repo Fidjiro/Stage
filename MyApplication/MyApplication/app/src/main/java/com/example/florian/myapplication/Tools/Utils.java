@@ -37,12 +37,15 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DecimalFormat;
 import java.util.Calendar;
 
 /**
  * Méthodes utilitaire qui peuvent être utilisées dans l'application
  */
 public final class Utils {
+
+    public static final DecimalFormat df = new DecimalFormat("0.##");
 
     /**
      * Compatibility method.

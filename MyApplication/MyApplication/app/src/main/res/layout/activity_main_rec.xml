@@ -53,17 +53,5 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:padding="5dp"
             app:layout_constraintStart_toStartOf="parent" />
-
-        <Button
-            android:id="@+id/fin_mission"
-            android:padding="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/finMission"
-            android:textAllCaps="false"
-            android:textColor="#FFFFFF"
-            android:background="@drawable/fond_bouton_mission"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
     </android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>

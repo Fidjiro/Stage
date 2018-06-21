@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.example.florian.myapplication.R;
+import com.example.florian.myapplication.Tools.Utils;
 
 public class PopUpLigne extends ReleveInfoPopup {
 
@@ -35,6 +36,6 @@ public class PopUpLigne extends ReleveInfoPopup {
     @Override
     protected void setViewsContent() {
         super.setViewsContent();
-        length.setText(rel.getLength() + "");
+        length.setText(Utils.df.format(rel.getLength()) + "");
     }
 }
