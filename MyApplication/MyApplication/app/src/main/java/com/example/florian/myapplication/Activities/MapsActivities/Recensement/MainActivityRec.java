@@ -1,30 +1,13 @@
 package com.example.florian.myapplication.Activities.MapsActivities.Recensement;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.LinearLayout;
 
-import com.example.florian.myapplication.Activities.FormActivities.Faune.AmphibienActivity;
-import com.example.florian.myapplication.Activities.FormActivities.Faune.FauneActivity;
-import com.example.florian.myapplication.Activities.FormActivities.Faune.OiseauxActivity;
-import com.example.florian.myapplication.Activities.FormActivities.Flore.FloreActivity;
 import com.example.florian.myapplication.Activities.MapsActivities.MainActivity;
-import com.example.florian.myapplication.AutoComplete.ArrayAdapter.AutocompleteCustomArrayAdapter;
-import com.example.florian.myapplication.AutoComplete.ArrayAdapter.AutocompleteCustomFrArrayAdapter;
-import com.example.florian.myapplication.AutoComplete.ArrayAdapter.AutocompleteCustomLatinArrayAdapter;
-import com.example.florian.myapplication.AutoComplete.AutoCompleteListeners.CustomAutoCompleteTextFrChangedListener;
-import com.example.florian.myapplication.AutoComplete.AutoCompleteListeners.CustomAutoCompleteTextLatinChangedListener;
-import com.example.florian.myapplication.AutoComplete.CustomAutoCompleteView;
-import com.example.florian.myapplication.Database.LoadingDatabase.Taxon;
 import com.example.florian.myapplication.R;
-import com.example.florian.myapplication.Tools.Utils;
 
 /**
  * Activité carte pour le recensement d'espèces
@@ -56,6 +39,7 @@ public class MainActivityRec extends MainActivity {
                 intent.putExtra("latitude",getUsrLatLong().getLatitude());
                 intent.putExtra("longitude",getUsrLatLong().getLongitude());
                 startActivity(intent);
+                overridePendingTransition(R.anim.enter_from_top,0);
             }
         });
     }

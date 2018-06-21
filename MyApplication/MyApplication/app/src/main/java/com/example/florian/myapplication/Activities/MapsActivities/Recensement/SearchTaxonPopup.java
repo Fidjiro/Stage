@@ -191,4 +191,10 @@ public class SearchTaxonPopup extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        overridePendingTransition(0,R.anim.exit_from_top);
+    }
 }
