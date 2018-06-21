@@ -22,44 +22,6 @@
         android:text="@string/mesCampagnes"
         android:textAllCaps="false" />
 
-    <LinearLayout
-        android:id="@+id/recensementLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:orientation="vertical"
-        android:background="@color/colorPrimary">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/layout_margin"
-            android:text="@string/layoutTitle"
-            android:textAllCaps="false"
-            android:textColor="#FFFFFF" />
-        <com.example.florian.myapplication.AutoComplete.CustomAutoCompleteView
-            android:id="@+id/autoCompleteEspeceLatin"
-            android:hint="@string/hintAutoCompleteLatin"
-            android:textColorHint="#FFFFFF"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="#FFFFFF"
-            android:completionThreshold="3"/>
-        <com.example.florian.myapplication.AutoComplete.CustomAutoCompleteView
-            android:id="@+id/autoCompleteEspeceFr"
-            android:hint="@string/hintAutoCompleteFr"
-            android:textColorHint="#FFFFFF"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="#FFFFFF"
-            android:completionThreshold="3"/>
-        <Button
-            android:id="@+id/validerRecensement"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/valider"
-            android:textAllCaps="false"/>
-    </LinearLayout>
-
     <android.support.constraint.ConstraintLayout
         android:id="@+id/missionLayout"
         android:layout_width="match_parent"

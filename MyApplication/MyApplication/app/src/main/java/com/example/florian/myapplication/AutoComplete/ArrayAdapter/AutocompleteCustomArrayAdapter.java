@@ -9,6 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.florian.myapplication.Activities.MapsActivities.Recensement.MainActivityRec;
+import com.example.florian.myapplication.Activities.MapsActivities.Recensement.SearchTaxonPopup;
+import com.example.florian.myapplication.Activities.MapsActivities.ShowInvRelActivity;
 import com.example.florian.myapplication.Database.LoadingDatabase.Taxon;
 import com.example.florian.myapplication.R;
 
@@ -43,7 +45,7 @@ public abstract class AutocompleteCustomArrayAdapter extends ArrayAdapter<Taxon>
              */
             if(convertView==null){
                 // inflate the layout
-                LayoutInflater inflater = ((MainActivityRec) mContext).getLayoutInflater();
+                LayoutInflater inflater = ((SearchTaxonPopup) mContext).getLayoutInflater();
                 convertView = inflater.inflate(layoutResourceId, parent, false);
             }
 
@@ -78,7 +80,7 @@ public abstract class AutocompleteCustomArrayAdapter extends ArrayAdapter<Taxon>
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MainActivityRec activity = ((MainActivityRec) mContext);
+                SearchTaxonPopup activity = ((SearchTaxonPopup) mContext);
                 activity.myAutoCompleteLatin.setText(t.getNom());
                 activity.myAutoCompleteFr.setText(t.getNom_fr());
                 dismissDropDown();

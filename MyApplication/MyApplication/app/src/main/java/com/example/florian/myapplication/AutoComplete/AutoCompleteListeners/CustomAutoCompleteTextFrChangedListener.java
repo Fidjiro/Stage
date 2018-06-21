@@ -3,6 +3,7 @@ package com.example.florian.myapplication.AutoComplete.AutoCompleteListeners;
 import android.content.Context;
 
 import com.example.florian.myapplication.Activities.MapsActivities.Recensement.MainActivityRec;
+import com.example.florian.myapplication.Activities.MapsActivities.Recensement.SearchTaxonPopup;
 import com.example.florian.myapplication.AutoComplete.ArrayAdapter.AutocompleteCustomFrArrayAdapter;
 import com.example.florian.myapplication.Database.LoadingDatabase.Taxon;
 import com.example.florian.myapplication.R;
@@ -18,7 +19,7 @@ public class CustomAutoCompleteTextFrChangedListener extends CustomAutoCompleteT
 
     @Override
     protected void actionOnTextChanged(CharSequence userInput) {
-        MainActivityRec mainActivityRec = ((MainActivityRec) context);
+        SearchTaxonPopup mainActivityRec = ((SearchTaxonPopup) context);
 
         // update the adapater
         mainActivityRec.myFrAdapter.notifyDataSetChanged();

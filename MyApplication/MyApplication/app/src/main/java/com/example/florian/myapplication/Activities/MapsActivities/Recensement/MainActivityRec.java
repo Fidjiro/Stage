@@ -31,60 +31,15 @@ import com.example.florian.myapplication.Tools.Utils;
  */
 public class MainActivityRec extends MainActivity {
 
-    public AutocompleteCustomArrayAdapter myLatinAdapter;
-    public AutocompleteCustomArrayAdapter myFrAdapter;
-
-    public CustomAutoCompleteView myAutoCompleteLatin;
-    public CustomAutoCompleteView myAutoCompleteFr;
-
-    protected LinearLayout recensementLayout;
     protected Button mesRecensement;
-
-    protected String nomLatinInput;
-    protected String nomFrInput;
-
-    protected final String PLANTAE = "Plantae";
-    protected final String AVES = "Aves";
-    protected final String AMPHIBIA = "Amphibia";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Button recenser = (Button) findViewById(R.id.recenser);
-        Button validerRecensement = (Button) findViewById(R.id.validerRecensement);
+
         mesRecensement = (Button) findViewById(R.id.mesCampagnes);
-
-        loadAutoComplete();
-
-        recensementLayout = (LinearLayout) findViewById(R.id.recensementLayout);
-        validerRecensement.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(myAutoCompleteFr.getWindowToken(), 0);
-                imm.hideSoftInputFromWindow(myAutoCompleteLatin.getWindowToken(), 0);
-                try {
-                    Intent intent = generateValidationIntent();
-                    recensementLayout.setVisibility(View.GONE);
-                    startActivity(intent);
-                } catch(Exception e){
-                    e.printStackTrace();
-                    AlertDialog box;
-                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivityRec.this);
-                    builder.setTitle(getString(R.string.avertissement));
-                    builder.setPositiveButton(getString(R.string.accord), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.dismiss();
-                        }
-                    });
-                    builder.setMessage(getString(R.string.saisirTaxon));
-                    box = builder.create();
-                    box.show();
-                }
-            }
-        });
 
         mesRecensement.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,10 +52,10 @@ public class MainActivityRec extends MainActivity {
         recenser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                recensementLayout.setVisibility(View.VISIBLE);
-                mesRecensement.setVisibility(View.GONE);
-                myAutoCompleteFr.setText("");
-                myAutoCompleteLatin.setText("");
+                Intent intent = new Intent(MainActivityRec.this,SearchTaxonPopup.class);
+                intent.putExtra("latitude",getUsrLatLong().getLatitude());
+                intent.putExtra("longitude",getUsrLatLong().getLongitude());
+                startActivity(intent);
             }
         });
     }
@@ -108,76 +63,6 @@ public class MainActivityRec extends MainActivity {
     @Override
     public void onResume() {
         super.onResume();
-        mesRecensement.setVisibility(View.VISIBLE);
-    }
-
-    /**
-     * Renvoie l'intent à lancer en utilisant generateGoodIntent et en lui ajoutant en extra la position de l'utilisateur
-     * et les noms de l'espèce inséré par l'utilisateur
-     *
-     * @return L'intent à lancer
-     */
-    protected Intent generateValidationIntent(){
-        setNamesfromUsrInput();
-        Intent intent = generateGoodIntent();
-
-        intent.putExtra("latitude",getUsrLatLong().getLatitude());
-        intent.putExtra("longitude",getUsrLatLong().getLongitude());
-        intent.putExtra("nomfr",nomFrInput);
-        intent.putExtra("nomlatin",nomLatinInput);
-        intent.putExtra("heure", Utils.getTime());
-
-        return intent;
-    }
-
-    /**
-     * Génère le bon intent en fonction du type d'espèce insérer par l'utilisateur.
-     *
-     * @return Le bon intent correspondant
-     */
-    protected Intent generateGoodIntent(){
-        if(usrInputIsPlantae()){
-            return new Intent(this, FloreActivity.class);
-        }else if(usrInputIsAves()){
-            return new Intent(this, OiseauxActivity.class);
-        }else if(usrInputIsAmphibia()){
-            return new Intent(this, AmphibienActivity.class);
-        } return new Intent(this, FauneActivity.class);
-    }
-
-    /**
-     * Vérifie si l'espèce inséré par l'utilisateur est une plante
-     * @return <code>True</code> si oui, <code>false</code> sinon
-     */
-    protected boolean usrInputIsPlantae(){
-        String regne = dao.getRegne(new String[]{nomLatinInput,nomFrInput});
-        return regne.equals(PLANTAE);
-    }
-
-    /**
-     * Vérifie si l'espèce inséré par l'utilisateur est un oiseau
-     * @return <code>True</code> si oui, <code>false</code> sinon
-     */
-    protected boolean usrInputIsAves(){
-        String classe = dao.getClasse(new String[]{nomLatinInput,nomFrInput});
-        return classe.equals(AVES);
-    }
-
-    /**
-     * Vérifie si l'espèce inséré par l'utilisateur est un amphibien
-     * @return <code>True</code> si oui, <code>false</code> sinon
-     */
-    protected boolean usrInputIsAmphibia(){
-        String classe = dao.getClasse(new String[]{nomLatinInput,nomFrInput});
-        return classe.equals(AMPHIBIA);
-    }
-
-    /**
-     * Modifie les attribut nomLatinInput et nomFrInput en fonction de l'input de l'utilisateur
-     */
-    protected void setNamesfromUsrInput(){
-        nomLatinInput = myAutoCompleteLatin.getText().toString();
-        nomFrInput = myAutoCompleteFr.getText().toString();
     }
 
     @Override
@@ -189,37 +74,6 @@ public class MainActivityRec extends MainActivity {
     protected void setRelocButton(View.OnClickListener listener) {
         Button reloc1 = (Button) findViewById(R.id.reloc1);
         reloc1.setOnClickListener(listener);
-    }
-
-    /**
-     * Mets en place l'autocompletion
-     */
-    protected void loadAutoComplete(){
-        try{
-            // autocompletetextview is in activity_main.xml
-            myAutoCompleteLatin = (CustomAutoCompleteView) findViewById(R.id.autoCompleteEspeceLatin);
-            myAutoCompleteFr = (CustomAutoCompleteView) findViewById(R.id.autoCompleteEspeceFr);
-
-            // add the listener so it will tries to suggest while the user types
-            myAutoCompleteLatin.addTextChangedListener(new CustomAutoCompleteTextLatinChangedListener(this));
-            myAutoCompleteFr.addTextChangedListener(new CustomAutoCompleteTextFrChangedListener(this));
-
-            // ObjectItemData has no value at first
-            Taxon[] ObjectItemDataLatin = new Taxon[0];
-            Taxon[] ObjectItemDataFr = new Taxon[0];
-
-            // set the custom ArrayAdapter
-            myLatinAdapter = new AutocompleteCustomLatinArrayAdapter(this, R.layout.list_view_row, ObjectItemDataLatin);
-            myAutoCompleteLatin.setAdapter(myLatinAdapter);
-
-            myFrAdapter = new AutocompleteCustomFrArrayAdapter(this, R.layout.list_view_row, ObjectItemDataFr);
-            myAutoCompleteFr.setAdapter(myFrAdapter);
-
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     protected void displayLayout(){

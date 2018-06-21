@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 
 import com.example.florian.myapplication.Activities.MapsActivities.Recensement.MainActivityRec;
+import com.example.florian.myapplication.Activities.MapsActivities.Recensement.SearchTaxonPopup;
 import com.example.florian.myapplication.Database.LoadingDatabase.Taxon;
 
 /**
@@ -38,7 +39,7 @@ public class AutocompleteCustomLatinArrayAdapter extends AutocompleteCustomArray
 
     @Override
     protected void dismissDropDown() {
-        MainActivityRec activity = (MainActivityRec) mContext;
+        SearchTaxonPopup activity = (SearchTaxonPopup) mContext;
         activity.myAutoCompleteLatin.dismissDropDown();
     }
 }
