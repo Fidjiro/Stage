@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.example.florian.myapplication.Activities.MapsActivities.Releve.MainActivityRel;
 import com.example.florian.myapplication.R;
+import com.example.florian.myapplication.Tools.Utils;
 
 import org.mapsforge.core.model.LatLong;
 
@@ -45,8 +46,8 @@ public class PopUpPoint extends ReleveInfoPopup {
         double lon = Double.parseDouble(rel.getLongitudes());
         XY xy = convertWgs84ToL93(new LatLong(lat,lon));
 
-        posWgs.setText(lat + ";" + lon);
-        posL93.setText(xy.x + ";" + xy.y);
+        posWgs.setText(Utils.dfPosWgs.format(lat)+ " ; " + Utils.dfPosWgs.format(lon));
+        posL93.setText(Utils.dfPosWgs.format(xy.x) + " ; " + Utils.dfPosWgs.format(xy.y));
     }
 
     private double atanh(double x){

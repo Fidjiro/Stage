@@ -9,14 +9,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.florian.myapplication.Activities.MapsActivities.Releve.RelevesPopUp.PopUpPoint;
 import com.example.florian.myapplication.Database.ReleveDatabase.HistoryDao;
 import com.example.florian.myapplication.Database.ReleveDatabase.Releve;
 import com.example.florian.myapplication.R;
@@ -31,7 +29,7 @@ public class NameRelevePopup extends AppCompatActivity {
     protected TextView lineLengthText,perimeterText, polygonAreaText, positionWGSText,positionL93Text;
     protected Button validNom;
     protected EditText nomReleve;
-    protected LinearLayout loginLayout;
+    protected LinearLayout loginLayout,positionWGSLayout,positionL93Layout;
 
     protected Releve releveToAdd;
 
@@ -55,6 +53,8 @@ public class NameRelevePopup extends AppCompatActivity {
         lineLengthText = (TextView) findViewById(R.id.lineLength);
         perimeterText = (TextView) findViewById(R.id.perimeter);
         polygonAreaText = (TextView) findViewById(R.id.polygonArea);
+        positionWGSLayout = (LinearLayout) findViewById(R.id.positionWGSLayout);
+        positionL93Layout = (LinearLayout) findViewById(R.id.positionL93Layout);
         positionWGSText = (TextView) findViewById(R.id.positionWGS);
         positionL93Text = (TextView) findViewById(R.id.positionL93);
         loginLayout = (LinearLayout) findViewById(R.id.loginLayout);
@@ -88,19 +88,19 @@ public class NameRelevePopup extends AppCompatActivity {
             double lon = Double.parseDouble(releveToAdd.getLongitudes());
             XY xy = convertWgs84ToL93(new LatLong(lat, lon));
 
-            positionL93Text.setVisibility(View.VISIBLE);
-            positionWGSText.setVisibility(View.VISIBLE);
-            positionWGSText.setText(getString(R.string.positionWGS) + " " + lat + " ; " + lon);
-            positionL93Text.setText(getString(R.string.positionL93) + " " + xy.x + " ; " + xy.y);
+            positionL93Layout.setVisibility(View.VISIBLE);
+            positionWGSLayout.setVisibility(View.VISIBLE);
+            positionWGSText.setText(Utils.dfPosWgs.format(lat) + " ; " + Utils.dfPosWgs.format(lon));
+            positionL93Text.setText(Utils.dfPosL93.format(xy.x) + " ; " + Utils.dfPosL93.format(xy.y));
         } else if(type.equals(getString(R.string.line))){
             lineLengthText.setVisibility(View.VISIBLE);
             System.out.println(releveToAdd.getLength());
-            lineLengthText.setText(getString(R.string.longueur) + " " + Utils.df.format(releveToAdd.getLength()));
+            lineLengthText.setText(getString(R.string.longueur) + " " + Utils.dfLength.format(releveToAdd.getLength()));
         } else{
             polygonAreaText.setVisibility(View.VISIBLE);
             perimeterText.setVisibility(View.VISIBLE);
-            perimeterText.setText(getString(R.string.perimetre) + " " + Utils.df.format(releveToAdd.getPerimeter()));
-            polygonAreaText.setText(getString(R.string.polygonArea) + " " + Utils.df.format(releveToAdd.getArea()));
+            perimeterText.setText(getString(R.string.perimetre) + " " + Utils.dfLength.format(releveToAdd.getPerimeter()));
+            polygonAreaText.setText(getString(R.string.polygonArea) + " " + Utils.dfLength.format(releveToAdd.getArea()));
         }
     }
 

@@ -45,7 +45,9 @@ import java.util.Calendar;
  */
 public final class Utils {
 
-    public static final DecimalFormat df = new DecimalFormat("0.##");
+    public static final DecimalFormat dfLength = new DecimalFormat("0.##");
+    public static final DecimalFormat dfPosWgs = new DecimalFormat("0.#####");
+    public static final DecimalFormat dfPosL93 = new DecimalFormat("0.####");
 
     /**
      * Compatibility method.
@@ -76,7 +78,6 @@ public final class Utils {
         }
     }
 
-    @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public static Marker createMarker(Context c, int resourceIdentifier,
                                       LatLong latLong) {

@@ -1,7 +1,5 @@
 package com.example.florian.myapplication.Activities.MapsActivities.Releve.RelevesPopUp;
 
-import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -37,7 +35,7 @@ public class PopUpPolygone extends ReleveInfoPopup {
     @Override
     protected void setViewsContent() {
         super.setViewsContent();
-        perimeter.setText(Utils.df.format(rel.getPerimeter()) + "");
-        area.setText(Utils.df.format(rel.getArea()) + "");
+        perimeter.setText(Utils.dfLength.format(rel.getPerimeter()) + "");
+        area.setText(Utils.dfLength.format(rel.getArea()) + "");
     }
 }
