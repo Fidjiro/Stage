@@ -33,6 +33,7 @@ public class Inventaire implements Parcelable{
     private String statut;
     private String nidif;
     private int indiceAbondance = -1;
+    private int err;
 
     /**
      * Sert à test la base de donnée, à delete après
@@ -52,7 +53,7 @@ public class Inventaire implements Parcelable{
      * @param nidif
      * @param indiceAbondance
      */
-    public Inventaire(long _id,long ref_taxon, long user, String nomFr, String nomLatin, int typeTaxon, double latitude, double longitude, String date, String heure, int nombre, String type_obs, int nbMale, int nbFemale, String presencePonte, String activite, String statut, String nidif, int indiceAbondance) {
+    public Inventaire(long _id,long ref_taxon, long user, String nomFr, String nomLatin, int typeTaxon, double latitude, double longitude, String date, String heure, int nombre, String type_obs, int nbMale, int nbFemale, String presencePonte, String activite, String statut, String nidif, int indiceAbondance, int err) {
         this._id = _id;
         this.ref_taxon = ref_taxon;
         this.user = user;
@@ -80,6 +81,7 @@ public class Inventaire implements Parcelable{
             nidif = "";
         this.nidif = nidif;
         this.indiceAbondance = indiceAbondance;
+        this.err = err;
     }
 
     /**
@@ -396,5 +398,13 @@ public class Inventaire implements Parcelable{
 
     public void setHeure(String heure) {
         this.heure = heure;
+    }
+
+    public int getErr() {
+        return err;
+    }
+
+    public void setErr(int err) {
+        this.err = err;
     }
 }

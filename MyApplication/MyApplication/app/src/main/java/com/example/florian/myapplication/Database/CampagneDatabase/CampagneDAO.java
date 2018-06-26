@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class CampagneDAO {
 
-    protected final static int VERSION = 1;
+    protected final static int VERSION = 2;
     // Le nom du fichier qui représente ma base
     protected final static String NAME = "database2.db";
 
@@ -40,6 +40,7 @@ public class CampagneDAO {
     public static final String STATUT = "statut";
     public static final String NIDIF = "nidification";
     public static final String ABONDANCE = "indice_abondance";
+    public static final String ERR = "err";
 
     public CampagneDAO(Context pContext) {
         this.mHandler = new CampagneDatabaseHandler(pContext, NAME, null, VERSION);
@@ -106,8 +107,9 @@ public class CampagneDAO {
         String statut = c.getString(c.getColumnIndex(STATUT));
         String nidif = c.getString(c.getColumnIndex(NIDIF));
         int indiceAbondance = c.getInt(c.getColumnIndex(ABONDANCE));
+        int err = c.getInt(c.getColumnIndex(ERR));
 
-        return new Inventaire(_id,ref_taxon,ref_usr, nomFr, nomLatin, type_taxon, latitude,longitude,date, heure, nb,type_obs,nbMale,nbFemale,presencePonte,activite,statut,nidif,indiceAbondance);
+        return new Inventaire(_id,ref_taxon,ref_usr, nomFr, nomLatin, type_taxon, latitude,longitude,date, heure, nb,type_obs,nbMale,nbFemale,presencePonte,activite,statut,nidif,indiceAbondance,err);
     }
 
     /**
@@ -136,6 +138,7 @@ public class CampagneDAO {
         cv.put(STATUT,inv.getStatut());
         cv.put(NIDIF,inv.getNidif());
         cv.put(ABONDANCE,inv.getIndiceAbondance());
+        cv.put(ERR,inv.getErr());
         return cv;
     }
 
@@ -145,12 +148,10 @@ public class CampagneDAO {
      * @return Le dernier Inventaire présent dans la base
      * @param usrId
      */
-    public Inventaire getInventaireOfTheUsr(long usrId){
+    public List<Inventaire> getInventaireOfTheUsr(long usrId){
         Cursor c = selectInvOfTheUsr(usrId);
 
-        if(c.moveToLast())
-            return new Inventaire(c.getLong(c.getColumnIndex(KEY)),c.getLong(c.getColumnIndex(REF_TAXON)),c.getLong(c.getColumnIndex(REF_USR)), c.getString(c.getColumnIndex(NOM_FR)), c.getString(c.getColumnIndex(NOM_LATIN)), c.getInt(c.getColumnIndex(TYPE_TAXON)), c.getDouble(c.getColumnIndex(LATITUDE)),c.getDouble(c.getColumnIndex(LONGITUDE)),c.getString(c.getColumnIndex(DATE)), c.getString(c.getColumnIndex(HEURE)), c.getInt(c.getColumnIndex(NB)),c.getString(c.getColumnIndex(TYPE_OBS)),c.getInt(c.getColumnIndex(NBMALE)),c.getInt(c.getColumnIndex(NBFEMALE)),c.getString(c.getColumnIndex(PRESENCE_PONTE)),c.getString(c.getColumnIndex(ACTIVITE)),c.getString(c.getColumnIndex(STATUT)),c.getString(c.getColumnIndex(NIDIF)),c.getInt(c.getColumnIndex(ABONDANCE)));
-        return null;
+        return dealWihCursor(c);
     }
 
     private Cursor selectInvOfTheUsr(long usrId){
@@ -194,8 +195,9 @@ public class CampagneDAO {
                 String statut = c.getString(c.getColumnIndex(STATUT));
                 String nidif = c.getString(c.getColumnIndex(NIDIF));
                 int indiceAbondance = c.getInt(c.getColumnIndex(ABONDANCE));
+                int err = c.getInt(c.getColumnIndex(ERR));
 
-                Inventaire tmp = new Inventaire(_id,ref_taxon,ref_usr, nomFr, nomLatin, type_taxon, latitude,longitude,date, heure, nb,type_obs,nbMale,nbFemale,presencePonte,activite,statut,nidif,indiceAbondance);
+                Inventaire tmp = new Inventaire(_id,ref_taxon,ref_usr, nomFr, nomLatin, type_taxon, latitude,longitude,date, heure, nb,type_obs,nbMale,nbFemale,presencePonte,activite,statut,nidif,indiceAbondance,err);
 
                 res.add(tmp);
             }while(c.moveToNext());

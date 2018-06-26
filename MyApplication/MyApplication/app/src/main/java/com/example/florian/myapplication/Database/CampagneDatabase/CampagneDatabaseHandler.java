@@ -29,6 +29,7 @@ public class CampagneDatabaseHandler extends SQLiteOpenHelper {
     public static final String CAMPAGNE_STATUT = "statut";
     public static final String CAMPAGNE_NIDIF = "nidification";
     public static final String CAMPAGNE_ABONDANCE = "indice_abondance";
+    public static final String CAMPAGNE_ERR = "err";
     public static final String CAMPAGNE_TABLE_CREATE = "CREATE TABLE " + CAMPAGNE_TABLE_NAME + " (" +
             CAMPAGNE_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             CAMPAGNE_REF_TAXON + " INTEGER NOT NULL, " +
@@ -48,7 +49,8 @@ public class CampagneDatabaseHandler extends SQLiteOpenHelper {
             CAMPAGNE_ACTIVITE + " TEXT, " +
             CAMPAGNE_STATUT + " TEXT, " +
             CAMPAGNE_NIDIF + " TEXT, " +
-            CAMPAGNE_ABONDANCE + " INTEGER);";
+            CAMPAGNE_ABONDANCE + " INTEGER, " +
+            CAMPAGNE_ERR + " INTEGER );";
 
     public static final String CAMPAGNE_TABLE_DROP = "DROP TABLE IF EXISTS " + CAMPAGNE_TABLE_NAME + ";";
 

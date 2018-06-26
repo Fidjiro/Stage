@@ -47,7 +47,7 @@ public class PopUpPoint extends ReleveInfoPopup {
         XY xy = convertWgs84ToL93(new LatLong(lat,lon));
 
         posWgs.setText(Utils.dfPosWgs.format(lat)+ " ; " + Utils.dfPosWgs.format(lon));
-        posL93.setText(Utils.dfPosWgs.format(xy.x) + " ; " + Utils.dfPosWgs.format(xy.y));
+        posL93.setText(Utils.dfPosL93.format(xy.x) + " ; " + Utils.dfPosL93.format(xy.y));
     }
 
     private double atanh(double x){

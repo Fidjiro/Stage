@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.florian.myapplication.Database.ReleveDatabase.Releve;
@@ -32,6 +33,7 @@ public class ReleveAdapter extends ArrayAdapter<Releve> {
             viewHolder.type = (TextView) convertView.findViewById(R.id.typeReleve);
             viewHolder.date = (TextView) convertView.findViewById(R.id.dateReleve);
             viewHolder.heure = (TextView) convertView.findViewById(R.id.heureReleve);
+            viewHolder.image = (ImageView) convertView.findViewById(R.id.importStatusImage);
 
             convertView.setTag(viewHolder);
         }
@@ -44,7 +46,12 @@ public class ReleveAdapter extends ArrayAdapter<Releve> {
         viewHolder.type.setText(rel.getType());
         viewHolder.date.setText(rel.getDate());
         viewHolder.heure.setText(rel.getHeure());
-
+        if(rel.getNom().equals("test"))
+            rel.setImportStatus("true");
+        if(rel.getImportStatus().equals("true"))
+            viewHolder.image.setImageResource(R.drawable.check_oui);
+        else
+            viewHolder.image.setImageResource(R.drawable.to_sync);
         return convertView;
     }
 
@@ -53,6 +60,7 @@ public class ReleveAdapter extends ArrayAdapter<Releve> {
         public TextView type;
         public TextView date;
         public TextView heure;
+        public ImageView image;
     }
 
 }

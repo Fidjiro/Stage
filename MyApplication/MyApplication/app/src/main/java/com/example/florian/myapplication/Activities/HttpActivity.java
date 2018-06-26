@@ -33,6 +33,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.List;
 
 import okhttp3.CookieJar;
 import okhttp3.FormBody;
@@ -151,16 +152,18 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         snackbar.show();
 
         RequestBody requestBody;
-        try {
-            requestBody = createRequestBodyToSend();
-            final Request request = new Request.Builder().url(URL_ADD_DATA).post(requestBody).build();
+        List<Inventaire> inventairesToSend = campagneDao.getInventaireOfTheUsr(usrId);
 
+        if(inventairesToSend.size() == 0)
+            Snackbar.make(txtJson, "Aucun inventaire à synchroniser", Snackbar.LENGTH_LONG).show();
+
+        for(Inventaire inv : inventairesToSend){
+            requestBody = createRequestBodyToSend(inv);
+            final Request request = new Request.Builder().url(URL_ADD_DATA).post(requestBody).build();
             SendDataTask task = new SendDataTask(request);
             task.execute((Void) null);
-        } catch (IOException e) {
-            Snackbar.make(txtJson, "Aucun inventaire à synchroniser", Snackbar.LENGTH_LONG).show();
-            e.printStackTrace();
         }
+
     }
 
     private class SendDataTask extends AsyncTask<Void,Void,Boolean>{
@@ -206,7 +209,6 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         protected void onPostExecute(final Boolean success) {
-            //showProgress(false);
 
             if (success) {
                 Snackbar.make(txtJson,"Synchronisation réussie",Snackbar.LENGTH_SHORT).show();
@@ -368,12 +370,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         campagneDao.close();
     }
 
-    private RequestBody createRequestBodyToSend() throws IOException {
-
-        Inventaire inv = campagneDao.getInventaireOfTheUsr(usrId);
-
-        if(inv == null)
-            throw new IOException("No inventory to send");
+    private RequestBody createRequestBodyToSend(Inventaire inv){
 
         RequestBody requestBody = new FormBody.Builder().add("_id",inv.get_id() + "").
                 add("ref_taxon",inv.getRef_taxon() + "").

@@ -69,6 +69,9 @@ public class InventaireAdapter extends ArrayAdapter<Inventaire>{
         viewHolder.date.setText(inv.getDate());
         viewHolder.heure.setText(inv.getHeure());
 
+        if(inv.getErr() == 1)
+            convertView.setBackgroundColor(Color.RED);
+
         return convertView;
     }
 
