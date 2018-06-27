@@ -32,7 +32,7 @@ import java.util.List;
 
 public class RelToGpxActivity extends AppCompatActivity {
 
-    private static final String PATH = Environment.getExternalStorageDirectory() + File.separator + "releve";
+    private final String DIRECTORY_PATH = Environment.getExternalStorageDirectory().getPath() + "/Android/data/" + getPackageName() + "/files/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,10 +94,10 @@ public class RelToGpxActivity extends AppCompatActivity {
     }
 
     private void toto(Releve rel) {
-        File dir = new File(Environment.getExternalStorageDirectory().getPath() + "/Android/data/" + getPackageName() + "/files/");
+        File dir = new File(DIRECTORY_PATH);
         if(!dir.exists())
             dir.mkdirs();
-        File mFile = new File(Environment.getExternalStorageDirectory().getPath() + "/Android/data/" + getPackageName() + "/files/" + rel.getNom() + ".gpx");
+        File mFile = new File(DIRECTORY_PATH + rel.getNom() + ".gpx");
         try {
             if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
                     && !Environment.MEDIA_MOUNTED_READ_ONLY.equals(Environment.getExternalStorageState())) {
