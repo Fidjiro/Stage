@@ -6,6 +6,7 @@ import android.support.constraint.ConstraintLayout;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.florian.myapplication.Activities.Historiques.Inventaires.HistoryRecensementActivity;
 import com.example.florian.myapplication.Activities.MapsActivities.MainActivity;
 import com.example.florian.myapplication.R;
 

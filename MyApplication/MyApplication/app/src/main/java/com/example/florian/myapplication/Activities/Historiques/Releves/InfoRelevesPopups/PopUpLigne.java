@@ -1,4 +1,4 @@
-package com.example.florian.myapplication.Activities.MapsActivities.Releve.RelevesPopUp;
+package com.example.florian.myapplication.Activities.Historiques.Releves.InfoRelevesPopups;
 
 import android.os.Bundle;
 import android.widget.TextView;
@@ -6,9 +6,9 @@ import android.widget.TextView;
 import com.example.florian.myapplication.R;
 import com.example.florian.myapplication.Tools.Utils;
 
-public class PopUpPolygone extends ReleveInfoPopup {
+public class PopUpLigne extends ReleveInfoPopup {
 
-    protected TextView perimeter, area;
+    protected TextView length;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,7 +17,7 @@ public class PopUpPolygone extends ReleveInfoPopup {
 
     @Override
     protected void setContentView() {
-        setContentView(R.layout.activity_pop_up_polygone);
+        setContentView(R.layout.activity_pop_up_ligne);
     }
 
     @Override
@@ -28,14 +28,12 @@ public class PopUpPolygone extends ReleveInfoPopup {
     @Override
     protected void initView() {
         super.initView();
-        perimeter = (TextView) findViewById(R.id.perimetre);
-        area = (TextView) findViewById(R.id.area);
+        length = (TextView) findViewById(R.id.longueur);
     }
 
     @Override
     protected void setViewsContent() {
         super.setViewsContent();
-        perimeter.setText(Utils.dfLength.format(rel.getPerimeter()) + "");
-        area.setText(Utils.dfLength.format(rel.getArea()) + "");
+        length.setText(Utils.dfLength.format(rel.getLength()) + "");
     }
 }

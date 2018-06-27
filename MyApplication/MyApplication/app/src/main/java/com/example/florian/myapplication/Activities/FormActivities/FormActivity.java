@@ -23,6 +23,8 @@ import com.example.florian.myapplication.Database.LoadingDatabase.TaxUsrDAO;
 import com.example.florian.myapplication.R;
 import com.example.florian.myapplication.Tools.Utils;
 
+import okhttp3.internal.Util;
+
 /**
  * Activité Formulaire qui sert de base aux 4 formulaires différents
  */
@@ -104,7 +106,7 @@ public abstract class FormActivity extends AppCompatActivity {
     protected void setFieldsFromConsultedInv(){
         nomfr.setText(consultedInv.getNomFr());
         nomlatin.setText(consultedInv.getNomLatin());
-        date.setText(consultedInv.getDate());
+        date.setText(Utils.printDateWithYearIn2Digit(consultedInv.getDate()));
         int invNombre = consultedInv.getNombre();
         if(invNombre > 0)
             nombre.setText( invNombre+ "");

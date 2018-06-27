@@ -19,6 +19,7 @@ import com.example.florian.myapplication.Database.ReleveDatabase.HistoryDao;
 import com.example.florian.myapplication.Database.ReleveDatabase.Releve;
 import com.example.florian.myapplication.R;
 import com.example.florian.myapplication.Tools.Utils;
+import com.example.florian.myapplication.Tools.XY;
 
 import org.mapsforge.core.model.LatLong;
 
@@ -86,7 +87,7 @@ public class NameRelevePopup extends AppCompatActivity {
         if(type.equals(getString(R.string.point))) {
             double lat = Double.parseDouble(releveToAdd.getLatitudes());
             double lon = Double.parseDouble(releveToAdd.getLongitudes());
-            XY xy = convertWgs84ToL93(new LatLong(lat, lon));
+            XY xy = Utils.convertWgs84ToL93(new LatLong(lat, lon));
 
             positionL93Layout.setVisibility(View.VISIBLE);
             positionWGSLayout.setVisibility(View.VISIBLE);
@@ -118,45 +119,5 @@ public class NameRelevePopup extends AppCompatActivity {
         });
         box = builder.create();
         return box;
-    }
-
-    private double atanh(double x){
-        return (log(1+x) - log(1-x))/2;
-    }
-
-    private XY convertWgs84ToL93(LatLong latLong){
-
-        double latitude = latLong.getLatitude();
-        double longitude = latLong.getLongitude();
-
-// définition des constantes
-        double c= 11754255.426096; //constante de la projection
-        double e= 0.0818191910428158; //première exentricité de l'ellipsoïde
-        double n= 0.725607765053267; //exposant de la projection
-        double xs= 700000; //coordonnées en projection du pole
-        double ys= 12655612.049876; //coordonnées en projection du pole
-
-// pré-calculs
-        double lat_rad= latitude/180*Math.PI; //latitude en rad
-        double lat_iso= atanh(Math.sin(lat_rad))-e*atanh(e*Math.sin(lat_rad)); //latitude isométrique
-
-//calcul
-        double x= ((c*Math.exp(-n*(lat_iso)))*Math.sin(n*(longitude-3)/180*Math.PI)+xs);
-        double y= (ys-(c*Math.exp(-n*(lat_iso)))*Math.cos(n*(longitude-3)/180*Math.PI));
-        return new XY(x,y);
-    }
-    private class XY{
-        public double x;
-        public double y;
-
-        public XY(){
-            x = 0;
-            y = 0;
-        }
-
-        public XY(double x, double y) {
-            this.x = x;
-            this.y = y;
-        }
     }
 }

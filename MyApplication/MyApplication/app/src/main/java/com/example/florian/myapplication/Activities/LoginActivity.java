@@ -14,6 +14,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
@@ -107,6 +108,7 @@ public class LoginActivity extends AppCompatActivity {
      * @return <code>True</code> si oui, <code>false</code> sinon
      */
     private boolean loadComplete(String filename){
+        Log.e("totototot",this.getFilesDir().getPath());
         return new File(this.getFilesDir(),filename).exists();
     }
 

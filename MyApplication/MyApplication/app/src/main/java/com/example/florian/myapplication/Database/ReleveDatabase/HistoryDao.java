@@ -95,7 +95,7 @@ public class HistoryDao {
     }
 
     private Cursor selectReleveFromNomTypeDateHeure(String[] fields){
-        String request = "SELECT * FROM " + TABLE_NAME + " WHERE " + NOM + " = ? AND " + TYPE + " = ? AND " + DATE + " = ? AND " + TIME + " = ?;";
+        String request = "SELECT * FROM " + TABLE_NAME + " WHERE " + NOM + " = ? AND " + TYPE + " = ? AND " + TIME + " = ?;";
         return mDb.rawQuery(request,fields);
     }
 

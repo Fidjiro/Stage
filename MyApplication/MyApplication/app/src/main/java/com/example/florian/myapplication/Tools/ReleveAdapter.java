@@ -44,7 +44,7 @@ public class ReleveAdapter extends ArrayAdapter<Releve> {
         //il ne reste plus qu'à remplir notre vue
         viewHolder.nom.setText(rel.getNom());
         viewHolder.type.setText(rel.getType());
-        viewHolder.date.setText(rel.getDate());
+        viewHolder.date.setText(Utils.printDateWithYearIn2Digit(rel.getDate()));
         viewHolder.heure.setText(rel.getHeure());
         if(rel.getNom().equals("test"))
             rel.setImportStatus("true");

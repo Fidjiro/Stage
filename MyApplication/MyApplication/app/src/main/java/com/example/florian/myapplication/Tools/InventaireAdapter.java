@@ -66,7 +66,7 @@ public class InventaireAdapter extends ArrayAdapter<Inventaire>{
             viewHolder.denombrement.setText("Présence");
         else
             viewHolder.denombrement.setText(nb + "");
-        viewHolder.date.setText(inv.getDate());
+        viewHolder.date.setText(Utils.printDateWithYearIn2Digit(inv.getDate()));
         viewHolder.heure.setText(inv.getHeure());
 
         if(inv.getErr() == 1)

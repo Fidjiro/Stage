@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <uses-feature android:name="android.hardware.location.gps" />
     <!-- To auto-complete the email text field in the login form with the user's emails -->
@@ -58,21 +59,21 @@
             android:name=".Activities.FormActivities.Faune.OiseauxActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activities.MapsActivities.Releve.HistoryReleveActivity"
+            android:name=".Activities.Historiques.Releves.HistoryReleveActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activities.MapsActivities.Recensement.HistoryRecensementActivity"
+            android:name=".Activities.Historiques.Inventaires.HistoryRecensementActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activities.MapsActivities.Releve.RelevesPopUp.PopUpPoint"
+            android:name=".Activities.Historiques.Releves.InfoRelevesPopups.PopUpPoint"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.CustomTheme" />
         <activity
-            android:name=".Activities.MapsActivities.Releve.RelevesPopUp.PopUpLigne"
+            android:name=".Activities.Historiques.Releves.InfoRelevesPopups.PopUpLigne"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.CustomTheme" />
         <activity
-            android:name=".Activities.MapsActivities.Releve.RelevesPopUp.PopUpPolygone"
+            android:name=".Activities.Historiques.Releves.InfoRelevesPopups.PopUpPolygone"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.CustomTheme" />
         <activity
@@ -84,8 +85,10 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activities.MapsActivities.Recensement.SearchTaxonPopup"
-            android:theme="@style/AppTheme.CustomTheme2"/>
+        <activity
+            android:name=".Activities.MapsActivities.Recensement.SearchTaxonPopup"
+            android:theme="@style/AppTheme.CustomTheme2" />
+        <activity android:name=".Activities.RelToGpxActivity"></activity>
     </application>
 
 </manifest>

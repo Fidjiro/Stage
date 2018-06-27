@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Activities.MapsActivities.Releve.RelevesPopUp.PopUpLigne"
+    tools:context=".Activities.Historiques.Releves.InfoRelevesPopups.PopUpLigne"
     android:background="@drawable/back">
 
     <TextView
@@ -145,6 +145,14 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/exportRel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="Exporter"
+            android:textAllCaps="false"/>
 
         <Button
             android:id="@+id/redraw"

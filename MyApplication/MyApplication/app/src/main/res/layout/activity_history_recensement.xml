@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Activities.MapsActivities.Releve.HistoryReleveActivity"
+    tools:context=".Activities.Historiques.Releves.HistoryReleveActivity"
     android:background="@drawable/back">
 
     <TextView

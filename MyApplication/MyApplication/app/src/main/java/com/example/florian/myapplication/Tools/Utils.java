@@ -40,6 +40,8 @@ import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 
+import static java.lang.Math.log;
+
 /**
  * Méthodes utilitaire qui peuvent être utilisées dans l'application
  */
@@ -163,11 +165,14 @@ public final class Utils {
         int year = c.get(Calendar.YEAR);
         c.get(Calendar.HOUR_OF_DAY);
 
-        return formatInt(day) + "/" + formatInt(month) + "/" + getYearIn2Digit(year);
+        return formatInt(day) + "/" + formatInt(month) + "/" + year;
     }
 
-    public static int getYearIn2Digit(int year){
-        return year % 100;
+    public static String printDateWithYearIn2Digit(String date){
+        int idxSlash = date.lastIndexOf("/");
+        String year = date.substring(idxSlash + 1);
+        String newYear = year.substring(year.length()-2);
+        return date.replace("/" + year,newYear);
     }
 
     public static String getTime(){
@@ -187,6 +192,32 @@ public final class Utils {
         if(i < 10)
             return "0" + i;
         return "" + i;
+    }
+
+    private static double atanh(double x){
+        return (log(1+x) - log(1-x))/2;
+    }
+
+    public static XY convertWgs84ToL93(LatLong latLong){
+
+        double latitude = latLong.getLatitude();
+        double longitude = latLong.getLongitude();
+
+// définition des constantes
+        double c= 11754255.426096; //constante de la projection
+        double e= 0.0818191910428158; //première exentricité de l'ellipsoïde
+        double n= 0.725607765053267; //exposant de la projection
+        double xs= 700000; //coordonnées en projection du pole
+        double ys= 12655612.049876; //coordonnées en projection du pole
+
+// pré-calculs
+        double lat_rad= latitude/180*Math.PI; //latitude en rad
+        double lat_iso= atanh(Math.sin(lat_rad))-e*atanh(e*Math.sin(lat_rad)); //latitude isométrique
+
+//calcul
+        double x= ((c*Math.exp(-n*(lat_iso)))*Math.sin(n*(longitude-3)/180*Math.PI)+xs);
+        double y= (ys-(c*Math.exp(-n*(lat_iso)))*Math.cos(n*(longitude-3)/180*Math.PI));
+        return new XY(x,y);
     }
 
     private Utils() {

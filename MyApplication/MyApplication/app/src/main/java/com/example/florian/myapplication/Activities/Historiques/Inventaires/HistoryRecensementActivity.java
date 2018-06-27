@@ -1,4 +1,4 @@
-package com.example.florian.myapplication.Activities.MapsActivities.Recensement;
+package com.example.florian.myapplication.Activities.Historiques.Inventaires;
 
 import android.content.Intent;
 import android.content.SharedPreferences;

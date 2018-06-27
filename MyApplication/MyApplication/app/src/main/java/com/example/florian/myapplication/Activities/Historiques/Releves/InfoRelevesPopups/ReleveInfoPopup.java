@@ -1,4 +1,4 @@
-package com.example.florian.myapplication.Activities.MapsActivities.Releve.RelevesPopUp;
+package com.example.florian.myapplication.Activities.Historiques.Releves.InfoRelevesPopups;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -13,15 +13,17 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.florian.myapplication.Activities.MapsActivities.ShowInvRelActivity;
+import com.example.florian.myapplication.Activities.RelToGpxActivity;
 import com.example.florian.myapplication.Database.ReleveDatabase.HistoryDao;
 import com.example.florian.myapplication.Database.ReleveDatabase.Releve;
 import com.example.florian.myapplication.R;
+import com.example.florian.myapplication.Tools.Utils;
 
 public abstract class ReleveInfoPopup extends AppCompatActivity {
 
     protected TextView nom, type, date, heure;
     protected ImageButton delete;
-    protected Button redraw;
+    protected Button redraw,export;
 
     protected HistoryDao dao;
 
@@ -53,7 +55,7 @@ public abstract class ReleveInfoPopup extends AppCompatActivity {
     protected void setViewsContent(){
         nom.setText(rel.getNom());
         type.setText(rel.getType());
-        date.setText(rel.getDate());
+        date.setText(Utils.printDateWithYearIn2Digit(rel.getDate()));
         heure.setText(rel.getHeure());
     }
 
@@ -67,6 +69,7 @@ public abstract class ReleveInfoPopup extends AppCompatActivity {
 
         delete = (ImageButton) findViewById(R.id.deleteRel);
         redraw = (Button) findViewById(R.id.redraw);
+        export = (Button) findViewById(R.id.exportRel);
 
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,6 +87,15 @@ public abstract class ReleveInfoPopup extends AppCompatActivity {
                 startActivity(intent);
                 finishPopUp();
         }
+        });
+
+        export.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ReleveInfoPopup.this, RelToGpxActivity.class);
+                intent.putExtra("relToExport",rel);
+                startActivity(intent);
+            }
         });
     }
 

@@ -1,4 +1,4 @@
-package com.example.florian.myapplication.Activities.MapsActivities.Releve;
+package com.example.florian.myapplication.Activities.Historiques.Releves;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,9 +9,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.florian.myapplication.Activities.MapsActivities.Releve.RelevesPopUp.PopUpLigne;
-import com.example.florian.myapplication.Activities.MapsActivities.Releve.RelevesPopUp.PopUpPoint;
-import com.example.florian.myapplication.Activities.MapsActivities.Releve.RelevesPopUp.PopUpPolygone;
+import com.example.florian.myapplication.Activities.Historiques.Releves.InfoRelevesPopups.PopUpLigne;
+import com.example.florian.myapplication.Activities.Historiques.Releves.InfoRelevesPopups.PopUpPoint;
+import com.example.florian.myapplication.Activities.Historiques.Releves.InfoRelevesPopups.PopUpPolygone;
 import com.example.florian.myapplication.Database.ReleveDatabase.HistoryDao;
 import com.example.florian.myapplication.Database.ReleveDatabase.Releve;
 import com.example.florian.myapplication.R;
@@ -42,7 +42,7 @@ public class HistoryReleveActivity extends AppCompatActivity {
                 TextView dateRelTxt = (TextView)view.findViewById(R.id.dateReleve);
                 TextView heureRelTxt = (TextView)view.findViewById(R.id.heureReleve);
 
-                Releve rel = dao.getReleveFromNomTypeDateHeure(new String[]{nomRelTxt.getText().toString(), typeRelTxt.getText().toString(), dateRelTxt.getText().toString(), heureRelTxt.getText().toString()});
+                Releve rel = dao.getReleveFromNomTypeDateHeure(new String[]{nomRelTxt.getText().toString(), typeRelTxt.getText().toString(), heureRelTxt.getText().toString()});
 
                 Intent intent = generateGoodIntent(typeRelTxt.getText().toString());
                 intent.putExtra("releve",rel);
