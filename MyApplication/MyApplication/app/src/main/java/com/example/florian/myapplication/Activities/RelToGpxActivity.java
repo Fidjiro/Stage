@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.media.MediaScannerConnection;
 import android.os.Build;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -32,12 +33,14 @@ import java.util.List;
 
 public class RelToGpxActivity extends AppCompatActivity {
 
-    private final String DIRECTORY_PATH = Environment.getExternalStorageDirectory().getPath() + "/Android/data/" + getPackageName() + "/files/";
+    private String DIRECTORY_PATH;
+    private static final String GPX_EXTENSION = ".gpx";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rel_to_gpx);
+        DIRECTORY_PATH = Environment.getExternalStorageDirectory().getPath() + "/Android/data/" + getPackageName() + "/files/";
         Intent intent = getIntent();
         Releve relToExport = intent.getParcelableExtra("relToExport");
         toto(relToExport);
@@ -85,10 +88,13 @@ public class RelToGpxActivity extends AppCompatActivity {
     private String formatDateHeure(Releve rel){
         String date = new String (rel.getDate());
         String time = new String(rel.getHeure());
+        String date_inverse = "";
 
-        date.replace("/","-");
-        StringBuilder lettersBuff = new StringBuilder(date);
-        String date_inverse = lettersBuff.reverse().toString();
+        String[] splittedDate = date.split("/");
+        for(int i = splittedDate.length - 1; i > 0; --i){
+            date_inverse += splittedDate[i] + "-";
+        }
+        date_inverse += splittedDate[0];
 
         return date_inverse + "T" + time + "Z";
     }
@@ -97,16 +103,22 @@ public class RelToGpxActivity extends AppCompatActivity {
         File dir = new File(DIRECTORY_PATH);
         if(!dir.exists())
             dir.mkdirs();
-        File mFile = new File(DIRECTORY_PATH + rel.getNom() + ".gpx");
+        String currFilePath = DIRECTORY_PATH + rel.getNom() + GPX_EXTENSION;
+        File mFile = new File(currFilePath);
         try {
-            if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
-                    && !Environment.MEDIA_MOUNTED_READ_ONLY.equals(Environment.getExternalStorageState())) {
+            if (appHasAccessToStorage()) {
                 mFile.createNewFile();
+                MediaScannerConnection.scanFile(this, new String[] {currFilePath}, null, null);
                 generateGpx(mFile,rel);
             } else
                 System.out.println("Pas accès");
         } catch (IOException e){
             e.printStackTrace();
         }
+    }
+
+    private boolean appHasAccessToStorage(){
+        return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
+                && !Environment.MEDIA_MOUNTED_READ_ONLY.equals(Environment.getExternalStorageState());
     }
 }
