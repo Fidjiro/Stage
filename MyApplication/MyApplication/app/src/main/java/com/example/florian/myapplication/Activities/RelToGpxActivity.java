@@ -39,11 +39,33 @@ public class RelToGpxActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_rel_to_gpx);
+
         DIRECTORY_PATH = Environment.getExternalStorageDirectory().getPath() + "/Android/data/" + getPackageName() + "/files/";
+
         Intent intent = getIntent();
         Releve relToExport = intent.getParcelableExtra("relToExport");
+
         toto(relToExport);
+    }
+
+    private String createGoodGpxSegment(Releve rel){
+        String segments = "";
+        if(rel.getType().equals(getString(R.string.point))) {
+            segments = "<trkpt lat=\"" + rel.getLatitudes() + "\" lon=\"" + rel.getLongitudes() + "\"><time>" + formatDateHeure(rel) + "</time></trkpt>\n";
+        }
+        else{
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<LatLong>>() {}.getType();
+            String relLatLongsString = rel.getLat_long();
+            List<LatLong> relLatLongs = gson.fromJson(relLatLongsString, type);
+
+            for (LatLong location : relLatLongs) {
+                segments += "<trkpt lat=\"" + location.getLatitude() + "\" lon=\"" + location.getLongitude() + "\"><time>" + formatDateHeure(rel) + "</time></trkpt>\n";
+            }
+        }
+        return segments;
     }
 
     public void generateGpx(File file, Releve rel) {
@@ -54,20 +76,7 @@ public class RelToGpxActivity extends AppCompatActivity {
         }
         String header = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?><gpx xmlns=\"http://www.topografix.com/GPX/1/1\" creator=\"MapSource 6.15.5\" version=\"1.1\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"  xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd\"><trk>\n";
         String name = "<name>" + rel.getNom() + "</name><trkseg>\n";
-
-        String segments = "";
-        Gson gson = new Gson();
-        Type type = new TypeToken<List<LatLong>>() {}.getType();
-        String relLatLongsString = rel.getLat_long();
-        List<LatLong> relLatLongs = gson.fromJson(relLatLongsString, type);
-
-        //XY pos;
-
-        for (LatLong location : relLatLongs) {
-          //  pos = Utils.convertWgs84ToL93(location);
-            segments += "<trkpt lat=\"" + location.getLatitude() + "\" lon=\"" + location.getLongitude() + "\"><time>" + formatDateHeure(rel) + "</time></trkpt>\n";
-        }
-
+        String segments = createGoodGpxSegment(rel);
         String footer = "</trkseg></trk></gpx>";
 
         try {
