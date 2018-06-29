@@ -3,23 +3,21 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:weightSum="6">
 
     <TextView
         android:id="@+id/nomRel"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Large Text"
-        android:layout_weight="1"
+        android:layout_weight="1.1"
         android:gravity="center"
-        android:padding="4dp"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView
         android:id="@+id/typeReleve"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Large Text"
         android:layout_weight="1.1"
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -28,7 +26,6 @@
         android:id="@+id/dateReleve"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Large Text"
         android:layout_weight="1.1"
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -37,7 +34,6 @@
         android:id="@+id/heureReleve"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Large Text"
         android:layout_weight="1.1"
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceSmall" />

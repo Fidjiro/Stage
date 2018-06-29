@@ -91,7 +91,7 @@ public class CampagneDAO implements DAO<Inventaire> {
     }
 
     public Inventaire getInventaireFromHistory(String[] params){
-        String request = "SELECT * FROM " + CAMPAGNE + " WHERE " + NOM_LATIN + " = ? AND " + NOM_FR + " = ? AND " + DATE + " = ? AND " + HEURE + " = ?;";
+        String request = "SELECT * FROM " + CAMPAGNE + " WHERE " + NOM_LATIN + " = ? AND " + NOM_FR + " = ? AND " + HEURE + " = ?;";
         Cursor c = mDb.rawQuery(request,params);
         c.moveToNext();
 

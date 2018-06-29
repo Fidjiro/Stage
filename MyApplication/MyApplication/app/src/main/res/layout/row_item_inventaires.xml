@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:weightSum="10">
 
     <LinearLayout
@@ -15,7 +15,6 @@
             android:id="@+id/nomEspeceInv"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:text="Large Text"
             android:layout_weight="1"
             android:lines="1"
             android:textStyle="bold"
@@ -33,7 +32,6 @@
                 android:id="@+id/denombrementInv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Large Text"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -42,7 +40,6 @@
                 android:id="@+id/dateInv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Large Text"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -51,7 +48,6 @@
                 android:id="@+id/heureInventaire"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Large Text"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -62,5 +58,7 @@
         android:layout_gravity="center"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
 </LinearLayout>

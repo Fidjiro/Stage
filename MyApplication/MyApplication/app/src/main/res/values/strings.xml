@@ -126,6 +126,8 @@
 
     <!--Strings pour l'historique des relevés-->
     <string name="titleHistoryReleve">Historique des relevés</string>
+    <string name="deleteSelection">Supprimer la sélection</string>
+    <string name="exportSelection">Exporter la sélection</string>
 
     <!--Historique recensement-->
     <string name="titleHistoryRecensement">Historique des inventaires</string>

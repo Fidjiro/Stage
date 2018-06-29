@@ -4,9 +4,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -42,6 +46,19 @@ public class HistoryRecensementActivity extends AppCompatActivity {
 
 
         listInv = (ListView) findViewById(R.id.listViewRecensement);
+        LayoutInflater inflater = getLayoutInflater();
+        ViewGroup header = (ViewGroup)inflater.inflate(R.layout.row_item_inventaires,listInv,false);
+        CheckBox changeAllCheckboxes = (CheckBox) header.findViewById(R.id.itemCheckbox);
+        changeAllCheckboxes.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b)
+                    checkAll();
+                else
+                    uncheckAll();
+            }
+        });
+        listInv.addHeaderView(header,null,false);
         listInv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -58,7 +75,7 @@ public class HistoryRecensementActivity extends AppCompatActivity {
                         noms.replace(" sp.","");
                     splittedNoms = new String[]{noms, ""};
                 }
-                String[] params = new String[] {splittedNoms[0],splittedNoms[1],dateInvTxt.getText().toString(),heureInvTxt.getText().toString()};
+                String[] params = new String[] {splittedNoms[0],splittedNoms[1],heureInvTxt.getText().toString()};
                 Inventaire selectedInventaire = campagneDao.getInventaireFromHistory(params);
                 startActivity(generateGoodIntent(selectedInventaire));
             }
@@ -129,6 +146,20 @@ public class HistoryRecensementActivity extends AppCompatActivity {
     protected long getCurrentUsrId(){
         SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         return loginPreferences.getLong("usrId",0);
+    }
+
+    private void changeAllCheckboxStatus(boolean checked){
+        for(CheckBox cb : adapter.allCheckBoxes){
+            cb.setChecked(checked);
+        }
+    }
+
+    private void checkAll(){
+        changeAllCheckboxStatus(true);
+    }
+
+    private void uncheckAll(){
+        changeAllCheckboxStatus(false);
     }
 
     @Override

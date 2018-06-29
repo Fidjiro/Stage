@@ -1,14 +1,11 @@
 package com.example.florian.myapplication.Activities;
 
-import android.content.Intent;
+import android.content.Context;
 import android.media.MediaScannerConnection;
 import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 
 import com.example.florian.myapplication.Database.ReleveDatabase.Releve;
-import com.example.florian.myapplication.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -20,28 +17,20 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class RelToGpxActivity extends AppCompatActivity {
+public class RelToGpx {
 
     private String DIRECTORY_PATH;
     private static final String GPX_EXTENSION = ".gpx";
+    private Context ctx;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_rel_to_gpx);
-
-        DIRECTORY_PATH = Environment.getExternalStorageDirectory().getPath() + "/Android/data/" + getPackageName() + "/files/";
-
-        Intent intent = getIntent();
-        Releve relToExport = intent.getParcelableExtra("relToExport");
-
-        export(relToExport);
+    public RelToGpx(Context ctx, String packageName) {
+        this.ctx = ctx;
+        DIRECTORY_PATH = Environment.getExternalStorageDirectory().getPath() + "/Android/data/" + packageName + "/files/";
     }
 
     private String createGoodGpxSegment(Releve rel){
         String segments = "";
-        if(rel.getType().equals(getString(R.string.point))) {
+        if(rel.getType().equals("Point")) {
             segments = "<trkpt lat=\"" + rel.getLatitudes() + "\" lon=\"" + rel.getLongitudes() + "\"><time>" + formatDateHeure(rel) + "</time></trkpt>\n";
         }
         else{
@@ -57,7 +46,7 @@ public class RelToGpxActivity extends AppCompatActivity {
         return segments;
     }
 
-    public void generateGpx(File file, Releve rel) {
+    private void generateGpx(File file, Releve rel) {
         try {
             file.createNewFile();
         } catch (IOException e) {
@@ -97,7 +86,7 @@ public class RelToGpxActivity extends AppCompatActivity {
         return date_inverse + "T" + time + "Z";
     }
 
-    private void export(Releve rel) {
+    public void export(Releve rel) {
         File dir = new File(DIRECTORY_PATH);
         if(!dir.exists())
             dir.mkdirs();
@@ -106,7 +95,7 @@ public class RelToGpxActivity extends AppCompatActivity {
         try {
             if (appHasAccessToStorage()) {
                 mFile.createNewFile();
-                MediaScannerConnection.scanFile(this, new String[] {currFilePath}, null, null);
+                MediaScannerConnection.scanFile(ctx, new String[] {currFilePath}, null, null);
                 generateGpx(mFile,rel);
             } else
                 System.out.println("Pas accès");

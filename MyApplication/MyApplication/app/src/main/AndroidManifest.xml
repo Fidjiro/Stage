@@ -89,7 +89,7 @@
         <activity
             android:name=".Activities.MapsActivities.Recensement.SearchTaxonPopup"
             android:theme="@style/AppTheme.CustomTheme2" />
-        <activity android:name=".Activities.RelToGpxActivity"></activity>
+        <activity android:name=".Activities.RelToGpx"></activity>
     </application>
 
 </manifest>

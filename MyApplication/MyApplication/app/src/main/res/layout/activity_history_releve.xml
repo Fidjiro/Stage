@@ -34,7 +34,14 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:textAllCaps="false"
-            android:text="Supprimer selection"/>
+            android:text="@string/deleteSelection"/>
+        <Button
+            android:id="@+id/exportSelect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:textAllCaps="false"
+            android:text="@string/exportSelection"/>
     </RelativeLayout>
 
 </LinearLayout>

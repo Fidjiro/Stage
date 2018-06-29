@@ -7,8 +7,8 @@ import java.util.List;
 
 public abstract class StockCheckedItems<T extends DatabaseItem,Y extends DAO> {
 
-    private List<T> checkedItems;
-    private Y dao;
+    protected List<T> checkedItems;
+    protected Y dao;
 
     public StockCheckedItems(List<T> checkedItems, Y dao) {
         this.checkedItems = checkedItems;

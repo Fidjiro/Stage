@@ -15,15 +15,18 @@ import com.example.florian.myapplication.Database.ReleveDatabase.Releve;
 import com.example.florian.myapplication.R;
 import com.example.florian.myapplication.Tools.Utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ReleveAdapter extends ArrayAdapter<Releve> {
 
     private ReleveStocker checkedReleveStocker;
+    public List<CheckBox> allCheckBoxes;
 
     public ReleveAdapter(Context context, List<Releve> releves) {
         super(context, 0, releves);
         checkedReleveStocker = new ReleveStocker(context);
+        allCheckBoxes = new ArrayList<>();
     }
 
     @Override
@@ -42,8 +45,7 @@ public class ReleveAdapter extends ArrayAdapter<Releve> {
             viewHolder.heure = (TextView) convertView.findViewById(R.id.heureReleve);
             viewHolder.image = (ImageView) convertView.findViewById(R.id.importStatusImage);
             viewHolder.checkBox = (CheckBox) convertView.findViewById(R.id.itemCheckbox);
-            viewHolder.checkBox.setFocusable(false);
-            viewHolder.checkBox.setFocusableInTouchMode(false);
+            allCheckBoxes.add(viewHolder.checkBox);
 
             convertView.setTag(viewHolder);
         }

@@ -16,17 +16,20 @@ import com.example.florian.myapplication.Database.LoadingDatabase.TaxUsrDAO;
 import com.example.florian.myapplication.R;
 import com.example.florian.myapplication.Tools.Utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class InventaireAdapter extends ArrayAdapter<Inventaire>{
 
     private TaxUsrDAO dao;
     private InventoryStocker checkedInventairesStocker;
+    public List<CheckBox> allCheckBoxes;
 
     public InventaireAdapter(Context context, List<Inventaire> inventaires) {
         super(context, 0, inventaires);
         dao = new TaxUsrDAO(context);
         checkedInventairesStocker = new InventoryStocker(context);
+        allCheckBoxes = new ArrayList<>();
     }
 
     @Override
@@ -44,6 +47,7 @@ public class InventaireAdapter extends ArrayAdapter<Inventaire>{
             viewHolder.date = (TextView) convertView.findViewById(R.id.dateInv);
             viewHolder.heure = (TextView) convertView.findViewById(R.id.heureInventaire);
             viewHolder.checkBox = (CheckBox) convertView.findViewById(R.id.itemCheckbox);
+            allCheckBoxes.add(viewHolder.checkBox);
 
             convertView.setTag(viewHolder);
         }

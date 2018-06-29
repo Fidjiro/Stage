@@ -13,7 +13,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.florian.myapplication.Activities.MapsActivities.ShowInvRelActivity;
-import com.example.florian.myapplication.Activities.RelToGpxActivity;
+import com.example.florian.myapplication.Activities.RelToGpx;
 import com.example.florian.myapplication.Database.ReleveDatabase.HistoryDao;
 import com.example.florian.myapplication.Database.ReleveDatabase.Releve;
 import com.example.florian.myapplication.R;
@@ -92,9 +92,8 @@ public abstract class ReleveInfoPopup extends AppCompatActivity {
         export.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ReleveInfoPopup.this, RelToGpxActivity.class);
-                intent.putExtra("relToExport",rel);
-                startActivity(intent);
+                RelToGpx convertisseur = new RelToGpx(ReleveInfoPopup.this,ReleveInfoPopup.this.getPackageName());
+                convertisseur.export(rel);
             }
         });
     }
