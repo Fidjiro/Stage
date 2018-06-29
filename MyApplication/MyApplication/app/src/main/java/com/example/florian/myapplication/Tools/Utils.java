@@ -172,7 +172,7 @@ public final class Utils {
         int idxSlash = date.lastIndexOf("/");
         String year = date.substring(idxSlash + 1);
         String newYear = year.substring(year.length()-2);
-        return date.replace("/" + year,newYear);
+        return date.replace(year,newYear);
     }
 
     public static String getTime(){

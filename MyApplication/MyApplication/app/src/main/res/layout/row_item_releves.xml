@@ -3,8 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:weightSum="5">
+    android:layout_height="wrap_content"
+    android:clickable="true">
 
     <TextView
         android:id="@+id/nomRel"
@@ -21,7 +21,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Large Text"
-        android:layout_weight="1"
+        android:layout_weight="1.1"
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -30,7 +30,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Large Text"
-        android:layout_weight="1"
+        android:layout_weight="1.1"
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -39,13 +39,21 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Large Text"
-        android:layout_weight="1"
+        android:layout_weight="1.1"
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceSmall" />
     <ImageView
         android:id="@+id/importStatusImage"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1" />
+        android:layout_weight="1.1" />
+    
+    <CheckBox
+        android:id="@+id/itemCheckbox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
 
 </LinearLayout>

@@ -1,11 +1,7 @@
 package com.example.florian.myapplication.Activities;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
 import android.media.MediaScannerConnection;
-import android.os.Build;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,22 +9,15 @@ import android.util.Log;
 
 import com.example.florian.myapplication.Database.ReleveDatabase.Releve;
 import com.example.florian.myapplication.R;
-import com.example.florian.myapplication.Tools.Utils;
-import com.example.florian.myapplication.Tools.XY;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import org.mapsforge.core.model.LatLong;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 public class RelToGpxActivity extends AppCompatActivity {
@@ -47,7 +36,7 @@ public class RelToGpxActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Releve relToExport = intent.getParcelableExtra("relToExport");
 
-        toto(relToExport);
+        export(relToExport);
     }
 
     private String createGoodGpxSegment(Releve rel){
@@ -108,7 +97,7 @@ public class RelToGpxActivity extends AppCompatActivity {
         return date_inverse + "T" + time + "Z";
     }
 
-    private void toto(Releve rel) {
+    private void export(Releve rel) {
         File dir = new File(DIRECTORY_PATH);
         if(!dir.exists())
             dir.mkdirs();

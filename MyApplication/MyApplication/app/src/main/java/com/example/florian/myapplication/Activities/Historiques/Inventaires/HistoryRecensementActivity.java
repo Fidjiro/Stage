@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -17,7 +18,7 @@ import com.example.florian.myapplication.Database.CampagneDatabase.CampagneDAO;
 import com.example.florian.myapplication.Database.CampagneDatabase.Inventaire;
 import com.example.florian.myapplication.Database.LoadingDatabase.TaxUsrDAO;
 import com.example.florian.myapplication.R;
-import com.example.florian.myapplication.Tools.InventaireAdapter;
+import com.example.florian.myapplication.HistoryAdapters.InventaireAdapter;
 
 import java.util.List;
 
@@ -26,6 +27,7 @@ public class HistoryRecensementActivity extends AppCompatActivity {
     protected ListView listInv;
     protected CampagneDAO campagneDao;
     protected TaxUsrDAO taxUsrDao;
+    protected InventaireAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,15 @@ public class HistoryRecensementActivity extends AppCompatActivity {
                 String[] params = new String[] {splittedNoms[0],splittedNoms[1],dateInvTxt.getText().toString(),heureInvTxt.getText().toString()};
                 Inventaire selectedInventaire = campagneDao.getInventaireFromHistory(params);
                 startActivity(generateGoodIntent(selectedInventaire));
+            }
+        });
+
+        Button deleteSelection = (Button) findViewById(R.id.deleteSelect);
+        deleteSelection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                adapter.getCheckedInventairesStocker().deleteCheckedItemsFromDao();
+                setAdapter();
             }
         });
     }
@@ -111,7 +122,7 @@ public class HistoryRecensementActivity extends AppCompatActivity {
     private void setAdapter(){
         List<Inventaire> inventaires = campagneDao.getInventairesOfTheUsr(getCurrentUsrId());
 
-        InventaireAdapter adapter = new InventaireAdapter(this,inventaires);
+        adapter = new InventaireAdapter(this,inventaires);
         listInv.setAdapter(adapter);
     }
 

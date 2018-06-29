@@ -6,11 +6,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.florian.myapplication.Database.CampagneDatabase.Inventaire;
+import com.example.florian.myapplication.Database.DAO;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HistoryDao {
+public class HistoryDao implements DAO<Releve>{
 
     protected final static int VERSION = 1;
     // Le nom du fichier qui représente ma base
@@ -64,6 +65,10 @@ public class HistoryDao {
         return mDb.insert(TABLE_NAME,null,cv);
     }
 
+    public long delete(Releve rel){
+        return mDb.delete(TABLE_NAME,KEY + " = ?",new String[]{rel.get_id() + ""});
+    }
+
     private ContentValues getCvFrom(Releve rel){
         ContentValues cv = new ContentValues();
         cv.put(CREATOR,rel.getCreator());
@@ -99,7 +104,7 @@ public class HistoryDao {
         return mDb.rawQuery(request,fields);
     }
 
-    public Releve getReleveFromNomTypeDateHeure(String[] fields){
+    public Releve getReleveFromNomTypeHeure(String[] fields){
         Cursor c = selectReleveFromNomTypeDateHeure(fields);
         c.moveToNext();
 
@@ -147,10 +152,6 @@ public class HistoryDao {
 
         c.close();
         return res;
-    }
-
-    public long deleteReleve(Releve rel){
-        return mDb.delete(TABLE_NAME,KEY + " = ?",new String[]{rel.get_id() + ""});
     }
 
 }

@@ -4,6 +4,8 @@ package com.example.florian.myapplication.Database.CampagneDatabase;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.florian.myapplication.Database.DatabaseItem;
+
 /**
  * Représente une ligne de la table Campagne <br>
  * Pour le typeTaxon:<br>&nbsp
@@ -12,7 +14,7 @@ import android.os.Parcelable;
  *  - 2 signifie Oiseaux<br>&nbsp
  *  - 3 signifie Amphibiens<br>
  */
-public class Inventaire implements Parcelable{
+public class Inventaire implements Parcelable,DatabaseItem{
 
     private long _id;
     private long ref_taxon;

@@ -1,4 +1,4 @@
-package com.example.florian.myapplication.Tools;
+package com.example.florian.myapplication.HistoryAdapters;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -6,21 +6,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import com.example.florian.myapplication.Activities.Historiques.Stocker.InventoryStocker;
 import com.example.florian.myapplication.Database.CampagneDatabase.Inventaire;
 import com.example.florian.myapplication.Database.LoadingDatabase.TaxUsrDAO;
 import com.example.florian.myapplication.R;
+import com.example.florian.myapplication.Tools.Utils;
 
 import java.util.List;
 
 public class InventaireAdapter extends ArrayAdapter<Inventaire>{
 
     private TaxUsrDAO dao;
+    private InventoryStocker checkedInventairesStocker;
 
     public InventaireAdapter(Context context, List<Inventaire> inventaires) {
         super(context, 0, inventaires);
         dao = new TaxUsrDAO(context);
+        checkedInventairesStocker = new InventoryStocker(context);
     }
 
     @Override
@@ -37,12 +43,13 @@ public class InventaireAdapter extends ArrayAdapter<Inventaire>{
             viewHolder.denombrement = (TextView) convertView.findViewById(R.id.denombrementInv);
             viewHolder.date = (TextView) convertView.findViewById(R.id.dateInv);
             viewHolder.heure = (TextView) convertView.findViewById(R.id.heureInventaire);
+            viewHolder.checkBox = (CheckBox) convertView.findViewById(R.id.itemCheckbox);
 
             convertView.setTag(viewHolder);
         }
 
         //getItem(position) va récupérer l'item [position] de la List<Tweet> tweets
-        Inventaire inv = getItem(position);
+        final Inventaire inv = getItem(position);
 
         String nom;
         String nomFr= inv.getNomFr();
@@ -72,6 +79,16 @@ public class InventaireAdapter extends ArrayAdapter<Inventaire>{
         if(inv.getErr() == 1)
             convertView.setBackgroundColor(Color.RED);
 
+        viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b)
+                    checkedInventairesStocker.add(inv);
+                else
+                    checkedInventairesStocker.remove(inv);
+            }
+        });
+
         return convertView;
     }
 
@@ -99,6 +116,10 @@ public class InventaireAdapter extends ArrayAdapter<Inventaire>{
         public TextView denombrement;
         public TextView date;
         public TextView heure;
+        public CheckBox checkBox;
     }
 
+    public InventoryStocker getCheckedInventairesStocker() {
+        return checkedInventairesStocker;
+    }
 }

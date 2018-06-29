@@ -107,7 +107,7 @@ public abstract class ReleveInfoPopup extends AppCompatActivity {
         builder.setPositiveButton(getString(R.string.oui), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dao.deleteReleve(rel);
+                        dao.delete(rel);
                         finishPopUp();
                     }
                 });

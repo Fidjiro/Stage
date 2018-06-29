@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -15,7 +16,7 @@ import com.example.florian.myapplication.Activities.Historiques.Releves.InfoRele
 import com.example.florian.myapplication.Database.ReleveDatabase.HistoryDao;
 import com.example.florian.myapplication.Database.ReleveDatabase.Releve;
 import com.example.florian.myapplication.R;
-import com.example.florian.myapplication.Tools.ReleveAdapter;
+import com.example.florian.myapplication.HistoryAdapters.ReleveAdapter;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class HistoryReleveActivity extends AppCompatActivity {
 
     protected ListView listReleves;
     protected HistoryDao dao;
+    protected ReleveAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +44,21 @@ public class HistoryReleveActivity extends AppCompatActivity {
                 TextView dateRelTxt = (TextView)view.findViewById(R.id.dateReleve);
                 TextView heureRelTxt = (TextView)view.findViewById(R.id.heureReleve);
 
-                Releve rel = dao.getReleveFromNomTypeDateHeure(new String[]{nomRelTxt.getText().toString(), typeRelTxt.getText().toString(), heureRelTxt.getText().toString()});
+                Releve rel = dao.getReleveFromNomTypeHeure(new String[]{nomRelTxt.getText().toString(), typeRelTxt.getText().toString(), heureRelTxt.getText().toString()});
 
                 Intent intent = generateGoodIntent(typeRelTxt.getText().toString());
                 intent.putExtra("releve",rel);
                 startActivity(intent);
+            }
+        });
+
+        Button deleteSelection = (Button) findViewById(R.id.deleteSelect);
+
+        deleteSelection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                adapter.getCheckedReleveStocker().deleteCheckedItemsFromDao();
+                setAdapter();
             }
         });
     }
@@ -68,7 +80,7 @@ public class HistoryReleveActivity extends AppCompatActivity {
     private void setAdapter(){
         List<Releve> releves = dao.getReleveOfTheUsr(getCurrentUsrId());
 
-        ReleveAdapter adapter = new ReleveAdapter(this,releves);
+        adapter = new ReleveAdapter(this,releves);
         listReleves.setAdapter(adapter);
     }
 

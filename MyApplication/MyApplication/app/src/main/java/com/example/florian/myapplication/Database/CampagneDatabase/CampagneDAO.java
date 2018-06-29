@@ -5,13 +5,16 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.example.florian.myapplication.Database.DAO;
+import com.example.florian.myapplication.Database.ReleveDatabase.Releve;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Représente la base de données qui contient la table des {@link Inventaire}
  */
-public class CampagneDAO {
+public class CampagneDAO implements DAO<Inventaire> {
 
     protected final static int VERSION = 2;
     // Le nom du fichier qui représente ma base
@@ -77,6 +80,10 @@ public class CampagneDAO {
         ContentValues cv = getCvFrom(inv);
         cv.put(KEY,inv.get_id());
         return mDb.insert(CAMPAGNE,null,cv);
+    }
+
+    public long delete(Inventaire inv){
+        return mDb.delete(CAMPAGNE,KEY + " = ?",new String[]{inv.get_id() + ""});
     }
 
     public long deleteInventaire(long invId){

@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.example.florian.myapplication.Activities.MapsActivities.Releve.MainActivityRel;
+import com.example.florian.myapplication.Database.DatabaseItem;
 import com.example.florian.myapplication.R;
 import com.example.florian.myapplication.Tools.Utils;
 
@@ -16,7 +17,7 @@ import org.mapsforge.map.layer.overlay.Polyline;
 
 import java.util.ArrayList;
 
-public class Releve implements Parcelable{
+public class Releve implements Parcelable,DatabaseItem{
 
     private long _id;
     private long creator;
