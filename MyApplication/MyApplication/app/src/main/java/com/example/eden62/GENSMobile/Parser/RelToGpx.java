@@ -1,7 +1,9 @@
 package com.example.eden62.GENSMobile.Parser;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 
@@ -97,6 +99,13 @@ public class RelToGpx {
                 mFile.createNewFile();
                 MediaScannerConnection.scanFile(ctx, new String[] {currFilePath}, null, null);
                 generateGpx(mFile,rel);
+                Uri path = Uri.fromFile(mFile);
+                Intent emailIntent = new Intent(Intent.ACTION_SEND);
+// set the type to 'email'
+                emailIntent.setType("vnd.android.cursor.dir/email");
+// the attachment
+                emailIntent.putExtra(Intent.EXTRA_STREAM, path);
+                ctx.startActivity(Intent.createChooser(emailIntent , "Send email..."));
             } else
                 System.out.println("Pas accès");
         } catch (IOException e){

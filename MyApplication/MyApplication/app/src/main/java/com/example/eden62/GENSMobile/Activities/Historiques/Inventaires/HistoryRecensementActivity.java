@@ -159,8 +159,7 @@ public class HistoryRecensementActivity extends AppCompatActivity {
         builder.setPositiveButton(getString(R.string.oui), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                adapter.getCheckedInventairesStocker().deleteCheckedItemsFromDao();
-                setAdapter();
+                deleteCheckedItems();
                 dialog.dismiss();
             }
         });
@@ -172,6 +171,13 @@ public class HistoryRecensementActivity extends AppCompatActivity {
         });
         box = builder.create();
         return box;
+    }
+
+    private void deleteCheckedItems(){
+        //RemoveCheckedItemsFromAdapter doit être appelé avant deleteCheckedItemsFromDao car cette dernière delete les inventaires
+        //de la liste.
+        adapter.removeCheckedItemsFromAdapter();
+        adapter.getCheckedInventairesStocker().deleteCheckedItemsFromDao();
     }
 
     private void changeAllCheckboxStatus(boolean checked){

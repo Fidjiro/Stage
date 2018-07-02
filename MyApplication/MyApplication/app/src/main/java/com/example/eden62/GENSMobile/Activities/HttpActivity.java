@@ -104,7 +104,6 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
                     return;
                 }
                 String mdp = psswText.getText().toString();
-                Log.w("Mdp: ", mdp);
                 RequestBody requestBody = new FormBody.Builder().add("log",username).add("mdp",mdp).build();
                 final Request request = new Request.Builder().url(URL_CONNEXION).post(requestBody).build();
                 AttemptLoginTask task = new AttemptLoginTask(request);
@@ -179,6 +178,10 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
             snackbar.show();
 
             try {
+                if (!isConnected()) {
+                    Snackbar.make(launchSync, "Aucune connexion à internet.", Snackbar.LENGTH_LONG).show();
+                    return false;
+                }
                 Response response = client.newCall(mRequete).execute();
                 if (!response.isSuccessful()) {
                     throw new IOException(response.toString());
@@ -234,7 +237,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         private boolean interpreteJson(JSONObject json){
             int err = -1;
             _id = -1;
-            boolean importStatus = false;
+            boolean importStatus;
             try{
                 err = json.getInt("err");
                 _id = json.getLong("_id");

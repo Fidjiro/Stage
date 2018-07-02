@@ -118,7 +118,7 @@ public class FauneActivity extends FormActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 CharSequence maleText = maleTextView.getText();
-                if(compoundButton.isChecked()){
+                if(b){
                     nbMaleText.setVisibility(View.VISIBLE);
                     maleTextView.setText(maleText + STRING_TO_ADD);
                 }else{
@@ -133,7 +133,7 @@ public class FauneActivity extends FormActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 CharSequence femaleText = femaleTextView.getText();
-                if(compoundButton.isChecked()){
+                if(b){
                     nbFemaleText.setVisibility(View.VISIBLE);
                     femaleTextView.setText(femaleText + STRING_TO_ADD);
                 }else{

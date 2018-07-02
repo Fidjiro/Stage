@@ -21,10 +21,8 @@ public class ReleveStocker extends StockCheckedItems<Releve,HistoryDao> {
     }
 
     public void exportReleves(){
-        int i = 0;
         for(Releve rel : checkedItems) {
             if (!exportedReleves.contains(rel)) {
-                i++;
                 convertisseur.export(rel);
                 exportedReleves.add(rel);
             }

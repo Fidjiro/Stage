@@ -126,4 +126,11 @@ public class InventaireAdapter extends ArrayAdapter<Inventaire>{
     public InventoryStocker getCheckedInventairesStocker() {
         return checkedInventairesStocker;
     }
+
+    public void removeCheckedItemsFromAdapter(){
+        for(Inventaire inv : checkedInventairesStocker.getCheckedItems()){
+            remove(inv);
+            notifyDataSetChanged();
+        }
+    }
 }

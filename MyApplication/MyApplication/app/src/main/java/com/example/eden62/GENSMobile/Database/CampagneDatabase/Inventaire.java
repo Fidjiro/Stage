@@ -187,6 +187,8 @@ public class Inventaire implements Parcelable,DatabaseItem{
      */
     public Inventaire(long ref_taxon, long user, String nomFr, String nomLatin,  int typeTaxon, double latitude, double longitude, String date, String heure, int nombre, String type_obs, int indiceAbondance) {
         this(ref_taxon, user, nomFr, nomLatin, typeTaxon, latitude, longitude, date, heure, nombre, type_obs);
+        nbMale = -1;
+        nbFemale = -1;
         this.indiceAbondance = indiceAbondance;
     }
 
