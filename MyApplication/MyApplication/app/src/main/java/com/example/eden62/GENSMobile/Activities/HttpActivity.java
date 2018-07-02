@@ -377,6 +377,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
                 add("latitude",inv.getLatitude() + "").
                 add("longitude",inv.getLongitude() + "").
                 add("date",inv.getDate()).
+                add("heure",inv.getHeure()).
                 add("nombre",inv.getNombre() + "").
                 add("type_obs",inv.getType_obs()).
                 add("nbMale",inv.getNbMale() + "").

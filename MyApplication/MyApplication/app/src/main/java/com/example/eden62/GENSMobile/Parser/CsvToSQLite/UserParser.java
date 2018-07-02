@@ -1,9 +1,10 @@
-package com.example.eden62.GENSMobile.Parser;
+package com.example.eden62.GENSMobile.Parser.CsvToSQLite;
 
 import android.content.Context;
 
 import com.example.eden62.GENSMobile.Database.LoadingDatabase.TaxUsrDAO;
 import com.example.eden62.GENSMobile.Database.LoadingDatabase.User;
+import com.example.eden62.GENSMobile.Parser.CsvToSQLite.CSVParser;
 
 /**
  * Parse le fichier User dans les assets pour insérer son contenu dans la table équivalente

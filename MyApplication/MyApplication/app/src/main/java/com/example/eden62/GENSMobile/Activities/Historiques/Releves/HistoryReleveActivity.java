@@ -4,8 +4,6 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
-import android.os.Environment;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -142,8 +140,7 @@ public class HistoryReleveActivity extends AppCompatActivity {
         builder.setPositiveButton(getString(R.string.oui), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                adapter.getCheckedReleveStocker().deleteCheckedItemsFromDao();
-                setAdapter();
+                deleteCheckedItems();
                 dialog.dismiss();
             }
         });
@@ -161,6 +158,13 @@ public class HistoryReleveActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         dao.close();
+    }
+
+    private void deleteCheckedItems(){
+        //RemoveCheckedItemsFromAdapter doit être appelé avant deleteCheckedItemsFromDao car cette dernière delete les relevés
+        //de la liste.
+        adapter.removeCheckedItemsFromAdapter();
+        adapter.getCheckedReleveStocker().deleteCheckedItemsFromDao();
     }
 
     private void changeAllCheckboxStatus(boolean checked){

@@ -1,4 +1,4 @@
-package com.example.eden62.GENSMobile.Activities;
+package com.example.eden62.GENSMobile.Parser;
 
 import android.content.Context;
 import android.media.MediaScannerConnection;

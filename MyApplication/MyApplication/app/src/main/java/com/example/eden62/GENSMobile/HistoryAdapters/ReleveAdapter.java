@@ -30,7 +30,7 @@ public class ReleveAdapter extends ArrayAdapter<Releve> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
         if(convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_item_releves,parent, false);
@@ -65,10 +65,11 @@ public class ReleveAdapter extends ArrayAdapter<Releve> {
         viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b)
+                if (b) {
                     checkedReleveStocker.add(rel);
-                else
+                } else{
                     checkedReleveStocker.remove(rel);
+                }
             }
         });
         return convertView;
@@ -85,5 +86,12 @@ public class ReleveAdapter extends ArrayAdapter<Releve> {
 
     public ReleveStocker getCheckedReleveStocker() {
         return checkedReleveStocker;
+    }
+
+    public void removeCheckedItemsFromAdapter(){
+        for(Releve rel : checkedReleveStocker.getCheckedItems()){
+            remove(rel);
+            notifyDataSetChanged();
+        }
     }
 }

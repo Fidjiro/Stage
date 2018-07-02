@@ -3,6 +3,7 @@ package com.example.eden62.GENSMobile.Activities.Historiques.Stocker;
 import com.example.eden62.GENSMobile.Database.DAO;
 import com.example.eden62.GENSMobile.Database.DatabaseItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class StockCheckedItems<T extends DatabaseItem,Y extends DAO> {
@@ -29,6 +30,10 @@ public abstract class StockCheckedItems<T extends DatabaseItem,Y extends DAO> {
             dao.delete(item);
         }
         dao.close();
+        checkedItems = new ArrayList<>();
     }
 
+    public List<T> getCheckedItems() {
+        return checkedItems;
+    }
 }

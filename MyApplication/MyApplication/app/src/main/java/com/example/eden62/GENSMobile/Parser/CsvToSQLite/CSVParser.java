@@ -1,4 +1,4 @@
-package com.example.eden62.GENSMobile.Parser;
+package com.example.eden62.GENSMobile.Parser.CsvToSQLite;
 
 import android.content.Context;
 import android.content.res.AssetManager;

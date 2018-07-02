@@ -13,7 +13,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.eden62.GENSMobile.Activities.MapsActivities.ShowInvRelActivity;
-import com.example.eden62.GENSMobile.Activities.RelToGpx;
+import com.example.eden62.GENSMobile.Parser.RelToGpx;
 import com.example.eden62.GENSMobile.Database.ReleveDatabase.HistoryDao;
 import com.example.eden62.GENSMobile.Database.ReleveDatabase.Releve;
 import com.example.eden62.GENSMobile.R;

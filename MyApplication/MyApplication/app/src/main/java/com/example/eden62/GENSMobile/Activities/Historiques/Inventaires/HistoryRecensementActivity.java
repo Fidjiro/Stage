@@ -75,7 +75,7 @@ public class HistoryRecensementActivity extends AppCompatActivity {
                     splittedNoms = noms.split(" - ");
                 else {
                     if(noms.contains(" sp."))
-                        noms.replace(" sp.","");
+                        noms = noms.replace(" sp.","");
                     splittedNoms = new String[]{noms, ""};
                 }
                 String[] params = new String[] {splittedNoms[0],splittedNoms[1],heureInvTxt.getText().toString()};

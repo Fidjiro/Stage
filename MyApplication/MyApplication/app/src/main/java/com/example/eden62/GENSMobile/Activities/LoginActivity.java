@@ -22,20 +22,12 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.eden62.GENSMobile.Database.LoadingDatabase.TaxUsrDAO;
-import com.example.eden62.GENSMobile.Parser.TaxRefParser;
-import com.example.eden62.GENSMobile.Parser.UserParser;
+import com.example.eden62.GENSMobile.Parser.CsvToSQLite.TaxRefParser;
+import com.example.eden62.GENSMobile.Parser.CsvToSQLite.UserParser;
 import com.example.eden62.GENSMobile.R;
-
-import org.mapsforge.core.model.LatLong;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import static java.lang.Math.PI;
-import static java.lang.Math.log;
 
 /**
  * Activité login qui permet de se log via un login/mot de passe.
