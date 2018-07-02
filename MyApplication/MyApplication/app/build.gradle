@@ -4,7 +4,7 @@ android {
     compileSdkVersion 23
     useLibrary 'org.apache.http.legacy'
     defaultConfig {
-        applicationId "com.example.florian.myapplication"
+        applicationId "com.example.eden62.GENSMobile"
         minSdkVersion 17
         targetSdkVersion 23
         versionCode 1

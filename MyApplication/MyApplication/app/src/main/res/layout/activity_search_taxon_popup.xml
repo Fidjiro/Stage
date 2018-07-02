@@ -14,7 +14,7 @@
         android:text="@string/layoutTitle"
         android:textAllCaps="false"
         android:textColor="#FFFFFF" />
-    <com.example.florian.myapplication.AutoComplete.CustomAutoCompleteView
+    <com.example.eden62.GENSMobile.AutoComplete.CustomAutoCompleteView
         android:id="@+id/autoCompleteEspeceLatin"
         android:hint="@string/hintAutoCompleteLatin"
         android:textColorHint="#FFFFFF"
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:textColor="#FFFFFF"
         android:completionThreshold="3"/>
-    <com.example.florian.myapplication.AutoComplete.CustomAutoCompleteView
+    <com.example.eden62.GENSMobile.AutoComplete.CustomAutoCompleteView
         android:id="@+id/autoCompleteEspeceFr"
         android:hint="@string/hintAutoCompleteFr"
         android:textColorHint="#FFFFFF"
