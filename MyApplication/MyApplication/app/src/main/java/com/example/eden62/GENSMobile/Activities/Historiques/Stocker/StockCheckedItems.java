@@ -16,23 +16,41 @@ public abstract class StockCheckedItems<T extends DatabaseItem,Y extends DAO> {
         this.dao = dao;
     }
 
+    /**
+     * Ajoute un item dans la liste de sélection
+     * @param item L'item à ajouter
+     */
     public void add(T item){
         checkedItems.add(item);
     }
 
+    /**
+     * Supprime un item dans la liste de sélection
+     * @param item L'item à supprimer
+     */
     public void remove(T item){
         checkedItems.remove(item);
     }
 
-    public void deleteCheckedItemsFromDao(){
+    /**
+     * Supprime les items selectionnés de la base de données correspondante
+     */
+    public List<T> deleteCheckedItemsFromDao(){
         dao.open();
+        List<T> deletedItems = new ArrayList<>();
         for(T item : checkedItems){
+            deletedItems.add(item);
             dao.delete(item);
         }
         dao.close();
         checkedItems = new ArrayList<>();
+        return deletedItems;
     }
 
+    /**
+     * Récupère les items selectionés
+     * @return La liste d'items
+     */
     public List<T> getCheckedItems() {
         return checkedItems;
     }

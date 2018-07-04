@@ -93,6 +93,11 @@ public class HistoryRecensementActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Lance le bon type de formulaire en fonction de l'inventaire
+     * @param inv L'inventaire à consulter
+     * @return L'intent du bon type de formulaire
+     */
     protected Intent generateGoodIntent(Inventaire inv){
         Intent intent;
         if(usrInputIsPlantae(inv))
@@ -146,11 +151,19 @@ public class HistoryRecensementActivity extends AppCompatActivity {
         listInv.setAdapter(adapter);
     }
 
+    /**
+     * Récupère l'id de l'utilisateur actuel
+     * @return l'id de l'utilisateur
+     */
     protected long getCurrentUsrId(){
         SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         return loginPreferences.getLong("usrId",0);
     }
 
+    /**
+     * Dialog de sûreté qui prévient l'utilisateur de la supression des items
+     * @return Un dialog d'avertissement
+     */
     public Dialog createDialog() {
         AlertDialog box;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -176,12 +189,12 @@ public class HistoryRecensementActivity extends AppCompatActivity {
     private void deleteCheckedItems(){
         //RemoveCheckedItemsFromAdapter doit être appelé avant deleteCheckedItemsFromDao car cette dernière delete les inventaires
         //de la liste.
-        adapter.removeCheckedItemsFromAdapter();
         adapter.getCheckedInventairesStocker().deleteCheckedItemsFromDao();
+        setAdapter();
     }
 
     private void changeAllCheckboxStatus(boolean checked){
-        for(CheckBox cb : adapter.allCheckBoxes){
+        for(CheckBox cb : adapter.allCheckBoxes.values()){
             cb.setChecked(checked);
         }
     }

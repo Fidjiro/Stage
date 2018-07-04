@@ -17,19 +17,19 @@ import com.example.eden62.GENSMobile.R;
 import com.example.eden62.GENSMobile.Tools.Utils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class InventaireAdapter extends ArrayAdapter<Inventaire>{
 
-    private TaxUsrDAO dao;
     private InventoryStocker checkedInventairesStocker;
-    public List<CheckBox> allCheckBoxes;
+    public Map<Inventaire,CheckBox> allCheckBoxes;
 
     public InventaireAdapter(Context context, List<Inventaire> inventaires) {
         super(context, 0, inventaires);
-        dao = new TaxUsrDAO(context);
         checkedInventairesStocker = new InventoryStocker(context);
-        allCheckBoxes = new ArrayList<>();
+        allCheckBoxes = new HashMap<>();
     }
 
     @Override
@@ -47,21 +47,19 @@ public class InventaireAdapter extends ArrayAdapter<Inventaire>{
             viewHolder.date = (TextView) convertView.findViewById(R.id.dateInv);
             viewHolder.heure = (TextView) convertView.findViewById(R.id.heureInventaire);
             viewHolder.checkBox = (CheckBox) convertView.findViewById(R.id.itemCheckbox);
-            allCheckBoxes.add(viewHolder.checkBox);
 
             convertView.setTag(viewHolder);
         }
 
         //getItem(position) va récupérer l'item [position] de la List<Tweet> tweets
         final Inventaire inv = getItem(position);
+        allCheckBoxes.put(inv,viewHolder.checkBox);
 
         String nom;
         String nomFr= inv.getNomFr();
         //il ne reste plus qu'à remplir notre vue
         nom = inv.getNomLatin();
-        dao.open();
-        int nv = dao.getNiveau(new String[]{nom,nomFr});
-        dao.close();
+        int nv = inv.getNv_taxon();
 
         nom = addSpToString(nv,nom);
 
@@ -125,12 +123,5 @@ public class InventaireAdapter extends ArrayAdapter<Inventaire>{
 
     public InventoryStocker getCheckedInventairesStocker() {
         return checkedInventairesStocker;
-    }
-
-    public void removeCheckedItemsFromAdapter(){
-        for(Inventaire inv : checkedInventairesStocker.getCheckedItems()){
-            remove(inv);
-            notifyDataSetChanged();
-        }
     }
 }

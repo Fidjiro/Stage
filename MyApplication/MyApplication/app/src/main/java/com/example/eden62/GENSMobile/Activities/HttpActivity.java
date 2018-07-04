@@ -9,10 +9,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,6 +26,7 @@ import com.example.eden62.GENSMobile.Database.CampagneDatabase.CampagneDAO;
 import com.example.eden62.GENSMobile.Database.CampagneDatabase.Inventaire;
 import com.example.eden62.GENSMobile.Database.ReleveDatabase.HistoryDao;
 import com.example.eden62.GENSMobile.R;
+import com.example.eden62.GENSMobile.Tools.Utils;
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
@@ -45,11 +49,12 @@ import okhttp3.Response;
  */
 public class HttpActivity extends AppCompatActivity implements View.OnClickListener {
 
-    LinearLayout psswLayout,nbInvLayout, nbRelLayout;
-    Button launchSync,validPssw;
-    TextView txtJson, nbInvToSyncTxt, nbRelToSyncTxt;
-    EditText psswText;
+    private LinearLayout psswLayout,nbInvLayout, nbRelLayout;
+    private Button launchSync,validPssw;
+    private TextView txtJson, nbInvToSyncTxt, nbRelToSyncTxt;
+    private EditText psswText;
     private Snackbar snackbar;
+    private CheckBox displayMdp;
 
     int nbInvToSync, nbRelToSync;
 
@@ -125,6 +130,16 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
             public void onClick(View view) {
                 Intent intent = new Intent(HttpActivity.this, HistoryReleveActivity.class);
                 startActivity(intent);
+            }
+        });
+        displayMdp = (CheckBox) findViewById(R.id.displayMdp);
+        displayMdp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b)
+                    psswText.setInputType(InputType.TYPE_CLASS_TEXT);
+                else
+                    psswText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             }
         });
     }
@@ -311,13 +326,13 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
                         nbInvLayout.setVisibility(View.VISIBLE);
                         nbRelLayout.setVisibility(View.VISIBLE);
                         launchSync.setVisibility(View.VISIBLE);
-                        final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                        InputMethodManager imm = (InputMethodManager)HttpActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(psswText.getWindowToken(),0);
                     }
                 });
             } else {
-                psswText.setError(getString(R.string.error_incorrect_login));
                 psswText.requestFocus();
+                psswText.setError(getString(R.string.error_incorrect_login));
             }
         }
 
@@ -383,6 +398,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
                 add("heure",inv.getHeure()).
                 add("nombre",inv.getNombre() + "").
                 add("type_obs",inv.getType_obs()).
+                add("remarques",inv.getRemarques()).
                 add("nbMale",inv.getNbMale() + "").
                 add("nbFemale",inv.getNbFemale() + "").
                 add("presencePonte",inv.getPresencePonte()).

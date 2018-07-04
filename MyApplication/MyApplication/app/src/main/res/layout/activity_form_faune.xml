@@ -53,7 +53,8 @@
                 <TextView
                     android:id="@+id/nomLatin"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:textStyle="italic"/>
             </LinearLayout>
 
             <LinearLayout
@@ -205,6 +206,26 @@
                     android:layout_marginRight="@dimen/formLabelMargin"
                     android:visibility="invisible"
                     android:inputType="number" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/formLayoutsMargin"
+                android:orientation="horizontal"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/formLabelMargin"
+                    android:text="@string/remarque"
+                    android:textSize="@dimen/formLabelTextSize"
+                    android:textStyle="bold" />
+                <EditText
+                    android:id="@+id/remarques"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:drawable/editbox_background_normal"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

@@ -1,7 +1,4 @@
 /*
- * Copyright 2013-2014 Ludwig M Brinckmann
- * Copyright 2014, 2015 devemux86
- *
  * This program is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free Software
  * Foundation, either version 3 of the License, or (at your option) any later version.
@@ -23,6 +20,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.View;
 import android.view.View.MeasureSpec;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import org.mapsforge.core.graphics.Bitmap;
@@ -224,4 +222,9 @@ public final class Utils {
         throw new IllegalStateException();
     }
 
+    public static void hideKeyboard(Context ctx, View v){
+
+            InputMethodManager imm = (InputMethodManager)ctx.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(v.getWindowToken(),0);
+    }
 }

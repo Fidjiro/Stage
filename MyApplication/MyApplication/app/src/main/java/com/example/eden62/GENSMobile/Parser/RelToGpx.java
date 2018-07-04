@@ -99,13 +99,13 @@ public class RelToGpx {
                 mFile.createNewFile();
                 MediaScannerConnection.scanFile(ctx, new String[] {currFilePath}, null, null);
                 generateGpx(mFile,rel);
-                Uri path = Uri.fromFile(mFile);
+                /*Uri path = Uri.fromFile(mFile);
                 Intent emailIntent = new Intent(Intent.ACTION_SEND);
-// set the type to 'email'
+                // set the type to 'email'
                 emailIntent.setType("vnd.android.cursor.dir/email");
-// the attachment
+                // the attachment
                 emailIntent.putExtra(Intent.EXTRA_STREAM, path);
-                ctx.startActivity(Intent.createChooser(emailIntent , "Send email..."));
+                ctx.startActivity(Intent.createChooser(emailIntent , "Send email..."));*/
             } else
                 System.out.println("Pas accès");
         } catch (IOException e){

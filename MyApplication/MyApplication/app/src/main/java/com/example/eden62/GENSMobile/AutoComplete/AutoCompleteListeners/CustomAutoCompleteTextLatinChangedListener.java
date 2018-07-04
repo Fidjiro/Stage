@@ -26,7 +26,7 @@ public class CustomAutoCompleteTextLatinChangedListener extends CustomAutoComple
         mainActivityRec.myLatinAdapter.notifyDataSetChanged();
 
         // get suggestions from the database
-        Taxon[] myObjs = mainActivityRec.dao.readLatin(userInput.toString());
+        Taxon[] myObjs = mainActivityRec.dao.readLatin(userInput.toString().trim());
 
         // update the adapter
         mainActivityRec.myLatinAdapter = new AutocompleteCustomLatinArrayAdapter(mainActivityRec, R.layout.list_view_row, myObjs);

@@ -18,6 +18,7 @@ public class Inventaire implements Parcelable,DatabaseItem{
 
     private long _id;
     private long ref_taxon;
+    private int nv_taxon;
     private long user;
     private String nomFr;
     private String nomLatin;
@@ -35,6 +36,7 @@ public class Inventaire implements Parcelable,DatabaseItem{
     private String statut;
     private String nidif;
     private int indiceAbondance = -1;
+    private String remarques;
     private int err;
 
     /**
@@ -55,9 +57,10 @@ public class Inventaire implements Parcelable,DatabaseItem{
      * @param nidif
      * @param indiceAbondance
      */
-    public Inventaire(long _id,long ref_taxon, long user, String nomFr, String nomLatin, int typeTaxon, double latitude, double longitude, String date, String heure, int nombre, String type_obs, int nbMale, int nbFemale, String presencePonte, String activite, String statut, String nidif, int indiceAbondance, int err) {
+    public Inventaire(long _id,long ref_taxon, int nv_taxon, long user, String nomFr, String nomLatin, int typeTaxon, double latitude, double longitude, String date, String heure, int nombre, String type_obs, String remarques,int nbMale, int nbFemale, String presencePonte, String activite, String statut, String nidif, int indiceAbondance, int err) {
         this._id = _id;
         this.ref_taxon = ref_taxon;
+        this.nv_taxon = nv_taxon;
         this.user = user;
         this.nomFr = nomFr;
         this.nomLatin = nomLatin;
@@ -68,19 +71,24 @@ public class Inventaire implements Parcelable,DatabaseItem{
         this.heure = heure;
         this.nombre = nombre;
         this.type_obs = type_obs;
+        this.remarques = remarques;
         this.nbMale = nbMale;
         this.nbFemale = nbFemale;
-        if(presencePonte == null)
+        if(presencePonte == null) {
             presencePonte = "false";
+        }
         this.presencePonte = presencePonte;
-        if(activite == null)
+        if(activite == null) {
             activite = "";
+        }
         this.activite = activite;
-        if(statut == null)
+        if(statut == null) {
             statut = "";
+        }
         this.statut = statut;
-        if(nidif == null)
+        if(nidif == null) {
             nidif = "";
+        }
         this.nidif = nidif;
         this.indiceAbondance = indiceAbondance;
         this.err = err;
@@ -96,8 +104,9 @@ public class Inventaire implements Parcelable,DatabaseItem{
      * @param nombre
      * @param type_obs
      */
-    public Inventaire(long ref_taxon, long user, String nomFr, String nomLatin, int typeTaxon, double latitude, double longitude, String date, String heure, int nombre, String type_obs) {
+    public Inventaire(long ref_taxon, int nv_taxon, long user, String nomFr, String nomLatin, int typeTaxon, double latitude, double longitude, String date, String heure, int nombre, String type_obs, String remarques) {
         this.ref_taxon = ref_taxon;
+        this.nv_taxon = nv_taxon;
         this.nomFr = nomFr;
         this.nomLatin = nomLatin;
         this.typeTaxon = typeTaxon;
@@ -106,6 +115,7 @@ public class Inventaire implements Parcelable,DatabaseItem{
         this.date = date;
         this.heure = heure;
         this.type_obs = type_obs;
+        this.remarques = remarques;
         this.user = user;
         this.nombre = nombre;
         this.presencePonte = "false";
@@ -126,8 +136,8 @@ public class Inventaire implements Parcelable,DatabaseItem{
      * @param nbMale
      * @param nbFemale
      */
-    public Inventaire(long ref_taxon, long user, String nomFr, String nomLatin, int typeTaxon, double latitude, double longitude, String date, String heure, int nombre, String type_obs, int nbMale, int nbFemale) {
-        this(ref_taxon, user, nomFr, nomLatin, typeTaxon, latitude, longitude, date, heure, nombre, type_obs);
+    public Inventaire(long ref_taxon, int nv_taxon, long user, String nomFr, String nomLatin, int typeTaxon, double latitude, double longitude, String date, String heure, int nombre, String type_obs, String remarques,int nbMale, int nbFemale) {
+        this(ref_taxon, nv_taxon, user, nomFr, nomLatin, typeTaxon, latitude, longitude, date, heure, nombre, type_obs, remarques);
         this.nbMale = nbMale;
         this.nbFemale = nbFemale;
     }
@@ -148,8 +158,8 @@ public class Inventaire implements Parcelable,DatabaseItem{
      * @param statut
      * @param nidif
      */
-    public Inventaire(long ref_taxon, long user, String nomFr, String nomLatin, int typeTaxon, double latitude, double longitude, String date, String heure, int nombre, String type_obs, int nbMale, int nbFemale, String activite, String statut, String nidif) {
-        this(ref_taxon, user, nomFr, nomLatin, typeTaxon, latitude, longitude, date, heure, nombre, type_obs, nbMale, nbFemale);
+    public Inventaire(long ref_taxon, int nv_taxon, long user, String nomFr, String nomLatin, int typeTaxon, double latitude, double longitude, String date, String heure, int nombre, String type_obs, String remarques,int nbMale, int nbFemale, String activite, String statut, String nidif) {
+        this(ref_taxon, nv_taxon, user, nomFr, nomLatin, typeTaxon, latitude, longitude, date, heure, nombre, type_obs, remarques,nbMale, nbFemale);
         this.activite = activite;
         this.statut = statut;
         this.nidif = nidif;
@@ -169,8 +179,8 @@ public class Inventaire implements Parcelable,DatabaseItem{
      * @param nbFemale
      * @param presencePonte
      */
-    public Inventaire(long ref_taxon, long user, String nomFr, String nomLatin,  int typeTaxon, double latitude, double longitude, String date, String heure, int nombre, String type_obs, int nbMale, int nbFemale, String presencePonte) {
-        this(ref_taxon, user, nomFr, nomLatin, typeTaxon, latitude, longitude, date, heure, nombre, type_obs, nbMale, nbFemale);
+    public Inventaire(long ref_taxon, int nv_taxon, long user, String nomFr, String nomLatin,  int typeTaxon, double latitude, double longitude, String date, String heure, int nombre, String type_obs, String remarques, int nbMale, int nbFemale, String presencePonte) {
+        this(ref_taxon, nv_taxon, user, nomFr, nomLatin, typeTaxon, latitude, longitude, date, heure, nombre, type_obs,  remarques, nbMale, nbFemale);
         this.presencePonte = presencePonte;
     }
 
@@ -185,8 +195,8 @@ public class Inventaire implements Parcelable,DatabaseItem{
      * @param type_obs
      * @param indiceAbondance
      */
-    public Inventaire(long ref_taxon, long user, String nomFr, String nomLatin,  int typeTaxon, double latitude, double longitude, String date, String heure, int nombre, String type_obs, int indiceAbondance) {
-        this(ref_taxon, user, nomFr, nomLatin, typeTaxon, latitude, longitude, date, heure, nombre, type_obs);
+    public Inventaire(long ref_taxon, int nv_taxon, long user, String nomFr, String nomLatin,  int typeTaxon, double latitude, double longitude, String date, String heure, int nombre, String type_obs, String remarques, int indiceAbondance) {
+        this(ref_taxon, nv_taxon, user, nomFr, nomLatin, typeTaxon, latitude, longitude, date, heure, nombre, type_obs, remarques);
         nbMale = -1;
         nbFemale = -1;
         this.indiceAbondance = indiceAbondance;
@@ -201,6 +211,7 @@ public class Inventaire implements Parcelable,DatabaseItem{
     public void writeToParcel(Parcel out, int flags) {
         out.writeLong(_id);
         out.writeLong(ref_taxon);
+        out.writeInt(nv_taxon);
         out.writeLong(user);
         out.writeString(nomFr);
         out.writeString(nomLatin);
@@ -211,6 +222,7 @@ public class Inventaire implements Parcelable,DatabaseItem{
         out.writeString(heure);
         out.writeInt(nombre);
         out.writeString(type_obs);
+        out.writeString(remarques);
         out.writeInt(nbMale);
         out.writeInt(nbFemale);
         out.writeString(presencePonte);
@@ -233,6 +245,7 @@ public class Inventaire implements Parcelable,DatabaseItem{
     private Inventaire(Parcel in) {
         _id = in.readLong();
         ref_taxon= in.readLong();
+        nv_taxon = in.readInt();
         user= in.readLong();
         nomFr = in.readString();
         nomLatin = in.readString();
@@ -243,6 +256,7 @@ public class Inventaire implements Parcelable,DatabaseItem{
         heure = in.readString();
         nombre = in.readInt();
         type_obs = in.readString();
+        remarques = in.readString();
         nbMale = in.readInt();
         nbFemale = in.readInt();
         presencePonte = in.readString();
@@ -410,5 +424,21 @@ public class Inventaire implements Parcelable,DatabaseItem{
 
     public void setErr(int err) {
         this.err = err;
+    }
+
+    public int getNv_taxon() {
+        return nv_taxon;
+    }
+
+    public void setNv_taxon(int nv_taxon) {
+        this.nv_taxon = nv_taxon;
+    }
+
+    public String getRemarques() {
+        return remarques;
+    }
+
+    public void setRemarques(String remarques) {
+        this.remarques = remarques;
     }
 }

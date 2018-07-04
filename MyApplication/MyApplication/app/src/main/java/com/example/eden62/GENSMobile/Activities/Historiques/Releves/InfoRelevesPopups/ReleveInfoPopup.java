@@ -52,6 +52,9 @@ public abstract class ReleveInfoPopup extends AppCompatActivity {
         setViewsContent();
     }
 
+    /**
+     * Rempli les champs avec les informations du relevé consulté via l'historique
+     */
     protected void setViewsContent(){
         nom.setText(rel.getNom());
         type.setText(rel.getType());
@@ -59,8 +62,14 @@ public abstract class ReleveInfoPopup extends AppCompatActivity {
         heure.setText(rel.getHeure());
     }
 
+    /**
+     * Affecte le bon layout en fonction du type de relevé
+     */
     protected abstract void setContentView();
 
+    /**
+     * Initialise les Views de cette activité
+     */
     protected void initView(){
         nom = (TextView) findViewById(R.id.nom);
         type = (TextView) findViewById(R.id.type);
@@ -98,6 +107,10 @@ public abstract class ReleveInfoPopup extends AppCompatActivity {
         });
     }
 
+    /**
+     * Dialog d'avertissement de suppression de relevé
+     * @return Le dialog d'avertissement
+     */
     public Dialog createDialog() {
         AlertDialog box;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -121,7 +134,8 @@ public abstract class ReleveInfoPopup extends AppCompatActivity {
     }
 
     /**
-     * Shows the progress UI and hides the login form.
+     * Affiche un message pour prévenir l'utilisateur du chargement de la carte
+     * @param show Si <code>true</code> le message s'affiche, n'efface si <code>false</code>
      */
     protected void showProgress(final boolean show) {
 
@@ -135,5 +149,8 @@ public abstract class ReleveInfoPopup extends AppCompatActivity {
         super.onResume();
     }
 
+    /**
+     * Permet de quitter cete activité
+     */
     protected abstract void finishPopUp();
 }

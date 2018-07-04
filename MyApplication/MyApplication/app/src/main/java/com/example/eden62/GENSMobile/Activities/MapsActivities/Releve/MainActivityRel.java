@@ -174,6 +174,11 @@ public class MainActivityRel extends MainActivity {
         return new XY(x,y);
     }
 
+    /**
+     * Convertit une liste de LatLongs en une liste de position en Lambert
+     * @param latLongs La liste à convertir
+     * @return La liste convertie
+     */
     protected List<XY> convertLatLongsListToL93List(List<LatLong> latLongs){
         List<XY> coordList = new ArrayList<>();
 
@@ -184,6 +189,11 @@ public class MainActivityRel extends MainActivity {
         return coordList;
     }
 
+    /**
+     * Récupère la surface d'un polygone
+     * @param latLongs La liste des positions du polygone
+     * @return la surface du polygone
+     */
     //Fonctionne mais attention, le point d'origine doit également se retrouver à la fin de la liste
     protected double getArea(List<LatLong> latLongs){
         // transformer chaque latLong en L93
@@ -286,7 +296,6 @@ public class MainActivityRel extends MainActivity {
 
     /**
      * Vérifie s'il y a un relevé de terrain en cours
-     *
      *
      * @return <code>True</code> si oui, <code>false</code> sinon
      */

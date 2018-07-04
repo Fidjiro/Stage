@@ -30,10 +30,22 @@
         android:layout_height="wrap_content"
         android:textColor="#FFFFFF"
         android:completionThreshold="3"/>
-    <Button
-        android:id="@+id/validerRecensement"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/valider"
-        android:textAllCaps="false"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/validerRecensement"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="@string/valider"
+            android:textAllCaps="false"/>
+        <Button
+            android:id="@+id/resetFields"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="@string/reset"
+            android:textAllCaps="false"/>
+    </RelativeLayout>
 </LinearLayout>

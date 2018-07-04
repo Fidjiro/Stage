@@ -62,13 +62,12 @@ public class SearchTaxonPopup extends AppCompatActivity {
         loadAutoComplete();
 
         Button validerRecensement = (Button) findViewById(R.id.validerRecensement);
+        Button resetNameFields = (Button) findViewById(R.id.resetFields);
 
         validerRecensement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(myAutoCompleteFr.getWindowToken(), 0);
-                imm.hideSoftInputFromWindow(myAutoCompleteLatin.getWindowToken(), 0);
+                Utils.hideKeyboard(getApplicationContext(),getCurrentFocus());
                 try {
                     Intent intent = generateValidationIntent();
                     startActivity(intent);
@@ -88,6 +87,14 @@ public class SearchTaxonPopup extends AppCompatActivity {
                     box = builder.create();
                     box.show();
                 }
+            }
+        });
+
+        resetNameFields.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myAutoCompleteFr.setText("");
+                myAutoCompleteLatin.setText("");
             }
         });
     }

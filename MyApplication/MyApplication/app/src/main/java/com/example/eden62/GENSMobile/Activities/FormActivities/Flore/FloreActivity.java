@@ -55,7 +55,7 @@ public class FloreActivity extends FormActivity {
      */
     @Override
     protected Inventaire createPersonalInventaire() {
-        return new Inventaire(ref_taxon, usrId, nomFrString,nomLatinString, typeTaxon, lat, lon, dat, heure, nb, "Vu", indiceAbondanceValue);
+        return new Inventaire(ref_taxon, nv_taxon, usrId, nomFrString,nomLatinString, typeTaxon, lat, lon, dat, heure, nb, "Vu", remarquesTxt, indiceAbondanceValue);
     }
 
     /**
@@ -182,6 +182,9 @@ public class FloreActivity extends FormActivity {
         }
     }
 
+    /**
+     * Change l'indice d'abondance du formulaire en fonction du dénombrement inséré par l'utilisateur
+     */
     protected void setIndiceFromDenombrement(){
         int denombrement;
         try{

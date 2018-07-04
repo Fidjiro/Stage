@@ -104,7 +104,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/givePssw"
-                android:textColor="#FFFFFF"
+                android:textColor="@android:color/white"
                 android:textAllCaps="false"
                 android:layout_margin="@dimen/formLabelMargin"/>
             <android.support.design.widget.TextInputLayout
@@ -122,6 +122,12 @@
                     android:maxLines="1"
                     android:singleLine="true" />
             </android.support.design.widget.TextInputLayout>
+            <CheckBox
+                android:id="@+id/displayMdp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/displayMdp"
+                android:textColor="@android:color/white"/>
             <Button
                 android:id="@+id/validPssw"
                 style="?android:textAppearanceSmall"

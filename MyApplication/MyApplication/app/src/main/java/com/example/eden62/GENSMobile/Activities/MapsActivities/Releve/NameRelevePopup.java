@@ -73,8 +73,7 @@ public class NameRelevePopup extends AppCompatActivity {
                 if(!nomReleve.getText().toString().isEmpty()) {
                     releveToAdd.setNom(nomReleve.getText().toString());
                     dao.insertInventaire(releveToAdd);
-                    final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(nomReleve.getWindowToken(), 0);
+                    Utils.hideKeyboard(getApplicationContext(),getCurrentFocus());
                     NameRelevePopup.this.finish();
                 }else
                     createAvertissementDialog().show();

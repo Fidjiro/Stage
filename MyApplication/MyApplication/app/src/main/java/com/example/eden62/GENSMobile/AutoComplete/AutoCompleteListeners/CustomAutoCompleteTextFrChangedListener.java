@@ -25,7 +25,7 @@ public class CustomAutoCompleteTextFrChangedListener extends CustomAutoCompleteT
         mainActivityRec.myFrAdapter.notifyDataSetChanged();
 
         // get suggestions from the database
-        Taxon[] myObjs = mainActivityRec.dao.readFr(userInput.toString());
+        Taxon[] myObjs = mainActivityRec.dao.readFr(userInput.toString().trim());
 
         // update the adapter
         mainActivityRec.myFrAdapter = new AutocompleteCustomFrArrayAdapter(mainActivityRec, R.layout.list_view_row, myObjs);

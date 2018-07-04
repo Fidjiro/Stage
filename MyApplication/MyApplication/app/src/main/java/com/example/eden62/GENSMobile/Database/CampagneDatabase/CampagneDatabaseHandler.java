@@ -12,6 +12,7 @@ public class CampagneDatabaseHandler extends SQLiteOpenHelper {
     public static final String CAMPAGNE_TABLE_NAME = "Campagne";
     public static final String CAMPAGNE_KEY = "_id";
     public static final String CAMPAGNE_REF_TAXON = "ref_taxon";
+    public static final String CAMPAGNE_NV_TAXON = "nv_taxon";
     public static final String CAMPAGNE_REF_USR = "ref_usr";
     public static final String CAMPAGNE_NOM_FR = "nom_fr";
     public static final String CAMPAGNE_NOM_LATIN = "nom_latin";
@@ -22,6 +23,7 @@ public class CampagneDatabaseHandler extends SQLiteOpenHelper {
     public static final String CAMPAGNE_HEURE = "heure";
     public static final String CAMPAGNE_NB = "nombre";
     public static final String CAMPAGNE_TYPE_OBS = "type_obs";
+    public static final String CAMPAGNE_REMARQUES = "remarques";
     public static final String CAMPAGNE_NBMALE = "nombre_mâle";
     public static final String CAMPAGNE_NBFEMALE = "nombre_femelle";
     public static final String CAMPAGNE_PRESENCE_PONTE = "presence_ponte";
@@ -33,6 +35,7 @@ public class CampagneDatabaseHandler extends SQLiteOpenHelper {
     public static final String CAMPAGNE_TABLE_CREATE = "CREATE TABLE " + CAMPAGNE_TABLE_NAME + " (" +
             CAMPAGNE_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             CAMPAGNE_REF_TAXON + " INTEGER NOT NULL, " +
+            CAMPAGNE_NV_TAXON + " INTEGER NOT NULL, " +
             CAMPAGNE_REF_USR + " INTEGER NOT NULL, " +
             CAMPAGNE_NOM_FR + " STRING NOT NULL, " +
             CAMPAGNE_NOM_LATIN + " STRING NOT NULL, " +
@@ -43,6 +46,7 @@ public class CampagneDatabaseHandler extends SQLiteOpenHelper {
             CAMPAGNE_HEURE + " TEXT NOT NULL, " +
             CAMPAGNE_NB + " INTEGER, " +
             CAMPAGNE_TYPE_OBS + " TEXT NOT NULL, " +
+            CAMPAGNE_REMARQUES + " TEXT, " +
             CAMPAGNE_NBMALE + " INTEGER, " +
             CAMPAGNE_NBFEMALE + " INTEGER, " +
             CAMPAGNE_PRESENCE_PONTE + " TEXT, " +

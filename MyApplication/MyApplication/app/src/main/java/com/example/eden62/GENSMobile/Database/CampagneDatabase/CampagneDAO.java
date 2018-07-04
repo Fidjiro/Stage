@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class CampagneDAO implements DAO<Inventaire> {
 
-    protected final static int VERSION = 2;
+    protected final static int VERSION = 4;
     // Le nom du fichier qui représente ma base
     protected final static String NAME = "database2.db";
 
@@ -27,6 +27,7 @@ public class CampagneDAO implements DAO<Inventaire> {
     public static final String KEY = "_id";
     public static final String REF_USR = "ref_usr";
     public static final String REF_TAXON = "ref_taxon";
+    public static final String NV_TAXON = "nv_taxon";
     public static final String NOM_FR = "nom_fr";
     public static final String NOM_LATIN = "nom_latin";
     public static final String TYPE_TAXON = "type_taxon";
@@ -36,6 +37,7 @@ public class CampagneDAO implements DAO<Inventaire> {
     public static final String HEURE = "heure";
     public static final String NB = "nombre";
     public static final String TYPE_OBS = "type_obs";
+    public static final String REMARQUES = "remarques";
     public static final String NBMALE = "nombre_mâle";
     public static final String NBFEMALE = "nombre_femelle";
     public static final String PRESENCE_PONTE = "presence_ponte";
@@ -97,6 +99,7 @@ public class CampagneDAO implements DAO<Inventaire> {
 
         long _id = c.getLong(c.getColumnIndex(KEY));
         long ref_taxon = c.getLong(c.getColumnIndex(REF_TAXON));
+        int nv_taxon = c.getInt(c.getColumnIndex(NV_TAXON));
         long ref_usr = c.getLong(c.getColumnIndex(REF_USR));
         String nomFr = c.getString(c.getColumnIndex(NOM_FR));
         String nomLatin = c.getString(c.getColumnIndex(NOM_LATIN));
@@ -107,6 +110,7 @@ public class CampagneDAO implements DAO<Inventaire> {
         String heure = c.getString(c.getColumnIndex(HEURE));
         int nb = c.getInt(c.getColumnIndex(NB));
         String type_obs = c.getString(c.getColumnIndex(TYPE_OBS));
+        String remarques = c.getString(c.getColumnIndex(REMARQUES));
         int nbMale = c.getInt(c.getColumnIndex(NBMALE));
         int nbFemale = c.getInt(c.getColumnIndex(NBFEMALE));
         String presencePonte = c.getString(c.getColumnIndex(PRESENCE_PONTE));
@@ -116,7 +120,7 @@ public class CampagneDAO implements DAO<Inventaire> {
         int indiceAbondance = c.getInt(c.getColumnIndex(ABONDANCE));
         int err = c.getInt(c.getColumnIndex(ERR));
 
-        return new Inventaire(_id,ref_taxon,ref_usr, nomFr, nomLatin, type_taxon, latitude,longitude,date, heure, nb,type_obs,nbMale,nbFemale,presencePonte,activite,statut,nidif,indiceAbondance,err);
+        return new Inventaire(_id,ref_taxon,nv_taxon,ref_usr, nomFr, nomLatin, type_taxon, latitude,longitude,date, heure, nb,type_obs,remarques,nbMale,nbFemale,presencePonte,activite,statut,nidif,indiceAbondance,err);
     }
 
     /**
@@ -128,6 +132,7 @@ public class CampagneDAO implements DAO<Inventaire> {
     private ContentValues getCvFrom(Inventaire inv){
         ContentValues cv = new ContentValues();
         cv.put(REF_TAXON,inv.getRef_taxon());
+        cv.put(NV_TAXON,inv.getNv_taxon());
         cv.put(REF_USR,inv.getUser());
         cv.put(NOM_FR,inv.getNomFr());
         cv.put(NOM_LATIN,inv.getNomLatin());
@@ -137,6 +142,7 @@ public class CampagneDAO implements DAO<Inventaire> {
         cv.put(DATE,inv.getDate());
         cv.put(HEURE,inv.getHeure());
         cv.put(TYPE_OBS,inv.getType_obs());
+        cv.put(REMARQUES,inv.getRemarques());
         cv.put(NB,inv.getNombre());
         cv.put(NBMALE,inv.getNbMale());
         cv.put(NBFEMALE,inv.getNbFemale());
@@ -185,6 +191,7 @@ public class CampagneDAO implements DAO<Inventaire> {
             do {
                 long _id = c.getLong(c.getColumnIndex(KEY));
                 long ref_taxon = c.getLong(c.getColumnIndex(REF_TAXON));
+                int nv_taxon = c.getInt(c.getColumnIndex(NV_TAXON));
                 long ref_usr = c.getLong(c.getColumnIndex(REF_USR));
                 String nomFr = c.getString(c.getColumnIndex(NOM_FR));
                 String nomLatin = c.getString(c.getColumnIndex(NOM_LATIN));
@@ -195,6 +202,7 @@ public class CampagneDAO implements DAO<Inventaire> {
                 String heure = c.getString(c.getColumnIndex(HEURE));
                 int nb = c.getInt(c.getColumnIndex(NB));
                 String type_obs = c.getString(c.getColumnIndex(TYPE_OBS));
+                String remarques = c.getString(c.getColumnIndex(REMARQUES));
                 int nbMale = c.getInt(c.getColumnIndex(NBMALE));
                 int nbFemale = c.getInt(c.getColumnIndex(NBFEMALE));
                 String presencePonte = c.getString(c.getColumnIndex(PRESENCE_PONTE));
@@ -204,7 +212,7 @@ public class CampagneDAO implements DAO<Inventaire> {
                 int indiceAbondance = c.getInt(c.getColumnIndex(ABONDANCE));
                 int err = c.getInt(c.getColumnIndex(ERR));
 
-                Inventaire tmp = new Inventaire(_id,ref_taxon,ref_usr, nomFr, nomLatin, type_taxon, latitude,longitude,date, heure, nb,type_obs,nbMale,nbFemale,presencePonte,activite,statut,nidif,indiceAbondance,err);
+                Inventaire tmp = new Inventaire(_id,ref_taxon,nv_taxon,ref_usr, nomFr, nomLatin, type_taxon, latitude,longitude,date, heure, nb,type_obs,remarques,nbMale,nbFemale,presencePonte,activite,statut,nidif,indiceAbondance,err);
 
                 res.add(tmp);
             }while(c.moveToNext());

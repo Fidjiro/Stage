@@ -17,21 +17,18 @@ public class ReleveStocker extends StockCheckedItems<Releve,HistoryDao> {
     public ReleveStocker(Context context) {
         super(new ArrayList<Releve>(), new HistoryDao(context));
         convertisseur = new RelToGpx(context,context.getPackageName());
-        exportedReleves = new ArrayList<>();
+        this.exportedReleves = new ArrayList<>();
     }
 
-    public void exportReleves(){
-        for(Releve rel : checkedItems) {
+    /**
+     * Exporte les relevés selectionnés
+     */
+    public void exportReleves() {
+        for (Releve rel : checkedItems) {
             if (!exportedReleves.contains(rel)) {
                 convertisseur.export(rel);
                 exportedReleves.add(rel);
             }
         }
-    }
-
-    @Override
-    public void deleteCheckedItemsFromDao() {
-        super.deleteCheckedItemsFromDao();
-        exportedReleves = new ArrayList<>();
     }
 }

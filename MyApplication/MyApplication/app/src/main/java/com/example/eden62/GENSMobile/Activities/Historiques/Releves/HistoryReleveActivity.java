@@ -26,6 +26,7 @@ import com.example.eden62.GENSMobile.Database.ReleveDatabase.Releve;
 import com.example.eden62.GENSMobile.R;
 import com.example.eden62.GENSMobile.HistoryAdapters.ReleveAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HistoryReleveActivity extends AppCompatActivity {
@@ -34,6 +35,7 @@ public class HistoryReleveActivity extends AppCompatActivity {
     protected HistoryDao dao;
     protected ReleveAdapter adapter;
     private CheckBox changeAllCheckboxes;
+    private List<Releve> exportedReleves;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,8 @@ public class HistoryReleveActivity extends AppCompatActivity {
 
         dao = new HistoryDao(this);
         dao.open();
+
+        exportedReleves = new ArrayList<>();
 
         setContentView(R.layout.activity_history_releve);
 
@@ -96,7 +100,6 @@ public class HistoryReleveActivity extends AppCompatActivity {
                 builder.setPositiveButton(getString(R.string.accord), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
                         dialog.dismiss();
                     }
                 });
@@ -105,6 +108,11 @@ public class HistoryReleveActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Lance le bon type de popUp d'informations en fonction du relevé
+     * @param typeReleve Le type du relevé
+     * @return L'intent du bon type de popUp
+     */
     protected Intent generateGoodIntent(String typeReleve){
         if(typeReleve.equals(getString(R.string.point)))
             return new Intent(HistoryReleveActivity.this, PopUpPoint.class);
@@ -127,11 +135,19 @@ public class HistoryReleveActivity extends AppCompatActivity {
         listReleves.setAdapter(adapter);
     }
 
+    /**
+     * Récupère l'id de l'utilisateur actuel
+     * @return l'id de l'utilisateur
+     */
     protected long getCurrentUsrId(){
         SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         return loginPreferences.getLong("usrId",0);
     }
 
+    /**
+     * Dialog de sûreté qui prévient l'utilisateur de la supression des items
+     * @return Un dialog d'avertissement
+     */
     public Dialog createDialog() {
         AlertDialog box;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -163,8 +179,8 @@ public class HistoryReleveActivity extends AppCompatActivity {
     private void deleteCheckedItems(){
         //RemoveCheckedItemsFromAdapter doit être appelé avant deleteCheckedItemsFromDao car cette dernière delete les relevés
         //de la liste.
-        adapter.removeCheckedItemsFromAdapter();
-        adapter.getCheckedReleveStocker().deleteCheckedItemsFromDao();
+        exportedReleves.removeAll(adapter.getCheckedReleveStocker().deleteCheckedItemsFromDao());
+        setAdapter();
     }
 
     private void changeAllCheckboxStatus(boolean checked){

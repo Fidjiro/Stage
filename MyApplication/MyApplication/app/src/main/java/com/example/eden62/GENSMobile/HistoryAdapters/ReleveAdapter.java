@@ -58,10 +58,12 @@ public class ReleveAdapter extends ArrayAdapter<Releve> {
         viewHolder.type.setText(rel.getType());
         viewHolder.date.setText(Utils.printDateWithYearIn2Digit(rel.getDate()));
         viewHolder.heure.setText(rel.getHeure());
+
         if(rel.getImportStatus().equals("true"))
             viewHolder.image.setImageResource(R.drawable.check_oui);
         else
             viewHolder.image.setImageResource(R.drawable.to_sync);
+
         viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -86,12 +88,5 @@ public class ReleveAdapter extends ArrayAdapter<Releve> {
 
     public ReleveStocker getCheckedReleveStocker() {
         return checkedReleveStocker;
-    }
-
-    public void removeCheckedItemsFromAdapter(){
-        for(Releve rel : checkedReleveStocker.getCheckedItems()){
-            remove(rel);
-            notifyDataSetChanged();
-        }
     }
 }

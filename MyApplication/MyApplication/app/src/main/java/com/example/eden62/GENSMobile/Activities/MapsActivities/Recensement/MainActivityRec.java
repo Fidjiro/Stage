@@ -61,6 +61,7 @@ public class MainActivityRec extends MainActivity {
         reloc1.setOnClickListener(listener);
     }
 
+    @Override
     protected void displayLayout(){
         ConstraintLayout layout = (ConstraintLayout)findViewById(R.id.missionLayout);
         layout.setVisibility(View.VISIBLE);

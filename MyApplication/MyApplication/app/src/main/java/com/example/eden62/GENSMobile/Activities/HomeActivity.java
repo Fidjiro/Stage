@@ -105,7 +105,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     /**
-     * TODO
+     * Renvoi sur la page de synchronisation de mission
      */
     protected void synchroniserMission(){
         Intent intent = new Intent(this,HttpActivity.class);
@@ -131,9 +131,7 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(final Boolean success) {
-
-        }
+        protected void onPostExecute(final Boolean success) { }
 
         @Override
         protected void onCancelled() {

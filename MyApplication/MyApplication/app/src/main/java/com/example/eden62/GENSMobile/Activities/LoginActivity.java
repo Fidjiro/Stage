@@ -7,17 +7,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.support.v7.app.AppCompatActivity;
-
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -25,6 +21,7 @@ import com.example.eden62.GENSMobile.Database.LoadingDatabase.TaxUsrDAO;
 import com.example.eden62.GENSMobile.Parser.CsvToSQLite.TaxRefParser;
 import com.example.eden62.GENSMobile.Parser.CsvToSQLite.UserParser;
 import com.example.eden62.GENSMobile.R;
+import com.example.eden62.GENSMobile.Tools.Utils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -43,8 +40,6 @@ public class LoginActivity extends AppCompatActivity {
 
     // UI references.
     private EditText mLoginView;
-    private View mProgressView;
-    private View mLoginFormView;
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
 
@@ -67,13 +62,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 attemptLogin();
-                final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
             }
         });
-
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
     }
 
     /**
@@ -100,7 +90,6 @@ public class LoginActivity extends AppCompatActivity {
      * @return <code>True</code> si oui, <code>false</code> sinon
      */
     private boolean loadComplete(String filename){
-        Log.e("totototot",this.getFilesDir().getPath());
         return new File(this.getFilesDir(),filename).exists();
     }
 
@@ -156,7 +145,6 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            showProgress(true);
             mAuthTask = new UserLoginTask(login);
             mAuthTask.execute((Void) null);
         }
@@ -172,41 +160,6 @@ public class LoginActivity extends AppCompatActivity {
         dao.close();
     }
 
-    /**
-     * Affiche le message de chargement et cache la liste d'actions possibles
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
-
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
-    }
 
     /**
      * Représente une tâche asynchrone qui permet de connecter l'utilisateur
@@ -228,10 +181,10 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
-            showProgress(false);
 
             if (success) {
                 rememberUsrId();
+                Utils.hideKeyboard(getApplicationContext(),getCurrentFocus());
                 Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
                 startActivity(intent);
                 LoginActivity.this.finish();
@@ -244,7 +197,6 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected void onCancelled() {
             mAuthTask = null;
-            showProgress(false);
         }
 
         private void rememberUsrId(){

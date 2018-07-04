@@ -204,4 +204,17 @@ public class Releve implements Parcelable,DatabaseItem{
     public void setArea(double area) {
         this.area = area;
     }
+
+    @Override
+    public int hashCode() {
+        return (int)this._id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof Releve){
+            Releve other = (Releve) o;
+            return this._id == other._id && this.heure == other.heure;
+        }return false;
+    }
 }

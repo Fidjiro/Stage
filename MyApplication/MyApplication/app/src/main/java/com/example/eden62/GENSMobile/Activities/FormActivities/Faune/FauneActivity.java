@@ -40,7 +40,7 @@ public class FauneActivity extends FormActivity {
 
     @Override
     protected Inventaire createPersonalInventaire() {
-        return new Inventaire(ref_taxon, usrId, nomFrString, nomLatinString, typeTaxon, lat, lon, dat, heure, nb, obs, nbMale, nbFemale);
+        return new Inventaire(ref_taxon, nv_taxon, usrId, nomFrString, nomLatinString, typeTaxon, lat, lon, dat, heure, nb, obs, remarquesTxt, nbMale, nbFemale);
     }
 
     @Override
@@ -104,7 +104,19 @@ public class FauneActivity extends FormActivity {
         femaleCheckbox = (CheckBox) findViewById(R.id.femaleCheckbox);
 
         nbMaleText.setOnFocusChangeListener(new MyFocusChangeListener());
+        nbMaleText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                view.requestFocus();
+            }
+        });
         nbFemaleText.setOnFocusChangeListener(new MyFocusChangeListener());
+        nbFemaleText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                view.requestFocus();
+            }
+        });
         nombre.setOnFocusChangeListener(new MyFocusChangeListener());
 
         rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
