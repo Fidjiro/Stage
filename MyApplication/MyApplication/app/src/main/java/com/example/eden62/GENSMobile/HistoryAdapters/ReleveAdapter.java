@@ -17,12 +17,13 @@ import com.example.eden62.GENSMobile.Tools.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ReleveAdapter extends ItemsAdapter<ReleveStocker,Releve>{
 
-    public ReleveAdapter(Context context, List<Releve> releves) {
+    public ReleveAdapter(Context context, List<Releve> releves, Map exportedReleves) {
         super(context, releves);
-        checkedItemsStocker = new ReleveStocker(context);
+        checkedItemsStocker = new ReleveStocker(context,exportedReleves);
     }
 
     @Override

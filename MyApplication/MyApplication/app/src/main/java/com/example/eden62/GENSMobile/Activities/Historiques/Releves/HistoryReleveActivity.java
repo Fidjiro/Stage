@@ -24,12 +24,16 @@ import com.example.eden62.GENSMobile.Database.ReleveDatabase.Releve;
 import com.example.eden62.GENSMobile.R;
 import com.example.eden62.GENSMobile.HistoryAdapters.ReleveAdapter;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class HistoryReleveActivity extends HistoryActivity<ReleveAdapter> {
 
     protected HistoryDao dao;
+    protected Map<Releve,File> exportedReleves;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,15 +41,16 @@ public class HistoryReleveActivity extends HistoryActivity<ReleveAdapter> {
 
         Button exportSelection = (Button) findViewById(R.id.exportSelect);
 
+        exportedReleves = new HashMap<>();
+
         exportSelection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar snackbar = Snackbar.make(listItems,"Exportation en cours",Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
-                adapter.getCheckedItemsStocker().exportReleves();
                 snackbar.dismiss();
                 AlertDialog.Builder builder = new AlertDialog.Builder(HistoryReleveActivity.this);
-                builder.setMessage("stockageInterne/Android/data/" + HistoryReleveActivity.this.getPackageName() + "/files/\n L'envoyer par mail ?");
+                builder.setMessage("stockageInterne/Android/data/" + HistoryReleveActivity.this.getPackageName() + "/files/\n \nL'envoyer par mail ?");
                 builder.setTitle("Localisation des fichiers");
                 builder.setPositiveButton(getString(R.string.oui), new DialogInterface.OnClickListener() {
                     @Override
@@ -57,6 +62,7 @@ public class HistoryReleveActivity extends HistoryActivity<ReleveAdapter> {
                 builder.setNegativeButton(getString(R.string.non), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
+                        adapter.getCheckedItemsStocker().exportReleves();
                         dialog.dismiss();
                     }
                 });
@@ -99,7 +105,7 @@ public class HistoryReleveActivity extends HistoryActivity<ReleveAdapter> {
     protected void setAdapter() {
         List<Releve> releves = dao.getReleveOfTheUsr(getCurrentUsrId());
 
-        adapter = new ReleveAdapter(this,releves);
+        adapter = new ReleveAdapter(this,releves,exportedReleves);
         listItems.setAdapter(adapter);
     }
 

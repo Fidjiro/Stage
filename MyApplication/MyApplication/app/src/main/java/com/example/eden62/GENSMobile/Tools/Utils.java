@@ -13,7 +13,6 @@
 package com.example.eden62.GENSMobile.Tools;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -49,34 +48,6 @@ public final class Utils {
     public static final DecimalFormat dfPosWgs = new DecimalFormat("0.#####");
     public static final DecimalFormat dfPosL93 = new DecimalFormat("0.####");
 
-    /**
-     * Compatibility method.
-     *
-     * @param a the current activity
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static void enableHome(Activity a) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            // Show the Up button in the action bar.
-            a.getActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-    }
-
-    /**
-     * Compatibility method.
-     *
-     * @param view       the view to set the background on
-     * @param background the background
-     */
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    @SuppressWarnings("deprecation")
-    public static void setBackground(View view, Drawable background) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            view.setBackground(background);
-        } else {
-            view.setBackgroundDrawable(background);
-        }
-    }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public static Marker createMarker(Context c, int resourceIdentifier,
@@ -114,17 +85,6 @@ public final class Utils {
                 return false;
             }
         };
-    }
-
-    public static Bitmap viewToBitmap(Context c, View view) {
-        view.measure(MeasureSpec.getSize(view.getMeasuredWidth()),
-                MeasureSpec.getSize(view.getMeasuredHeight()));
-        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
-        view.setDrawingCacheEnabled(true);
-        Drawable drawable = new BitmapDrawable(c.getResources(),
-                android.graphics.Bitmap.createBitmap(view.getDrawingCache()));
-        view.setDrawingCacheEnabled(false);
-        return AndroidGraphicFactory.convertToBitmap(drawable);
     }
 
     public static File getFileFromAssets(Context ctx, String aFileName) throws IOException {
@@ -186,7 +146,7 @@ public final class Utils {
      * @param i L'entier à transformer
      * @return L'entier formaté
      */
-    public static String formatInt(int i){
+    private static String formatInt(int i){
         if(i < 10)
             return "0" + i;
         return "" + i;
@@ -223,7 +183,6 @@ public final class Utils {
     }
 
     public static void hideKeyboard(Context ctx, View v){
-
             InputMethodManager imm = (InputMethodManager)ctx.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(v.getWindowToken(),0);
     }

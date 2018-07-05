@@ -3,6 +3,7 @@ package com.example.eden62.GENSMobile.Activities.Historiques.Stocker;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Environment;
 
 import com.example.eden62.GENSMobile.Parser.RelToGpx;
 import com.example.eden62.GENSMobile.Database.ReleveDatabase.HistoryDao;
@@ -20,11 +21,11 @@ public class ReleveStocker extends StockCheckedItems<Releve,HistoryDao> {
     private Map<Releve,File> exportedReleves;
     private Context ctx;
 
-    public ReleveStocker(Context context) {
+    public ReleveStocker(Context context, Map exportedReleves) {
         super(new ArrayList<Releve>(), new HistoryDao(context));
         ctx = context;
         convertisseur = new RelToGpx(context,context.getPackageName());
-        this.exportedReleves = new HashMap<>();
+        this.exportedReleves = exportedReleves;
     }
 
     /**
@@ -32,22 +33,24 @@ public class ReleveStocker extends StockCheckedItems<Releve,HistoryDao> {
      */
     public void exportReleves() {
         for (Releve rel : checkedItems) {
-            if (!exportedReleves.containsKey(rel)) {
-                exportedReleves.put(rel,convertisseur.export(rel));
-            }
+            addReleveIfNotAlreadyExported(rel);
         }
     }
 
     public void exportReleveAndSendMail(){
-        Intent intent = new Intent(Intent.ACTION_SEND);
+        Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
         intent.setType("vnd.android.cursor.dir/email");
+        ArrayList<Uri> uris = new ArrayList<>();
         for (Releve rel : checkedItems) {
-            if (!exportedReleves.containsKey(rel)) {
-                exportedReleves.put(rel,convertisseur.export(rel));
-            }
-            Uri path = Uri.fromFile(exportedReleves.get(rel));
-            intent.putExtra(Intent.EXTRA_STREAM,path);
+            addReleveIfNotAlreadyExported(rel);
+            uris.add(Uri.fromFile(exportedReleves.get(rel)));
         }
-        ctx.startActivity(Intent.createChooser(intent , "Send email..."));
+        intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
+        ctx.startActivity(Intent.createChooser(intent , "Envoyer par..."));
+    }
+
+    private void addReleveIfNotAlreadyExported(Releve rel){
+        if (!exportedReleves.containsKey(rel))
+            exportedReleves.put(rel,convertisseur.export(rel));
     }
 }
