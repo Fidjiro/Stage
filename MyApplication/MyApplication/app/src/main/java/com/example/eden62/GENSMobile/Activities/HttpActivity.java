@@ -93,6 +93,9 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
                 Snackbar.LENGTH_INDEFINITE);
     }
 
+    /**
+     * Initialise les élémentes de la view
+     */
     private void makeView() {
         launchSync = (Button) findViewById(R.id.btnHit);
         txtJson = (TextView) findViewById(R.id.tvJsonItem);
@@ -144,11 +147,17 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+    /**
+     * Récupère le nombre d'inventaires/relevés à synchroniser
+     */
     private void getNbDataToSync(){
         nbInvToSync = campagneDao.getNbInventairesOfTheUsr(usrId);
         nbRelToSync = releveDao.getNbReleveOfTheUsr(usrId);
     }
 
+    /**
+     * Affecte le bon texte aux champs d'informations du nombre d'inventaires/relevés
+     */
     protected void setTxtNbDatas(){
         getNbDataToSync();
         nbInvToSyncTxt.setText(nbInvToSync + " " + getString(R.string.invToSync));
@@ -369,6 +378,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    // Vérifie si l'utilisateur est connecté à internet
     private boolean isConnected() {
         ConnectivityManager connectivityManager =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -376,6 +386,13 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         return networkInfo != null && networkInfo.isConnected();
     }
 
+    /**
+     * Transforme une chaîne de caractère en un objet JSON
+     *
+     * @param s La String à transformer
+     * @return L'objet JSON correspondant à la String
+     * @throws JSONException En cas d'echec de parsage
+     */
     protected JSONObject parseStringToJsonObject(String s) throws JSONException {
         return new JSONObject(s);
     }
@@ -386,6 +403,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         campagneDao.close();
     }
 
+    // Créé la requêtre à envoyer au serveur lors d'un envoi d'inventaire
     private RequestBody createRequestBodyToSend(Inventaire inv){
 
         RequestBody requestBody = new FormBody.Builder().add("_id",inv.get_id() + "").

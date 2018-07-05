@@ -65,10 +65,16 @@ public class ShowInvRelActivity extends AppCompatActivity {
         myMap.exit();
     }
 
+    /**
+     * Ajoute le Layer l à la carte
+     *
+     * @param l Le layer à ajouter
+     */
     protected void addLayer(Layer l) {
         myMap.getLayers().add(l);
     }
 
+    // Redessine le relevé sur la carte
     private void redrawReleve(Releve rel){
         Gson gson = new Gson();
         String relType = rel.getType();
@@ -95,6 +101,7 @@ public class ShowInvRelActivity extends AppCompatActivity {
         }
     }
 
+    //Dessine un point sur la carte
     private void drawPoint(LatLong latLong){
         Marker m = Utils.createMarker(ShowInvRelActivity.this, R.drawable.marker_green, latLong);
         addLayer(m);

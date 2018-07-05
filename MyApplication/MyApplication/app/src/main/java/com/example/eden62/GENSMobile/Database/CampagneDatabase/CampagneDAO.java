@@ -77,6 +77,12 @@ public class CampagneDAO implements DAO<Inventaire> {
         return mDb.insert(CAMPAGNE,null,cv);
     }
 
+    /**
+     * Modifie un inventaire dans la base
+     *
+     * @param inv L'inventaire à modifier
+     * @return Le résultate de la modification de l'inventaire
+     */
     public long modifInventaire(Inventaire inv){
         deleteInventaire(inv.get_id());
         ContentValues cv = getCvFrom(inv);
@@ -84,14 +90,32 @@ public class CampagneDAO implements DAO<Inventaire> {
         return mDb.insert(CAMPAGNE,null,cv);
     }
 
+    /**
+     * Supprime l'inventaire de la base
+     *
+     * @param inv L'inventaire à supprimer
+     * @return Le résultat de la suppression de l'inventaire
+     */
     public long delete(Inventaire inv){
         return mDb.delete(CAMPAGNE,KEY + " = ?",new String[]{inv.get_id() + ""});
     }
 
+    /**
+     * Supprime l'inventaire de la base
+     *
+     * @param invId L'id de l'inventaire à supprimer
+     * @return Le résultat de la suppression de l'inventaire
+     */
     public long deleteInventaire(long invId){
         return mDb.delete(CAMPAGNE,KEY + " = ?",new String[]{invId + ""});
     }
 
+    /**
+     * Récupère un inventaire depuis l'historique des inventaires
+     *
+     * @param params Les paramètres permettant d'identifier l'inventaire
+     * @return L'inventaire correspondant aux paramètres
+     */
     public Inventaire getInventaireFromHistory(String[] params){
         String request = "SELECT * FROM " + CAMPAGNE + " WHERE " + NOM_LATIN + " = ? AND " + NOM_FR + " = ? AND " + HEURE + " = ?;";
         Cursor c = mDb.rawQuery(request,params);
@@ -167,23 +191,35 @@ public class CampagneDAO implements DAO<Inventaire> {
         return dealWihCursor(c);
     }
 
+    // Récupère le curseur indexé sur le premier inventaire correspondant à l'utilisateur
     private Cursor selectInvOfTheUsr(long usrId){
         String request = "SELECT * FROM " + CAMPAGNE + " WHERE " + REF_USR + " = ?";
         return mDb.rawQuery(request,new String[]{usrId + ""});
     }
 
+    /**
+     * Récupère le nombre d'inventaires de l'utilisateur usrId
+     * @param usrId L'id de l'utilisateur
+     * @return Le nombre d'inventaire de l'utilisateur
+     */
     public int getNbInventairesOfTheUsr(long usrId){
         Cursor c = selectInvOfTheUsr(usrId);
 
         return c.getCount();
     }
 
+    /**
+     * Récupère les inventaires de l'utilisateur
+     * @param usrId L'id de l'utilisateur
+     * @return La liste des inventaires de l'utilisateur
+     */
     public List<Inventaire> getInventairesOfTheUsr(long usrId){
         Cursor c = selectInvOfTheUsr(usrId);
 
         return dealWihCursor(c);
     }
 
+    //Récupère une liste d'inventaire via le curseur en paramètre
     private List<Inventaire> dealWihCursor(Cursor c){
         List<Inventaire> res = new ArrayList<>();
 

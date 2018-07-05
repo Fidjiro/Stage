@@ -82,8 +82,4 @@ public class ReleveAdapter extends ItemsAdapter<ReleveStocker,Releve>{
         public ImageView image;
         public CheckBox checkBox;
     }
-
-    public ReleveStocker getCheckedItemsStocker() {
-        return checkedItemsStocker;
-    }
 }

@@ -40,7 +40,6 @@ public class Inventaire implements Parcelable,DatabaseItem{
     private int err;
 
     /**
-     * Sert à test la base de donnée, à delete après
      * @param ref_taxon
      * @param user
      * @param typeTaxon

@@ -103,11 +103,19 @@ public abstract class HistoryActivity<T extends ItemsAdapter> extends AppCompatA
         return box;
     }
 
+    /**
+     * Supprime les items de la base puis réinitialise la listView
+     */
     protected void deleteCheckedItems(){
         adapter.getCheckedItemsStocker().deleteCheckedItemsFromDao();
         setAdapter();
     }
 
+    /**
+     * Change le statut checked des checkboxes via le paramètre checked
+     *
+     * @param checked Le nouveau statut des checkboxes
+     */
     protected void changeAllCheckboxStatus(boolean checked){
         List<CheckBox> allCheckboxes = adapter.getAllCheckboxes();
         for(CheckBox cb : allCheckboxes){
@@ -122,22 +130,46 @@ public abstract class HistoryActivity<T extends ItemsAdapter> extends AppCompatA
         changeAllCheckboxes.setChecked(false);
     }
 
+    /**
+     * Coche toutes les checkboxes
+     */
     protected void checkAll(){
         changeAllCheckboxStatus(true);
     }
 
+    /**
+     * Décoche toutes les checkboxes
+     */
     protected void uncheckAll(){
         changeAllCheckboxStatus(false);
     }
 
-
+    /**
+     * Initialise l'adapter adéquat
+     */
     protected abstract void setAdapter();
 
+    /**
+     * Utilise le bon layout pour la méthode setContentView()
+     */
     protected abstract void setView();
 
+    /**
+     * Affecte à la listView un header personnalisé en fonction de la classe
+     */
     protected abstract void setListViewHeader();
 
+    /**
+     * Action lancée lors d'un clic sur un item de la listView
+     * @param adapterView
+     * @param view
+     * @param i
+     * @param l
+     */
     protected abstract void actionOnItemClick(AdapterView<?> adapterView, View view, int i, long l);
 
+    /**
+     * Ouvre les BDD utile pour cette classe
+     */
     protected abstract void openDatabases();
 }

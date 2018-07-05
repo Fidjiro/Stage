@@ -37,6 +37,9 @@ public class ReleveStocker extends StockCheckedItems<Releve,HistoryDao> {
         }
     }
 
+    /**
+     * Exporte les relevés selectionnés et les fourni ensuite en pièce jointe d'un mail
+     */
     public void exportReleveAndSendMail(){
         Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
         intent.setType("vnd.android.cursor.dir/email");
@@ -49,6 +52,7 @@ public class ReleveStocker extends StockCheckedItems<Releve,HistoryDao> {
         ctx.startActivity(Intent.createChooser(intent , "Envoyer par..."));
     }
 
+    //Exporte le relevé puis l'ajoute à la hashmap s'il n'a pas déjà été exporté
     private void addReleveIfNotAlreadyExported(Releve rel){
         if (!exportedReleves.containsKey(rel))
             exportedReleves.put(rel,convertisseur.export(rel));

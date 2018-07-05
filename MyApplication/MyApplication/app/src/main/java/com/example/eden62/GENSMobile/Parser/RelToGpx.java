@@ -30,6 +30,7 @@ public class RelToGpx {
         DIRECTORY_PATH = Environment.getExternalStorageDirectory().getPath() + "/Android/data/" + packageName + "/files/";
     }
 
+    // Génère la partie segment du gpx file via le relevé
     private String createGoodGpxSegment(Releve rel){
         String segments = "";
         if(rel.getType().equals("Point")) {
@@ -48,6 +49,7 @@ public class RelToGpx {
         return segments;
     }
 
+    //Ecrit dans le fichier file le gpx
     private void generateGpx(File file, Releve rel) {
         try {
             file.createNewFile();
@@ -74,6 +76,7 @@ public class RelToGpx {
         }
     }
 
+    // Formate la date au bon format pour le gpx
     private String formatDateHeure(Releve rel){
         String date = new String (rel.getDate());
         String time = new String(rel.getHeure());
@@ -88,6 +91,11 @@ public class RelToGpx {
         return date_inverse + "T" + time + "Z";
     }
 
+    /**
+     * Exporte le relevé dans le téléphone
+     * @param rel Le relevé à exporter
+     * @return Le File correspondant au relevé exporté
+     */
     public File export(Releve rel) {
         File dir = new File(DIRECTORY_PATH);
         if(!dir.exists())
@@ -108,6 +116,15 @@ public class RelToGpx {
         return null;
     }
 
+    public void sendFileByMail(File file){
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("vnd.android.cursor.dir/email");
+        Uri uri = Uri.fromFile(file);
+        intent.putExtra(Intent.EXTRA_STREAM,uri);
+        ctx.startActivity(Intent.createChooser(intent , "Envoyer par..."));
+    }
+
+    // Vérifie si l'application a accès au stockage du téléphone
     private boolean appHasAccessToStorage(){
         return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
                 && !Environment.MEDIA_MOUNTED_READ_ONLY.equals(Environment.getExternalStorageState());

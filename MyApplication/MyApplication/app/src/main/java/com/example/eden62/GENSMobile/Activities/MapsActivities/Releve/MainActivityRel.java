@@ -17,6 +17,7 @@ import com.example.eden62.GENSMobile.Activities.MapsActivities.MainActivity;
 import com.example.eden62.GENSMobile.Database.ReleveDatabase.Releve;
 import com.example.eden62.GENSMobile.R;
 import com.example.eden62.GENSMobile.Tools.Utils;
+import com.example.eden62.GENSMobile.Tools.XY;
 import com.google.gson.Gson;
 
 import org.mapsforge.core.graphics.Color;
@@ -140,38 +141,13 @@ public class MainActivityRel extends MainActivity {
 
     }
 
+    //Reset les relevés de terrain
     private void clearLayers(){
         try {
             myMap.getLayers().remove(previousLayer);
         }catch (Exception e){
             e.printStackTrace();
         }
-    }
-
-    private double atanh(double x){
-        return (log(1+x) - log(1-x))/2;
-    }
-
-    private XY convertWgs84ToL93(LatLong latLong){
-
-        double latitude = latLong.getLatitude();
-        double longitude = latLong.getLongitude();
-
-// définition des constantes
-        double c= 11754255.426096; //constante de la projection
-        double e= 0.0818191910428158; //première exentricité de l'ellipsoïde
-        double n= 0.725607765053267; //exposant de la projection
-        double xs= 700000; //coordonnées en projection du pole
-        double ys= 12655612.049876; //coordonnées en projection du pole
-
-// pré-calculs
-        double lat_rad= latitude/180*Math.PI; //latitude en rad
-        double lat_iso= atanh(Math.sin(lat_rad))-e*atanh(e*Math.sin(lat_rad)); //latitude isométrique
-
-//calcul
-        double x= ((c*Math.exp(-n*(lat_iso)))*Math.sin(n*(longitude-3)/180*Math.PI)+xs);
-        double y= (ys-(c*Math.exp(-n*(lat_iso)))*Math.cos(n*(longitude-3)/180*Math.PI));
-        return new XY(x,y);
     }
 
     /**
@@ -183,7 +159,7 @@ public class MainActivityRel extends MainActivity {
         List<XY> coordList = new ArrayList<>();
 
         for(LatLong latLong : latLongs){
-            coordList.add(convertWgs84ToL93(latLong));
+            coordList.add(Utils.convertWgs84ToL93(latLong));
         }
 
         return coordList;
@@ -224,21 +200,7 @@ public class MainActivityRel extends MainActivity {
         return Math.abs(-sum /2);
     }
 
-    private class XY{
-        public double x;
-        public double y;
-
-        public XY(){
-            x = 0;
-            y = 0;
-        }
-
-        public XY(double x, double y) {
-            this.x = x;
-            this.y = y;
-        }
-    }
-
+    // Renvoi le releve à insérer dans la base
     private Releve createReleveToInsert(){
         SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         long creatorId = loginPreferences.getLong("usrId",0);
@@ -257,6 +219,7 @@ public class MainActivityRel extends MainActivity {
         return new Releve(creatorId,"",getCurrentReleveType(), latitude, longitude, formatedLatLongs, "false", Utils.getDate(),Utils.getTime(),lineLength,polygonPerimeter,polygonArea);
     }
 
+    // Formattent les latitudes/longitudes pour que le serveur les récupère
     private StringTuple getStringsFromLatLongs(){
         String lats = "";
         String longs = "";
@@ -269,6 +232,7 @@ public class MainActivityRel extends MainActivity {
         return new StringTuple(lats,longs);
     }
 
+    // Formate la liste de LatLong pour qu'elle puisse être réutilisable après la transmission par un intent
     private String getFormatedLatLongs(){
         Gson gson = new Gson();
         return gson.toJson(latLongs);
@@ -303,14 +267,29 @@ public class MainActivityRel extends MainActivity {
         return currentReleve == NO_RELEVE;
     }
 
+    /**
+     * Vérifie si le relevé en cours est de type ligne
+     *
+     * @return <code>True</code> si le relevé en cours est de type ligne, <code>false</code> sinon
+     */
     protected boolean currentReleveIsLine() {
         return currentReleve == LINE;
     }
 
+    /**
+     * Vérifie si le relevé en cours est de type polygone
+     *
+     * @return <code>True</code> si le relevé en cours est de type polygone, <code>false</code> sinon
+     */
     protected boolean currentReleveIsPolygon() {
         return currentReleve == POLYGON;
     }
 
+    /**
+     * Récupère le type de relevé courant
+     *
+     * @return le type de relevé en cours
+     */
     protected String getCurrentReleveType(){
         if(currentReleveIsLine()){
             return getString(R.string.line);
@@ -319,6 +298,11 @@ public class MainActivityRel extends MainActivity {
         } return getString(R.string.point);
     }
 
+    /**
+     * Créé une polyline
+     *
+     * @return la polyline créée
+     */
     public Polyline createPolyline(){
         return new Polyline(Utils.createPaint(
                 PAINT_STROKE,
@@ -335,6 +319,9 @@ public class MainActivityRel extends MainActivity {
         latLongs = polyline.getLatLongs();
     }
 
+    /**
+     * Mets fin au relevé courant et lance l'activité de nommage
+     */
     private void finirReleve(){
         stopReleve();
         setCurrentReleve(NO_RELEVE);
@@ -514,6 +501,7 @@ public class MainActivityRel extends MainActivity {
 
     }
 
+    @Override
     protected void displayLayout(){
         ConstraintLayout layout = (ConstraintLayout)findViewById(R.id.releveLayout);
         layout.setVisibility(View.VISIBLE);

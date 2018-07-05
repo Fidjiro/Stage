@@ -182,6 +182,11 @@ public final class Utils {
         throw new IllegalStateException();
     }
 
+    /**
+     * Ferme le clavier
+     * @param ctx Le context de l'activité appellante
+     * @param v La view possédant un clavier
+     */
     public static void hideKeyboard(Context ctx, View v){
             InputMethodManager imm = (InputMethodManager)ctx.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(v.getWindowToken(),0);

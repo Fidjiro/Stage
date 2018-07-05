@@ -3,6 +3,7 @@ package com.example.eden62.GENSMobile.Activities.Historiques.Releves.InfoReleves
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.eden62.GENSMobile.Activities.Historiques.Releves.HistoryReleveActivity;
 import com.example.eden62.GENSMobile.Activities.MapsActivities.ShowInvRelActivity;
 import com.example.eden62.GENSMobile.Parser.RelToGpx;
 import com.example.eden62.GENSMobile.Database.ReleveDatabase.HistoryDao;
@@ -101,8 +103,31 @@ public abstract class ReleveInfoPopup extends AppCompatActivity {
         export.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RelToGpx convertisseur = new RelToGpx(ReleveInfoPopup.this,ReleveInfoPopup.this.getPackageName());
-                convertisseur.export(rel);
+                final RelToGpx convertisseur = new RelToGpx(ReleveInfoPopup.this,ReleveInfoPopup.this.getPackageName());
+                final Snackbar exportSnackbar = Snackbar.make(export,"Exportation en cours",Snackbar.LENGTH_INDEFINITE);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(ReleveInfoPopup.this);
+                builder.setMessage("stockageInterne/Android/data/" + ReleveInfoPopup.this.getPackageName() + "/files/\n \nL'envoyer par mail ?");
+                builder.setTitle("Localisation des fichiers");
+                builder.setPositiveButton(getString(R.string.oui), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        exportSnackbar.show();
+                        convertisseur.sendFileByMail(convertisseur.export(rel));
+                        exportSnackbar.dismiss();
+                        dialog.dismiss();
+                    }
+                });
+                builder.setNegativeButton(getString(R.string.non), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        exportSnackbar.show();
+                        convertisseur.export(rel);
+                        exportSnackbar.dismiss();
+                        dialog.dismiss();
+                    }
+                });
+                builder.create().show();
             }
         });
     }

@@ -22,8 +22,18 @@ public abstract class ItemsAdapter<T extends StockCheckedItems,Y extends Databas
         allCheckBoxes = new ArrayList<>();
     }
 
-    public abstract T getCheckedItemsStocker();
+    /**
+     * Récupère les items coché
+     * @return La liste d'items cochés
+     */
+    public T getCheckedItemsStocker(){
+        return checkedItemsStocker;
+    }
 
+    /**
+     * Récupère toutes les checkboxes présente dans cet adapter
+     * @return La liste de checkboxes
+     */
     public List<CheckBox> getAllCheckboxes(){
         return allCheckBoxes;
     }

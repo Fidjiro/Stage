@@ -20,8 +20,6 @@ import java.util.List;
 
 public class InventaireAdapter extends ItemsAdapter<InventoryStocker,Inventaire> {
 
-    public List<CheckBox> allCheckBoxes;
-
     public InventaireAdapter(Context context, List<Inventaire> inventaires) {
         super(context, inventaires);
         checkedItemsStocker = new InventoryStocker(context);
@@ -106,11 +104,6 @@ public class InventaireAdapter extends ItemsAdapter<InventoryStocker,Inventaire>
         else
             color = Color.rgb(255,140,0);
         view.setTextColor(color);
-    }
-
-    @Override
-    public InventoryStocker getCheckedItemsStocker() {
-        return checkedItemsStocker;
     }
 
     @Override

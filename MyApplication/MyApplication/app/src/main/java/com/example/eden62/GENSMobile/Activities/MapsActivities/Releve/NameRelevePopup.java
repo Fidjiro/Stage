@@ -81,6 +81,7 @@ public class NameRelevePopup extends AppCompatActivity {
         });
     }
 
+    //Affiche les bonnes textView en fonction du type de relevé
     private void displayGoodReleveInfos() {
         String type = releveToAdd.getType();
         if(type.equals(getString(R.string.point))) {
@@ -104,6 +105,11 @@ public class NameRelevePopup extends AppCompatActivity {
         }
     }
 
+    /**
+     * Créé un dialog d'avertissement lorsque l'utilisateur n'a pas rentré de nom de relevé
+     *
+     * @return Le dialog d'avertissement
+     */
     protected Dialog createAvertissementDialog(){
         AlertDialog box;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

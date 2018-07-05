@@ -202,6 +202,11 @@ public class TaxUsrDAO {
         return c;
     }
 
+    /**
+     * Récupère le niveau du taxon correspondant aux paramètres
+     * @param noms Les noms du taxon
+     * @return Le niveau du taxon
+     */
     public int getNiveau(String[] noms){
         Cursor c = selectByNoms(noms);
         return c.getInt(c.getColumnIndex(NIVEAU));

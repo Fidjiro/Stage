@@ -65,10 +65,16 @@ public class HistoryDao implements DAO<Releve>{
         return mDb.insert(TABLE_NAME,null,cv);
     }
 
+    /**
+     * Supprime un relevé de la bas
+     * @param rel Le relevé à supprimer
+     * @return Le résultat de la suppression du relevé de la base
+     */
     public long delete(Releve rel){
         return mDb.delete(TABLE_NAME,KEY + " = ?",new String[]{rel.get_id() + ""});
     }
 
+    //Récupère un ContentValue depuis le relevé en paramètre
     private ContentValues getCvFrom(Releve rel){
         ContentValues cv = new ContentValues();
         cv.put(CREATOR,rel.getCreator());
@@ -86,12 +92,22 @@ public class HistoryDao implements DAO<Releve>{
         return cv;
     }
 
+    /**
+     * Récupère le nombre de relevés de l'utilisateur
+     * @param creatorId L'id de l'utilisateur
+     * @return Le nombre de relevés de l'utilisateur
+     */
     public int getNbReleveOfTheUsr(long creatorId){
         String request = "SELECT * FROM " + TABLE_NAME + " WHERE " + CREATOR + " = ? AND " + IMPORT + " = ?;";
         Cursor c = mDb.rawQuery(request,new String[]{creatorId +"","false"});
         return c.getCount();
     }
 
+    /**
+     * Récupère la liste des relevés de l'utilisateur
+     * @param creatorId L'id de l'utilisateur
+     * @return Les relevés de l'utilisateur
+     */
     public List<Releve> getReleveOfTheUsr(long creatorId){
         String request = "SELECT * FROM " + TABLE_NAME + " WHERE " + CREATOR + " = ?;";
         Cursor c = mDb.rawQuery(request,new String[]{creatorId +""});
@@ -104,6 +120,12 @@ public class HistoryDao implements DAO<Releve>{
         return mDb.rawQuery(request,fields);
     }
 
+    /**
+     * Récupère le relevé par son nom, son type et l'heure à laquelle il a été réalisé
+     *
+     * @param fields Les paramètres pour reconnaître le relevé
+     * @return Le relevé correspondant
+     */
     public Releve getReleveFromNomTypeHeure(String[] fields){
         Cursor c = selectReleveFromNomTypeDateHeure(fields);
         c.moveToNext();
@@ -125,6 +147,11 @@ public class HistoryDao implements DAO<Releve>{
         return new Releve(_id,creator,nom,type,latitudes,longitudes,lat_long,importStatus,date,heure,length,perimeter,area);
     }
 
+    /**
+     * Récupère la liste de relevé via le curseur
+     * @param c Le curseur initialisé
+     * @return Une liste de relevé
+     */
     protected List<Releve> dealWithCursor(Cursor c){
         List<Releve> res = new ArrayList<>();
 
