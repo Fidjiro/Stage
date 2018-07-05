@@ -25,25 +25,22 @@ import com.example.eden62.GENSMobile.HistoryAdapters.InventaireAdapter;
 
 import java.util.List;
 
-public class HistoryRecensementActivity extends HistoryActivity {
+public class HistoryRecensementActivity extends HistoryActivity<InventaireAdapter> {
 
     protected CampagneDAO campagneDao;
     protected TaxUsrDAO taxUsrDao;
-    protected InventaireAdapter adapter;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        campagneDao = new CampagneDAO(this);
-        taxUsrDao = new TaxUsrDAO(this);
-        campagneDao.open();
-        taxUsrDao.open();
-    }
 
     @Override
     protected void setView() {
         setContentView(R.layout.activity_history_recensement);
+    }
+
+    @Override
+    protected void openDatabases() {
+        campagneDao = new CampagneDAO(this);
+        taxUsrDao = new TaxUsrDAO(this);
+        campagneDao.open();
+        taxUsrDao.open();
     }
 
     /**
@@ -122,11 +119,6 @@ public class HistoryRecensementActivity extends HistoryActivity {
 
         adapter = new InventaireAdapter(this,inventaires);
         listItems.setAdapter(adapter);
-    }
-
-    @Override
-    protected void personalDelete() {
-        adapter.getCheckedItemsStocker().deleteCheckedItemsFromDao();
     }
 
     @Override

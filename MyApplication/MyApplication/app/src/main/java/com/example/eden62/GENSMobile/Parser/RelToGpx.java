@@ -88,7 +88,7 @@ public class RelToGpx {
         return date_inverse + "T" + time + "Z";
     }
 
-    public void export(Releve rel) {
+    public File export(Releve rel) {
         File dir = new File(DIRECTORY_PATH);
         if(!dir.exists())
             dir.mkdirs();
@@ -99,6 +99,7 @@ public class RelToGpx {
                 mFile.createNewFile();
                 MediaScannerConnection.scanFile(ctx, new String[] {currFilePath}, null, null);
                 generateGpx(mFile,rel);
+                return mFile;
                 /*Uri path = Uri.fromFile(mFile);
                 Intent emailIntent = new Intent(Intent.ACTION_SEND);
                 // set the type to 'email'
@@ -111,6 +112,7 @@ public class RelToGpx {
         } catch (IOException e){
             e.printStackTrace();
         }
+        return null;
     }
 
     private boolean appHasAccessToStorage(){

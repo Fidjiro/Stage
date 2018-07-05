@@ -214,7 +214,7 @@ public class Releve implements Parcelable,DatabaseItem{
     public boolean equals(Object o) {
         if(o instanceof Releve){
             Releve other = (Releve) o;
-            return this._id == other._id && this.heure == other.heure;
+            return this._id == other._id && this.heure.equals(other.heure);
         }return false;
     }
 }

@@ -27,21 +27,13 @@ import com.example.eden62.GENSMobile.HistoryAdapters.ReleveAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HistoryReleveActivity extends HistoryActivity {
+public class HistoryReleveActivity extends HistoryActivity<ReleveAdapter> {
 
     protected HistoryDao dao;
-    protected ReleveAdapter adapter;
-    private List<Releve> exportedReleves;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        dao = new HistoryDao(this);
-        dao.open();
-
-        exportedReleves = new ArrayList<>();
-
 
         Button exportSelection = (Button) findViewById(R.id.exportSelect);
 
@@ -53,11 +45,18 @@ public class HistoryReleveActivity extends HistoryActivity {
                 adapter.getCheckedItemsStocker().exportReleves();
                 snackbar.dismiss();
                 AlertDialog.Builder builder = new AlertDialog.Builder(HistoryReleveActivity.this);
-                builder.setMessage("stockageInterne/Android/data/" + HistoryReleveActivity.this.getPackageName() + "/files/");
+                builder.setMessage("stockageInterne/Android/data/" + HistoryReleveActivity.this.getPackageName() + "/files/\n L'envoyer par mail ?");
                 builder.setTitle("Localisation des fichiers");
-                builder.setPositiveButton(getString(R.string.accord), new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(getString(R.string.oui), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        adapter.getCheckedItemsStocker().exportReleveAndSendMail();
+                        dialog.dismiss();
+                    }
+                });
+                builder.setNegativeButton(getString(R.string.non), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
                         dialog.dismiss();
                     }
                 });
@@ -69,6 +68,12 @@ public class HistoryReleveActivity extends HistoryActivity {
     @Override
     protected void setView() {
         setContentView(R.layout.activity_history_releve);
+    }
+
+    @Override
+    protected void openDatabases() {
+        dao = new HistoryDao(this);
+        dao.open();
     }
 
     @Override
@@ -102,11 +107,6 @@ public class HistoryReleveActivity extends HistoryActivity {
     protected void onDestroy() {
         super.onDestroy();
         dao.close();
-    }
-
-    @Override
-    protected void personalDelete() {
-        exportedReleves.removeAll(adapter.getCheckedItemsStocker().deleteCheckedItemsFromDao());
     }
 
     @Override

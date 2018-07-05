@@ -19,11 +19,12 @@ import com.example.eden62.GENSMobile.HistoryAdapters.ItemsAdapter;
 import com.example.eden62.GENSMobile.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public abstract class HistoryActivity extends AppCompatActivity {
+public abstract class HistoryActivity<T extends ItemsAdapter> extends AppCompatActivity {
     protected ListView listItems;
     protected CheckBox changeAllCheckboxes;
-    protected ItemsAdapter adapter;
+    protected T adapter;
     protected ViewGroup header;
 
     @Override
@@ -33,8 +34,20 @@ public abstract class HistoryActivity extends AppCompatActivity {
         setView();
 
         setListViewHeader();
-        listItems.addHeaderView(header,null,false);
         listItems = (ListView) findViewById(R.id.listViewHistory);
+        listItems.addHeaderView(header,null,false);
+
+        listItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                actionOnItemClick(adapterView, view, i, l);
+            }
+        });
+
+        openDatabases();
+
+        setAdapter();
+
         changeAllCheckboxes = (CheckBox) header.findViewById(R.id.itemCheckbox);
         changeAllCheckboxes.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -43,13 +56,6 @@ public abstract class HistoryActivity extends AppCompatActivity {
                     checkAll();
                 else
                     uncheckAll();
-            }
-        });
-
-        listItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                actionOnItemClick(adapterView, view, i, l);
             }
         });
 
@@ -98,12 +104,12 @@ public abstract class HistoryActivity extends AppCompatActivity {
     }
 
     protected void deleteCheckedItems(){
-        personalDelete();
+        adapter.getCheckedItemsStocker().deleteCheckedItemsFromDao();
         setAdapter();
     }
 
     protected void changeAllCheckboxStatus(boolean checked){
-        ArrayList<CheckBox> allCheckboxes = adapter.getAllCheckboxes();
+        List<CheckBox> allCheckboxes = adapter.getAllCheckboxes();
         for(CheckBox cb : allCheckboxes){
             cb.setChecked(checked);
         }
@@ -124,7 +130,6 @@ public abstract class HistoryActivity extends AppCompatActivity {
         changeAllCheckboxStatus(false);
     }
 
-    protected abstract void personalDelete();
 
     protected abstract void setAdapter();
 
@@ -134,4 +139,5 @@ public abstract class HistoryActivity extends AppCompatActivity {
 
     protected abstract void actionOnItemClick(AdapterView<?> adapterView, View view, int i, long l);
 
+    protected abstract void openDatabases();
 }

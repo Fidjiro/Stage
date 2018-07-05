@@ -18,15 +18,13 @@ import com.example.eden62.GENSMobile.Tools.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InventaireAdapter extends ArrayAdapter<Inventaire> implements ItemsAdapter<InventoryStocker> {
+public class InventaireAdapter extends ItemsAdapter<InventoryStocker,Inventaire> {
 
-    private InventoryStocker checkedInventairesStocker;
     public List<CheckBox> allCheckBoxes;
 
     public InventaireAdapter(Context context, List<Inventaire> inventaires) {
-        super(context, 0, inventaires);
-        checkedInventairesStocker = new InventoryStocker(context);
-        allCheckBoxes = new ArrayList<>();
+        super(context, inventaires);
+        checkedItemsStocker = new InventoryStocker(context);
     }
 
     @Override
@@ -82,9 +80,9 @@ public class InventaireAdapter extends ArrayAdapter<Inventaire> implements Items
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if(b)
-                    checkedInventairesStocker.add(inv);
+                    checkedItemsStocker.add(inv);
                 else
-                    checkedInventairesStocker.remove(inv);
+                    checkedItemsStocker.remove(inv);
             }
         });
 
@@ -112,11 +110,11 @@ public class InventaireAdapter extends ArrayAdapter<Inventaire> implements Items
 
     @Override
     public InventoryStocker getCheckedItemsStocker() {
-        return checkedInventairesStocker;
+        return checkedItemsStocker;
     }
 
     @Override
-    public CheckBox getAllCheckboxes() {
+    public List<CheckBox> getAllCheckboxes() {
         return allCheckBoxes;
     }
 
