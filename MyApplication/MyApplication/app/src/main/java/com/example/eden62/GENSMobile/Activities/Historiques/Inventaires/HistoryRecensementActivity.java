@@ -1,11 +1,6 @@
 package com.example.eden62.GENSMobile.Activities.Historiques.Inventaires;
 
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +16,7 @@ import com.example.eden62.GENSMobile.Activities.FormActivities.Faune.AmphibienAc
 import com.example.eden62.GENSMobile.Activities.FormActivities.Faune.FauneActivity;
 import com.example.eden62.GENSMobile.Activities.FormActivities.Faune.OiseauxActivity;
 import com.example.eden62.GENSMobile.Activities.FormActivities.Flore.FloreActivity;
+import com.example.eden62.GENSMobile.Activities.Historiques.HistoryActivity;
 import com.example.eden62.GENSMobile.Database.CampagneDatabase.CampagneDAO;
 import com.example.eden62.GENSMobile.Database.CampagneDatabase.Inventaire;
 import com.example.eden62.GENSMobile.Database.LoadingDatabase.TaxUsrDAO;
@@ -29,68 +25,25 @@ import com.example.eden62.GENSMobile.HistoryAdapters.InventaireAdapter;
 
 import java.util.List;
 
-public class HistoryRecensementActivity extends AppCompatActivity {
+public class HistoryRecensementActivity extends HistoryActivity {
 
-    protected ListView listInv;
     protected CampagneDAO campagneDao;
     protected TaxUsrDAO taxUsrDao;
     protected InventaireAdapter adapter;
-    protected CheckBox changeAllCheckboxes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_history_recensement);
-
         campagneDao = new CampagneDAO(this);
         taxUsrDao = new TaxUsrDAO(this);
         campagneDao.open();
         taxUsrDao.open();
+    }
 
-
-        listInv = (ListView) findViewById(R.id.listViewRecensement);
-        LayoutInflater inflater = getLayoutInflater();
-        ViewGroup header = (ViewGroup)inflater.inflate(R.layout.row_item_inventaires,listInv,false);
-        changeAllCheckboxes = (CheckBox) header.findViewById(R.id.itemCheckbox);
-        changeAllCheckboxes.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b)
-                    checkAll();
-                else
-                    uncheckAll();
-            }
-        });
-        listInv.addHeaderView(header,null,false);
-        listInv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                TextView nomsInvTxt = (TextView)view.findViewById(R.id.nomEspeceInv);
-                TextView heureInvTxt = (TextView)view.findViewById(R.id.heureInventaire);
-
-                String noms = nomsInvTxt.getText().toString();
-                String[] splittedNoms;
-                if(noms.contains(" - "))
-                    splittedNoms = noms.split(" - ");
-                else {
-                    if(noms.contains(" sp."))
-                        noms = noms.replace(" sp.","");
-                    splittedNoms = new String[]{noms, ""};
-                }
-                String[] params = new String[] {splittedNoms[0],splittedNoms[1],heureInvTxt.getText().toString()};
-                Inventaire selectedInventaire = campagneDao.getInventaireFromHistory(params);
-                startActivity(generateGoodIntent(selectedInventaire));
-            }
-        });
-
-        Button deleteSelection = (Button) findViewById(R.id.deleteSelect);
-        deleteSelection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                createDialog().show();
-            }
-        });
+    @Override
+    protected void setView() {
+        setContentView(R.layout.activity_history_recensement);
     }
 
     /**
@@ -111,105 +64,75 @@ public class HistoryRecensementActivity extends AppCompatActivity {
         intent.putExtra("selectedInv",inv);
         return intent;
     }
-       /** Vérifie si l'espèce inséré par l'utilisateur est une plante
-       * @return <code>True</code> si oui, <code>false</code> sinon
-       */
-        protected boolean usrInputIsPlantae(Inventaire inv){
-            String regne = taxUsrDao.getRegne(new String[]{inv.getNomLatin(),inv.getNomFr()});
-            return regne.equals(getString(R.string.plantae));
-        }
 
-        /**
-         * Vérifie si l'espèce inséré par l'utilisateur est un oiseau
-         * @return <code>True</code> si oui, <code>false</code> sinon
-        */
-        protected boolean usrInputIsAves(Inventaire inv){
-            String classe = taxUsrDao.getClasse(new String[]{inv.getNomLatin(),inv.getNomFr()});
-            return classe.equals(getString(R.string.aves));
-        }
-
-        /**
-         * Vérifie si l'espèce inséré par l'utilisateur est un amphibien
-         * @return <code>True</code> si oui, <code>false</code> sinon
-         */
-        protected boolean usrInputIsAmphibia(Inventaire inv){
-            String classe = taxUsrDao.getClasse(new String[]{inv.getNomLatin(),inv.getNomFr()});
-            return classe.equals(getString(R.string.amphibia));
-        }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        setAdapter();
-        changeAllCheckboxes.setChecked(false);
+    /** Vérifie si l'espèce inséré par l'utilisateur est une plante
+     * @return <code>True</code> si oui, <code>false</code> sinon
+     */
+    protected boolean usrInputIsPlantae(Inventaire inv){
+        String regne = taxUsrDao.getRegne(new String[]{inv.getNomLatin(),inv.getNomFr()});
+        return regne.equals(getString(R.string.plantae));
     }
 
-    private void setAdapter(){
+    /**
+     * Vérifie si l'espèce inséré par l'utilisateur est un oiseau
+     * @return <code>True</code> si oui, <code>false</code> sinon
+     */
+    protected boolean usrInputIsAves(Inventaire inv){
+        String classe = taxUsrDao.getClasse(new String[]{inv.getNomLatin(),inv.getNomFr()});
+        return classe.equals(getString(R.string.aves));
+    }
+
+    /**
+     * Vérifie si l'espèce inséré par l'utilisateur est un amphibien
+     * @return <code>True</code> si oui, <code>false</code> sinon
+     */
+    protected boolean usrInputIsAmphibia(Inventaire inv){
+        String classe = taxUsrDao.getClasse(new String[]{inv.getNomLatin(),inv.getNomFr()});
+        return classe.equals(getString(R.string.amphibia));
+    }
+
+    @Override
+    protected void actionOnItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        TextView nomsInvTxt = (TextView)view.findViewById(R.id.nomEspeceInv);
+        TextView heureInvTxt = (TextView)view.findViewById(R.id.heureInventaire);
+
+        String noms = nomsInvTxt.getText().toString();
+        String[] splittedNoms;
+        if(noms.contains(" - "))
+            splittedNoms = noms.split(" - ");
+        else {
+            if(noms.contains(" sp."))
+                noms = noms.replace(" sp.","");
+            splittedNoms = new String[]{noms, ""};
+        }
+        String[] params = new String[] {splittedNoms[0],splittedNoms[1],heureInvTxt.getText().toString()};
+        Inventaire selectedInventaire = campagneDao.getInventaireFromHistory(params);
+        startActivity(generateGoodIntent(selectedInventaire));
+    }
+
+    @Override
+    protected void setListViewHeader() {
+        LayoutInflater inflater = getLayoutInflater();
+        header = (ViewGroup)inflater.inflate(R.layout.row_item_inventaires,listItems,false);
+    }
+
+    @Override
+    protected void setAdapter(){
         List<Inventaire> inventaires = campagneDao.getInventairesOfTheUsr(getCurrentUsrId());
 
         adapter = new InventaireAdapter(this,inventaires);
-        listInv.setAdapter(adapter);
+        listItems.setAdapter(adapter);
     }
 
-    /**
-     * Récupère l'id de l'utilisateur actuel
-     * @return l'id de l'utilisateur
-     */
-    protected long getCurrentUsrId(){
-        SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
-        return loginPreferences.getLong("usrId",0);
-    }
-
-    /**
-     * Dialog de sûreté qui prévient l'utilisateur de la supression des items
-     * @return Un dialog d'avertissement
-     */
-    public Dialog createDialog() {
-        AlertDialog box;
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(R.string.avertissementDeleteSelection);
-        builder.setTitle(getString(R.string.avertissement));
-        builder.setPositiveButton(getString(R.string.oui), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                deleteCheckedItems();
-                dialog.dismiss();
-            }
-        });
-        builder.setNegativeButton(getString(R.string.non), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
-        box = builder.create();
-        return box;
-    }
-
-    private void deleteCheckedItems(){
-        //RemoveCheckedItemsFromAdapter doit être appelé avant deleteCheckedItemsFromDao car cette dernière delete les inventaires
-        //de la liste.
-        adapter.getCheckedInventairesStocker().deleteCheckedItemsFromDao();
-        setAdapter();
-    }
-
-    private void changeAllCheckboxStatus(boolean checked){
-        for(CheckBox cb : adapter.allCheckBoxes.values()){
-            cb.setChecked(checked);
-        }
-    }
-
-    private void checkAll(){
-        changeAllCheckboxStatus(true);
-    }
-
-    private void uncheckAll(){
-        changeAllCheckboxStatus(false);
+    @Override
+    protected void personalDelete() {
+        adapter.getCheckedItemsStocker().deleteCheckedItemsFromDao();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         campagneDao.close();
+        taxUsrDao.close();
     }
 }

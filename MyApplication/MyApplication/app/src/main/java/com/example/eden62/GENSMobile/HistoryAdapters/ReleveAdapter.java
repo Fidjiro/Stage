@@ -18,7 +18,7 @@ import com.example.eden62.GENSMobile.Tools.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReleveAdapter extends ArrayAdapter<Releve> {
+public class ReleveAdapter extends ArrayAdapter<Releve> implements ItemsAdapter<ReleveStocker>{
 
     private ReleveStocker checkedReleveStocker;
     public List<CheckBox> allCheckBoxes;
@@ -86,7 +86,12 @@ public class ReleveAdapter extends ArrayAdapter<Releve> {
         public CheckBox checkBox;
     }
 
-    public ReleveStocker getCheckedReleveStocker() {
+    public ReleveStocker getCheckedItemsStocker() {
         return checkedReleveStocker;
+    }
+
+    @Override
+    public CheckBox getAllCheckboxes() {
+        return allCheckBoxes;
     }
 }

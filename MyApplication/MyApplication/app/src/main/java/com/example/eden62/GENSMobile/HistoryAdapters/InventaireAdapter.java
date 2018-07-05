@@ -12,24 +12,21 @@ import android.widget.TextView;
 
 import com.example.eden62.GENSMobile.Activities.Historiques.Stocker.InventoryStocker;
 import com.example.eden62.GENSMobile.Database.CampagneDatabase.Inventaire;
-import com.example.eden62.GENSMobile.Database.LoadingDatabase.TaxUsrDAO;
 import com.example.eden62.GENSMobile.R;
 import com.example.eden62.GENSMobile.Tools.Utils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class InventaireAdapter extends ArrayAdapter<Inventaire>{
+public class InventaireAdapter extends ArrayAdapter<Inventaire> implements ItemsAdapter<InventoryStocker> {
 
     private InventoryStocker checkedInventairesStocker;
-    public Map<Inventaire,CheckBox> allCheckBoxes;
+    public List<CheckBox> allCheckBoxes;
 
     public InventaireAdapter(Context context, List<Inventaire> inventaires) {
         super(context, 0, inventaires);
         checkedInventairesStocker = new InventoryStocker(context);
-        allCheckBoxes = new HashMap<>();
+        allCheckBoxes = new ArrayList<>();
     }
 
     @Override
@@ -47,13 +44,13 @@ public class InventaireAdapter extends ArrayAdapter<Inventaire>{
             viewHolder.date = (TextView) convertView.findViewById(R.id.dateInv);
             viewHolder.heure = (TextView) convertView.findViewById(R.id.heureInventaire);
             viewHolder.checkBox = (CheckBox) convertView.findViewById(R.id.itemCheckbox);
+            allCheckBoxes.add(viewHolder.checkBox);
 
             convertView.setTag(viewHolder);
         }
 
         //getItem(position) va récupérer l'item [position] de la List<Tweet> tweets
         final Inventaire inv = getItem(position);
-        allCheckBoxes.put(inv,viewHolder.checkBox);
 
         String nom;
         String nomFr= inv.getNomFr();
@@ -113,15 +110,21 @@ public class InventaireAdapter extends ArrayAdapter<Inventaire>{
         view.setTextColor(color);
     }
 
+    @Override
+    public InventoryStocker getCheckedItemsStocker() {
+        return checkedInventairesStocker;
+    }
+
+    @Override
+    public CheckBox getAllCheckboxes() {
+        return allCheckBoxes;
+    }
+
     private class InventaireViewHolder {
         public TextView nomEspece;
         public TextView denombrement;
         public TextView date;
         public TextView heure;
         public CheckBox checkBox;
-    }
-
-    public InventoryStocker getCheckedInventairesStocker() {
-        return checkedInventairesStocker;
     }
 }
