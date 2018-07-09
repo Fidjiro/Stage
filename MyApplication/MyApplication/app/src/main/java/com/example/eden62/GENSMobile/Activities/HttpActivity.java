@@ -1,6 +1,7 @@
 package com.example.eden62.GENSMobile.Activities;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -8,6 +9,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.util.Log;
@@ -26,10 +28,8 @@ import com.example.eden62.GENSMobile.Database.CampagneDatabase.CampagneDAO;
 import com.example.eden62.GENSMobile.Database.CampagneDatabase.Inventaire;
 import com.example.eden62.GENSMobile.Database.ReleveDatabase.HistoryDao;
 import com.example.eden62.GENSMobile.R;
+import com.example.eden62.GENSMobile.Tools.MyHttpService;
 import com.example.eden62.GENSMobile.Tools.Utils;
-import com.franmontiel.persistentcookiejar.PersistentCookieJar;
-import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
-import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,16 +37,9 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.List;
 
-import okhttp3.CookieJar;
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
-/**
- * IN PROGRESS
- */
 public class HttpActivity extends AppCompatActivity implements View.OnClickListener {
 
     private LinearLayout psswLayout,nbInvLayout, nbRelLayout;
@@ -58,12 +51,11 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
 
     int nbInvToSync, nbRelToSync;
 
-    private CookieJar cookieJar;
-    private OkHttpClient client;
+
     private String username;
     private long usrId;
-    static final String URL_CONNEXION = "http://vps122669.ovh.net:8080/connexion.php";
-    static final String URL_ADD_DATA = "http://vps122669.ovh.net:8080/addData.php";
+
+    private MyHttpService httpService;
 
     private CampagneDAO campagneDao;
     private HistoryDao releveDao;
@@ -73,14 +65,11 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_http);
 
+        httpService = new MyHttpService(this);
         campagneDao = new CampagneDAO(this);
         releveDao = new HistoryDao(this);
         campagneDao.open();
         releveDao.open();
-
-
-        cookieJar = new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(this));
-        client = new OkHttpClient.Builder().cookieJar(cookieJar).build();
 
         makeView();
 
@@ -97,7 +86,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
      * Initialise les élémentes de la view
      */
     private void makeView() {
-        launchSync = (Button) findViewById(R.id.btnHit);
+        launchSync = (Button) findViewById(R.id.syncInvs);
         txtJson = (TextView) findViewById(R.id.tvJsonItem);
         validPssw = (Button) findViewById(R.id.validPssw);
         psswText = (EditText) findViewById(R.id.password);
@@ -107,14 +96,12 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         validPssw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!isConnected()) {
+                if (!Utils.isConnected(HttpActivity.this)) {
                     Snackbar.make(txtJson, "Aucune connexion à internet.", Snackbar.LENGTH_LONG).show();
                     return;
                 }
                 String mdp = psswText.getText().toString();
-                RequestBody requestBody = new FormBody.Builder().add("log",username).add("mdp",mdp).build();
-                final Request request = new Request.Builder().url(URL_CONNEXION).post(requestBody).build();
-                AttemptLoginTask task = new AttemptLoginTask(request);
+                AttemptLoginTask task = new HttpActivity.AttemptLoginTask(httpService.createConnectionRequest(username,mdp));
                 task.execute((Void)null);
             }
         });
@@ -125,6 +112,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(HttpActivity.this, HistoryRecensementActivity.class);
+                intent.putExtra("createCampagne",false);
                 startActivity(intent);
             }
         });
@@ -166,25 +154,41 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(final View view) {
-        if (!isConnected()) {
+        if (!Utils.isConnected(HttpActivity.this)) {
             Snackbar.make(view, "Aucune connexion à internet.", Snackbar.LENGTH_LONG).show();
             return;
         }
-        snackbar.show();
 
-        RequestBody requestBody;
-        List<Inventaire> inventairesToSend = campagneDao.getInventaireOfTheUsr(usrId);
+        final List<Inventaire> inventairesToSend = campagneDao.getInventaireOfTheUsr(usrId);
 
-        if(inventairesToSend.size() == 0)
+        if(inventairesToSend.size() == 0) {
             Snackbar.make(txtJson, "Aucun inventaire à synchroniser", Snackbar.LENGTH_LONG).show();
-
-        for(Inventaire inv : inventairesToSend){
-            requestBody = createRequestBodyToSend(inv);
-            final Request request = new Request.Builder().url(URL_ADD_DATA).post(requestBody).build();
-            SendDataTask task = new SendDataTask(request);
-            task.execute((Void) null);
+            return;
         }
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Voulez-vous créer vos campagnes automatiquement ?");
+        builder.setNegativeButton(getString(R.string.non), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent intent = new Intent(HttpActivity.this, HistoryRecensementActivity.class);
+                intent.putExtra("createCampagne",true);
+                startActivity(intent);
+                dialogInterface.dismiss();
+            }
+        });
+        builder.setPositiveButton(getString(R.string.oui), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                snackbar.show();
+                for(Inventaire inv : inventairesToSend){
+                    SendDataTask task = new SendDataTask(httpService.createSendDataRequest(inv));
+                    task.execute((Void) null);
+                }
+                dialogInterface.dismiss();
+            }
+        });
+        builder.create().show();
     }
 
     private class SendDataTask extends AsyncTask<Void,Void,Boolean>{
@@ -202,11 +206,11 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
             snackbar.show();
 
             try {
-                if (!isConnected()) {
+                if (!Utils.isConnected(HttpActivity.this)) {
                     Snackbar.make(launchSync, "Aucune connexion à internet.", Snackbar.LENGTH_LONG).show();
                     return false;
                 }
-                Response response = client.newCall(mRequete).execute();
+                Response response = httpService.executeRequest(mRequete);
                 if (!response.isSuccessful()) {
                     throw new IOException(response.toString());
                 }
@@ -254,9 +258,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         @Override
-        protected void onCancelled() {
-            //showProgress(false);
-        }
+        protected void onCancelled() { }
 
         private boolean interpreteJson(JSONObject json){
             int err = -1;
@@ -275,7 +277,18 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private class AttemptLoginTask extends AsyncTask<Void,Void,Boolean>{
+    /**
+     * Transforme une chaîne de caractère en un objet JSON
+     *
+     * @param s La String à transformer
+     * @return L'objet JSON correspondant à la String
+     * @throws JSONException En cas d'echec de parsage
+     */
+    protected JSONObject parseStringToJsonObject(String s) throws JSONException {
+        return new JSONObject(s);
+    }
+
+    private class AttemptLoginTask extends AsyncTask<Void,Void,Boolean> {
 
         private final Request mRequete;
 
@@ -295,7 +308,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
             });
 
             try {
-                Response response = client.newCall(mRequete).execute();
+                Response response = httpService.executeRequest(mRequete);
                 if (!response.isSuccessful()) {
                     throw new IOException(response.toString());
                 }
@@ -378,54 +391,10 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    // Vérifie si l'utilisateur est connecté à internet
-    private boolean isConnected() {
-        ConnectivityManager connectivityManager =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        return networkInfo != null && networkInfo.isConnected();
-    }
-
-    /**
-     * Transforme une chaîne de caractère en un objet JSON
-     *
-     * @param s La String à transformer
-     * @return L'objet JSON correspondant à la String
-     * @throws JSONException En cas d'echec de parsage
-     */
-    protected JSONObject parseStringToJsonObject(String s) throws JSONException {
-        return new JSONObject(s);
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         campagneDao.close();
-    }
-
-    // Créé la requêtre à envoyer au serveur lors d'un envoi d'inventaire
-    private RequestBody createRequestBodyToSend(Inventaire inv){
-
-        RequestBody requestBody = new FormBody.Builder().add("_id",inv.get_id() + "").
-                add("ref_taxon",inv.getRef_taxon() + "").
-                add("ref_user",inv.getUser() + "").
-                add("typeTaxon",inv.getTypeTaxon() + "").
-                add("latitude",inv.getLatitude() + "").
-                add("longitude",inv.getLongitude() + "").
-                add("date",inv.getDate()).
-                add("heure",inv.getHeure()).
-                add("nombre",inv.getNombre() + "").
-                add("type_obs",inv.getType_obs()).
-                add("remarques",inv.getRemarques()).
-                add("nbMale",inv.getNbMale() + "").
-                add("nbFemale",inv.getNbFemale() + "").
-                add("presencePonte",inv.getPresencePonte()).
-                add("activite",inv.getActivite()).
-                add("statut",inv.getStatut()).
-                add("nidif",inv.getNidif()).
-                add("indice_abondance",inv.getIndiceAbondance() + "").
-                build();
-        return requestBody;
     }
 
     @Override

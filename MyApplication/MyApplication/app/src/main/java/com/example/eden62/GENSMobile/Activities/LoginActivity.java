@@ -56,6 +56,10 @@ public class LoginActivity extends AppCompatActivity {
         mLoginView = (EditText) findViewById(R.id.login);
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         loginPrefsEditor = loginPreferences.edit();
+        if(loginPreferences.getInt("idCampagne",-1) == -1) {
+            loginPrefsEditor.putInt("idCampagne", 0);
+            loginPrefsEditor.commit();
+        }
 
         Button mSignInButton = (Button) findViewById(R.id.sign_in_button);
         mSignInButton.setOnClickListener(new OnClickListener() {

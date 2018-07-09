@@ -57,7 +57,6 @@ public abstract class MainActivity extends AppCompatActivity{
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
 
         AndroidGraphicFactory.createInstance(getApplication());

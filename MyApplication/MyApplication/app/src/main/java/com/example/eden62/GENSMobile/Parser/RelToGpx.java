@@ -116,14 +116,6 @@ public class RelToGpx {
         return null;
     }
 
-    public void sendFileByMail(File file){
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("vnd.android.cursor.dir/email");
-        Uri uri = Uri.fromFile(file);
-        intent.putExtra(Intent.EXTRA_STREAM,uri);
-        ctx.startActivity(Intent.createChooser(intent , "Envoyer par..."));
-    }
-
     // Vérifie si l'application a accès au stockage du téléphone
     private boolean appHasAccessToStorage(){
         return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())

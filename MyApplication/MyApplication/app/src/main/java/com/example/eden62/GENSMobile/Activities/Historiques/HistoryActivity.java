@@ -26,6 +26,7 @@ public abstract class HistoryActivity<T extends ItemsAdapter> extends AppCompatA
     protected CheckBox changeAllCheckboxes;
     protected T adapter;
     protected ViewGroup header;
+    protected Button deleteSelection;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,7 +60,7 @@ public abstract class HistoryActivity<T extends ItemsAdapter> extends AppCompatA
             }
         });
 
-        Button deleteSelection = (Button) findViewById(R.id.deleteSelect);
+        deleteSelection = (Button) findViewById(R.id.deleteSelect);
         deleteSelection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

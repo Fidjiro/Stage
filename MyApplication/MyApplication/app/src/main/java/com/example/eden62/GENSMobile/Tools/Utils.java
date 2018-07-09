@@ -16,6 +16,8 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -87,23 +89,18 @@ public final class Utils {
         };
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     public static File getFileFromAssets(Context ctx, String aFileName) throws IOException {
         File cacheFile = new File(ctx.getCacheDir(), aFileName);
         try {
-            InputStream inputStream = ctx.getAssets().open(aFileName);
-            try {
-                FileOutputStream outputStream = new FileOutputStream(cacheFile);
-                try {
+            try (InputStream inputStream = ctx.getAssets().open(aFileName)) {
+                try (FileOutputStream outputStream = new FileOutputStream(cacheFile)) {
                     byte[] buf = new byte[1024];
                     int len;
                     while ((len = inputStream.read(buf)) > 0) {
                         outputStream.write(buf, 0, len);
                     }
-                } finally {
-                    outputStream.close();
                 }
-            } finally {
-                inputStream.close();
             }
         } catch (IOException e) {
             throw new IOException("Could not open "+aFileName, e);
@@ -190,5 +187,15 @@ public final class Utils {
     public static void hideKeyboard(Context ctx, View v){
             InputMethodManager imm = (InputMethodManager)ctx.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(v.getWindowToken(),0);
+    }
+
+    /**
+     * Vérifie si l'utilisateur est connecté à internet
+     */
+    public static boolean isConnected(Context ctx) {
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected();
     }
 }

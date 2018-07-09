@@ -29,6 +29,7 @@ public class MainActivityRec extends MainActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivityRec.this,HistoryRecensementActivity.class);
+                intent.putExtra("createCampagne",false);
                 startActivity(intent);
             }
         });

@@ -3,6 +3,7 @@ package com.example.eden62.GENSMobile.Activities.Historiques.Releves.InfoReleves
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,8 @@ import com.example.eden62.GENSMobile.Database.ReleveDatabase.HistoryDao;
 import com.example.eden62.GENSMobile.Database.ReleveDatabase.Releve;
 import com.example.eden62.GENSMobile.R;
 import com.example.eden62.GENSMobile.Tools.Utils;
+
+import java.io.File;
 
 public abstract class ReleveInfoPopup extends AppCompatActivity {
 
@@ -113,7 +116,7 @@ public abstract class ReleveInfoPopup extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         exportSnackbar.show();
-                        convertisseur.sendFileByMail(convertisseur.export(rel));
+                        sendFileByMail(convertisseur.export(rel));
                         exportSnackbar.dismiss();
                         dialog.dismiss();
                     }
@@ -130,6 +133,18 @@ public abstract class ReleveInfoPopup extends AppCompatActivity {
                 builder.create().show();
             }
         });
+    }
+
+    /**
+     * Permet d'ajoute le File en paramètre en pièce jointe d'un mail
+     * @param file La file qui servira de pièce jointemary
+     */
+    public void sendFileByMail(File file){
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("vnd.android.cursor.dir/email");
+        Uri uri = Uri.fromFile(file);
+        intent.putExtra(Intent.EXTRA_STREAM,uri);
+        this.startActivity(Intent.createChooser(intent , "Envoyer par..."));
     }
 
     /**

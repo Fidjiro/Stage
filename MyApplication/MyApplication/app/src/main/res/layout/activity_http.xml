@@ -72,17 +72,18 @@
                 <TextView
                     android:id="@+id/tvJsonItem"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"/>
             </LinearLayout>
         </ScrollView>
 
         <Button
-            android:id="@+id/btnHit"
+            android:id="@+id/syncInvs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textAllCaps="false"
-            android:text="@string/syncData"
+            android:text="@string/syncInvs"
             android:visibility="gone"/>
     </LinearLayout>
 

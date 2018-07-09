@@ -30,7 +30,7 @@
     <string name="relevé">Outil de relevé de terrain</string>
     <string name="sync">Synchroniser</string>
     <string name="chargement">Chargement de la carte &#8230;</string>
-    <string name="syncData">Synchroniser les données</string>
+    <string name="syncInvs">Synchroniser les inventaires</string>
 
     <!-- Boutons sur la map -->
     <string name="recenser">Recenser</string>
@@ -74,6 +74,7 @@
     <string name="nombre">Dénombrement : </string>
     <string name="modifier">Modifier</string>
     <string name="remarque">Remarque(s) :</string>
+    <string name="validerForm">Valider le formulaire</string>
 
     <!--Flore-->
     <string name="abondance">Indice d\'abondance : </string>
