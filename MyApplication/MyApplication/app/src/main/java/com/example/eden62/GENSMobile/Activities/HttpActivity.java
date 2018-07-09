@@ -52,8 +52,10 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
     int nbInvToSync, nbRelToSync;
 
 
-    private String username;
+    private String username,mdp;
     private long usrId;
+    protected int idCampagne;
+    protected SharedPreferences prefs;
 
     private MyHttpService httpService;
 
@@ -70,6 +72,8 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         releveDao = new HistoryDao(this);
         campagneDao.open();
         releveDao.open();
+        prefs = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        idCampagne = prefs.getInt("idCampagne",0);
 
         makeView();
 
@@ -100,7 +104,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
                     Snackbar.make(txtJson, "Aucune connexion à internet.", Snackbar.LENGTH_LONG).show();
                     return;
                 }
-                String mdp = psswText.getText().toString();
+                mdp = psswText.getText().toString();
                 AttemptLoginTask task = new HttpActivity.AttemptLoginTask(httpService.createConnectionRequest(username,mdp));
                 task.execute((Void)null);
             }
@@ -173,6 +177,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
             public void onClick(DialogInterface dialogInterface, int i) {
                 Intent intent = new Intent(HttpActivity.this, HistoryRecensementActivity.class);
                 intent.putExtra("createCampagne",true);
+                intent.putExtra("mdp",mdp);
                 startActivity(intent);
                 dialogInterface.dismiss();
             }
@@ -182,9 +187,13 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
             public void onClick(DialogInterface dialogInterface, int i) {
                 snackbar.show();
                 for(Inventaire inv : inventairesToSend){
-                    SendDataTask task = new SendDataTask(httpService.createSendDataRequest(inv));
+                    SendDataTask task = new SendDataTask(httpService.createSendDataRequest(inv,idCampagne));
                     task.execute((Void) null);
                 }
+                idCampagne++;
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putInt("idCampagne",idCampagne);
+                editor.commit();
                 dialogInterface.dismiss();
             }
         });
@@ -268,6 +277,13 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
                 err = json.getInt("err");
                 _id = json.getLong("_id");
                 importStatus = json.getBoolean("import");
+                if(err == 1){
+                    errMsg = json.getString("msg");
+                    Inventaire inv = campagneDao.getInventaire(_id);
+                    inv.setErr(1);
+                    campagneDao.modifInventaire(inv);
+                    return false;
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
                 errMsg = "Mauvais parsage de JSON";

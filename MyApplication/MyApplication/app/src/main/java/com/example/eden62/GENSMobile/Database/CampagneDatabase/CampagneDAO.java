@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.eden62.GENSMobile.Database.DAO;
-import com.example.eden62.GENSMobile.Database.ReleveDatabase.Releve;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,6 +89,11 @@ public class CampagneDAO implements DAO<Inventaire> {
         return mDb.insert(CAMPAGNE,null,cv);
     }
 
+    public Inventaire getInventaire(long id){
+        String request = "SELECT * FROM " + CAMPAGNE + " WHERE " + KEY + " = ?";
+        return dealWithSingleCursor(mDb.rawQuery(request,new String[]{id + ""}));
+    }
+
     /**
      * Supprime l'inventaire de la base
      *
@@ -119,32 +123,7 @@ public class CampagneDAO implements DAO<Inventaire> {
     public Inventaire getInventaireFromHistory(String[] params){
         String request = "SELECT * FROM " + CAMPAGNE + " WHERE " + NOM_LATIN + " = ? AND " + NOM_FR + " = ? AND " + HEURE + " = ?;";
         Cursor c = mDb.rawQuery(request,params);
-        c.moveToNext();
-
-        long _id = c.getLong(c.getColumnIndex(KEY));
-        long ref_taxon = c.getLong(c.getColumnIndex(REF_TAXON));
-        int nv_taxon = c.getInt(c.getColumnIndex(NV_TAXON));
-        long ref_usr = c.getLong(c.getColumnIndex(REF_USR));
-        String nomFr = c.getString(c.getColumnIndex(NOM_FR));
-        String nomLatin = c.getString(c.getColumnIndex(NOM_LATIN));
-        int type_taxon = c.getInt(c.getColumnIndex(TYPE_TAXON));
-        double latitude = c.getDouble(c.getColumnIndex(LATITUDE));
-        double longitude = c.getDouble(c.getColumnIndex(LONGITUDE));
-        String date = c.getString(c.getColumnIndex(DATE));
-        String heure = c.getString(c.getColumnIndex(HEURE));
-        int nb = c.getInt(c.getColumnIndex(NB));
-        String type_obs = c.getString(c.getColumnIndex(TYPE_OBS));
-        String remarques = c.getString(c.getColumnIndex(REMARQUES));
-        int nbMale = c.getInt(c.getColumnIndex(NBMALE));
-        int nbFemale = c.getInt(c.getColumnIndex(NBFEMALE));
-        String presencePonte = c.getString(c.getColumnIndex(PRESENCE_PONTE));
-        String activite = c.getString(c.getColumnIndex(ACTIVITE));
-        String statut = c.getString(c.getColumnIndex(STATUT));
-        String nidif = c.getString(c.getColumnIndex(NIDIF));
-        int indiceAbondance = c.getInt(c.getColumnIndex(ABONDANCE));
-        int err = c.getInt(c.getColumnIndex(ERR));
-
-        return new Inventaire(_id,ref_taxon,nv_taxon,ref_usr, nomFr, nomLatin, type_taxon, latitude,longitude,date, heure, nb,type_obs,remarques,nbMale,nbFemale,presencePonte,activite,statut,nidif,indiceAbondance,err);
+        return dealWithSingleCursor(c);
     }
 
     /**
@@ -188,13 +167,13 @@ public class CampagneDAO implements DAO<Inventaire> {
     public List<Inventaire> getInventaireOfTheUsr(long usrId){
         Cursor c = selectInvOfTheUsr(usrId);
 
-        return dealWihCursor(c);
+        return dealWithCursor(c);
     }
 
     // Récupère le curseur indexé sur le premier inventaire correspondant à l'utilisateur
     private Cursor selectInvOfTheUsr(long usrId){
-        String request = "SELECT * FROM " + CAMPAGNE + " WHERE " + REF_USR + " = ?";
-        return mDb.rawQuery(request,new String[]{usrId + ""});
+        String request = "SELECT * FROM " + CAMPAGNE + " WHERE " + REF_USR + " = ? AND " + ERR + " = ?";
+        return mDb.rawQuery(request,new String[]{usrId + "","0"});
     }
 
     /**
@@ -216,11 +195,40 @@ public class CampagneDAO implements DAO<Inventaire> {
     public List<Inventaire> getInventairesOfTheUsr(long usrId){
         Cursor c = selectInvOfTheUsr(usrId);
 
-        return dealWihCursor(c);
+        return dealWithCursor(c);
+    }
+
+    private Inventaire dealWithSingleCursor(Cursor c){
+        c.moveToNext();
+
+        long _id = c.getLong(c.getColumnIndex(KEY));
+        long ref_taxon = c.getLong(c.getColumnIndex(REF_TAXON));
+        int nv_taxon = c.getInt(c.getColumnIndex(NV_TAXON));
+        long ref_usr = c.getLong(c.getColumnIndex(REF_USR));
+        String nomFr = c.getString(c.getColumnIndex(NOM_FR));
+        String nomLatin = c.getString(c.getColumnIndex(NOM_LATIN));
+        int type_taxon = c.getInt(c.getColumnIndex(TYPE_TAXON));
+        double latitude = c.getDouble(c.getColumnIndex(LATITUDE));
+        double longitude = c.getDouble(c.getColumnIndex(LONGITUDE));
+        String date = c.getString(c.getColumnIndex(DATE));
+        String heure = c.getString(c.getColumnIndex(HEURE));
+        int nb = c.getInt(c.getColumnIndex(NB));
+        String type_obs = c.getString(c.getColumnIndex(TYPE_OBS));
+        String remarques = c.getString(c.getColumnIndex(REMARQUES));
+        int nbMale = c.getInt(c.getColumnIndex(NBMALE));
+        int nbFemale = c.getInt(c.getColumnIndex(NBFEMALE));
+        String presencePonte = c.getString(c.getColumnIndex(PRESENCE_PONTE));
+        String activite = c.getString(c.getColumnIndex(ACTIVITE));
+        String statut = c.getString(c.getColumnIndex(STATUT));
+        String nidif = c.getString(c.getColumnIndex(NIDIF));
+        int indiceAbondance = c.getInt(c.getColumnIndex(ABONDANCE));
+        int err = c.getInt(c.getColumnIndex(ERR));
+
+        return new Inventaire(_id,ref_taxon,nv_taxon,ref_usr, nomFr, nomLatin, type_taxon, latitude,longitude,date, heure, nb,type_obs,remarques,nbMale,nbFemale,presencePonte,activite,statut,nidif,indiceAbondance,err);
     }
 
     //Récupère une liste d'inventaire via le curseur en paramètre
-    private List<Inventaire> dealWihCursor(Cursor c){
+    private List<Inventaire> dealWithCursor(Cursor c){
         List<Inventaire> res = new ArrayList<>();
 
         if(c.moveToFirst()){

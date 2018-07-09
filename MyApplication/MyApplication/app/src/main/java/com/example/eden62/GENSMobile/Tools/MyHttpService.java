@@ -24,7 +24,7 @@ public class MyHttpService {
 
     static final String URL_CONNEXION = "http://vps122669.ovh.net:8080/connexion.php";
     static final String URL_ADD_DATA = "http://vps122669.ovh.net:8080/addData.php";
-    static final String URL_INFO_CAMPAGNE = "";
+    static final String URL_INFO_CAMPAGNE = "http://vps122669.ovh.net:8080/InitSync.php";
 
     public MyHttpService(Context ctx) {
         this.ctx = ctx;
