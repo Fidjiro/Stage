@@ -23,6 +23,8 @@ import com.example.eden62.GENSMobile.R;
 import com.example.eden62.GENSMobile.Tools.Utils;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class ReleveInfoPopup extends AppCompatActivity {
 
@@ -112,11 +114,13 @@ public abstract class ReleveInfoPopup extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ReleveInfoPopup.this);
                 builder.setMessage("stockageInterne/Android/data/" + ReleveInfoPopup.this.getPackageName() + "/files/\n \nL'envoyer par mail ?");
                 builder.setTitle("Localisation des fichiers");
+                final List<Releve> releveToExport = new ArrayList<>();
+                releveToExport.add(rel);
                 builder.setPositiveButton(getString(R.string.oui), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         exportSnackbar.show();
-                        sendFileByMail(convertisseur.export(rel));
+                        sendFileByMail(convertisseur.exportReleves(releveToExport,rel.getNom()));
                         exportSnackbar.dismiss();
                         dialog.dismiss();
                     }
@@ -125,7 +129,7 @@ public abstract class ReleveInfoPopup extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
                         exportSnackbar.show();
-                        convertisseur.export(rel);
+                        convertisseur.exportReleves(releveToExport,rel.getNom());
                         exportSnackbar.dismiss();
                         dialog.dismiss();
                     }

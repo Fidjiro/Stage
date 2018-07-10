@@ -2,17 +2,14 @@ package com.example.eden62.GENSMobile.Activities.Historiques.Releves;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.eden62.GENSMobile.Activities.Historiques.HistoryActivity;
@@ -21,11 +18,10 @@ import com.example.eden62.GENSMobile.Activities.Historiques.Releves.InfoRelevesP
 import com.example.eden62.GENSMobile.Activities.Historiques.Releves.InfoRelevesPopups.PopUpPolygone;
 import com.example.eden62.GENSMobile.Database.ReleveDatabase.HistoryDao;
 import com.example.eden62.GENSMobile.Database.ReleveDatabase.Releve;
-import com.example.eden62.GENSMobile.R;
 import com.example.eden62.GENSMobile.HistoryAdapters.ReleveAdapter;
+import com.example.eden62.GENSMobile.R;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +42,7 @@ public class HistoryReleveActivity extends HistoryActivity<ReleveAdapter> {
         exportSelection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                final String name = "toto";
                 final Snackbar exportSnackbar = Snackbar.make(listItems,"Exportation en cours",Snackbar.LENGTH_INDEFINITE);
                 AlertDialog.Builder builder = new AlertDialog.Builder(HistoryReleveActivity.this);
                 builder.setMessage("stockageInterne/Android/data/" + HistoryReleveActivity.this.getPackageName() + "/files/\n \nL' envoyer par mail ?");
@@ -54,7 +51,7 @@ public class HistoryReleveActivity extends HistoryActivity<ReleveAdapter> {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         exportSnackbar.show();
-                        adapter.getCheckedItemsStocker().exportReleveAndSendMail();
+                        adapter.getCheckedItemsStocker().exportReleveAndSendMail(name);
                         exportSnackbar.dismiss();
                         dialog.dismiss();
                     }
@@ -63,7 +60,7 @@ public class HistoryReleveActivity extends HistoryActivity<ReleveAdapter> {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
                         exportSnackbar.show();
-                        adapter.getCheckedItemsStocker().exportReleves();
+                        adapter.getCheckedItemsStocker().exportReleves(name);
                         exportSnackbar.dismiss();
                         dialog.dismiss();
                     }
