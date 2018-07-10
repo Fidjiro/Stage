@@ -1,7 +1,6 @@
 package com.example.eden62.GENSMobile.Activities.Historiques.Inventaires;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,7 +13,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
@@ -24,7 +22,6 @@ import com.example.eden62.GENSMobile.Activities.FormActivities.Faune.FauneActivi
 import com.example.eden62.GENSMobile.Activities.FormActivities.Faune.OiseauxActivity;
 import com.example.eden62.GENSMobile.Activities.FormActivities.Flore.FloreActivity;
 import com.example.eden62.GENSMobile.Activities.Historiques.HistoryActivity;
-import com.example.eden62.GENSMobile.Activities.HttpActivity;
 import com.example.eden62.GENSMobile.Database.CampagneDatabase.CampagneDAO;
 import com.example.eden62.GENSMobile.Database.CampagneDatabase.Inventaire;
 import com.example.eden62.GENSMobile.Database.LoadingDatabase.TaxUsrDAO;
@@ -47,13 +44,17 @@ public class HistoryRecensementActivity extends HistoryActivity<InventaireAdapte
 
     protected CampagneDAO campagneDao;
     protected TaxUsrDAO taxUsrDao;
+
     protected Button syncInvs;
     protected MyHttpService httpService;
     protected int idCampagne;
     protected SharedPreferences prefs;
     protected ProgressDialog dial;
     protected TextView txtJson;
-    protected String mdp;
+
+    private static int currTotalInv;
+    private static int cpt;
+    private static int nbErr;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -103,6 +104,7 @@ public class HistoryRecensementActivity extends HistoryActivity<InventaireAdapte
                     }
 
                     dial = ProgressDialog.show(HistoryRecensementActivity.this, "", "Synchronisation en cours...", true);
+                    currTotalInv = listSize;
                     SendCampagneInfoTask task2 = new SendCampagneInfoTask(httpService.createSendInfoCampagneRequest(idCampagne,listSize),inventairesToSend);
                     task2.execute((Void)null);
                 }
@@ -172,6 +174,8 @@ public class HistoryRecensementActivity extends HistoryActivity<InventaireAdapte
         protected void onPostExecute(final Boolean success) {
 
             if (success) {
+                cpt = 0;
+                nbErr = 0;
                 for(Inventaire inv : inventairesToSend){
                     SendDataTask task = new SendDataTask(httpService.createSendDataRequest(inv,idCampagne));
                     task.execute((Void) null);
@@ -343,12 +347,37 @@ public class HistoryRecensementActivity extends HistoryActivity<InventaireAdapte
                 Snackbar.make(syncInvs,"Synchronisation réussie",Snackbar.LENGTH_SHORT).show();
                 campagneDao.deleteInventaire(_id);
             } else {
+                nbErr ++;
                 if(errMsg != null){
                     Snackbar.make(syncInvs, errMsg,Snackbar.LENGTH_SHORT).show();
                 }else{
                     Snackbar.make(syncInvs,"Erreur sur l'inventaire " + _id,Snackbar.LENGTH_SHORT).show();
                 }
             }
+            cpt++;
+            if(cpt == currTotalInv && nbErr > 0){
+                AlertDialog.Builder builder = new AlertDialog.Builder(HistoryRecensementActivity.this);
+                builder.setMessage(nbErr + goodFormatForWordInventaire() + "à plus de 100m hors des limites de sites");
+                builder.setPositiveButton(getString(R.string.accord), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                builder.create().show();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        setAdapter();
+                    }
+                });
+            }
+        }
+
+        private String goodFormatForWordInventaire(){
+            if(nbErr > 1)
+                return " inventaires ";
+            return " inventaire ";
         }
 
         @Override
@@ -367,7 +396,6 @@ public class HistoryRecensementActivity extends HistoryActivity<InventaireAdapte
                     Inventaire inv = campagneDao.getInventaire(_id);
                     inv.setErr(1);
                     campagneDao.modifInventaire(inv);
-                    setAdapter();
                     return false;
                 }
             } catch (JSONException e) {

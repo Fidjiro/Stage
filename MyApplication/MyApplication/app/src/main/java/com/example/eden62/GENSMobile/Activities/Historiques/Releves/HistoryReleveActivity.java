@@ -48,7 +48,7 @@ public class HistoryReleveActivity extends HistoryActivity<ReleveAdapter> {
             public void onClick(View view) {
                 final Snackbar exportSnackbar = Snackbar.make(listItems,"Exportation en cours",Snackbar.LENGTH_INDEFINITE);
                 AlertDialog.Builder builder = new AlertDialog.Builder(HistoryReleveActivity.this);
-                builder.setMessage("stockageInterne/Android/data/" + HistoryReleveActivity.this.getPackageName() + "/files/\n \nL'envoyer par mail ?");
+                builder.setMessage("stockageInterne/Android/data/" + HistoryReleveActivity.this.getPackageName() + "/files/\n \nL' envoyer par mail ?");
                 builder.setTitle("Localisation des fichiers");
                 builder.setPositiveButton(getString(R.string.oui), new DialogInterface.OnClickListener() {
                     @Override

@@ -172,19 +172,8 @@ public class CampagneDAO implements DAO<Inventaire> {
 
     // Récupère le curseur indexé sur le premier inventaire correspondant à l'utilisateur
     private Cursor selectInvOfTheUsr(long usrId){
-        String request = "SELECT * FROM " + CAMPAGNE + " WHERE " + REF_USR + " = ? AND " + ERR + " = ?";
-        return mDb.rawQuery(request,new String[]{usrId + "","0"});
-    }
-
-    /**
-     * Récupère le nombre d'inventaires de l'utilisateur usrId
-     * @param usrId L'id de l'utilisateur
-     * @return Le nombre d'inventaire de l'utilisateur
-     */
-    public int getNbInventairesOfTheUsr(long usrId){
-        Cursor c = selectInvOfTheUsr(usrId);
-
-        return c.getCount();
+        String request = "SELECT * FROM " + CAMPAGNE + " WHERE " + REF_USR + " = ? ";
+        return mDb.rawQuery(request,new String[]{usrId + ""});
     }
 
     /**

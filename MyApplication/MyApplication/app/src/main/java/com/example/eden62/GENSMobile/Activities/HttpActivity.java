@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -35,6 +33,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Request;
@@ -50,7 +49,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
     private CheckBox displayMdp;
 
     int nbInvToSync, nbRelToSync;
-
+    private static int cpt, currTotalInv, nbErr;
 
     private String username,mdp;
     private long usrId;
@@ -143,7 +142,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
      * Récupère le nombre d'inventaires/relevés à synchroniser
      */
     private void getNbDataToSync(){
-        nbInvToSync = campagneDao.getNbInventairesOfTheUsr(usrId);
+        nbInvToSync = getInventairesToSend().size();
         nbRelToSync = releveDao.getNbReleveOfTheUsr(usrId);
     }
 
@@ -156,6 +155,16 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         nbRelToSyncTxt.setText(nbRelToSync + " " + getString(R.string.relToSync));
     }
 
+    private List<Inventaire> getInventairesToSend(){
+        List<Inventaire> tmp =  campagneDao.getInventaireOfTheUsr(usrId);
+        List<Inventaire> res = new ArrayList<>();
+        for (Inventaire inv : tmp){
+            if(inv.getErr() == 0)
+                res.add(inv);
+        }
+        return res;
+    }
+
     @Override
     public void onClick(final View view) {
         if (!Utils.isConnected(HttpActivity.this)) {
@@ -163,9 +172,10 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        final List<Inventaire> inventairesToSend = campagneDao.getInventaireOfTheUsr(usrId);
+        final List<Inventaire> inventairesToSend = getInventairesToSend();
+        currTotalInv = inventairesToSend.size();
 
-        if(inventairesToSend.size() == 0) {
+        if(currTotalInv == 0) {
             Snackbar.make(txtJson, "Aucun inventaire à synchroniser", Snackbar.LENGTH_LONG).show();
             return;
         }
@@ -186,6 +196,8 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 snackbar.show();
+                cpt = 0;
+                nbErr = 0;
                 for(Inventaire inv : inventairesToSend){
                     SendDataTask task = new SendDataTask(httpService.createSendDataRequest(inv,idCampagne));
                     task.execute((Void) null);
@@ -252,6 +264,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
                 Snackbar.make(txtJson,"Synchronisation réussie",Snackbar.LENGTH_SHORT).show();
                 campagneDao.deleteInventaire(_id);
             } else {
+                nbErr++;
                 if(errMsg != null){
                     Snackbar.make(txtJson, errMsg,Snackbar.LENGTH_SHORT).show();
                 }else{
@@ -264,13 +277,31 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
                     setTxtNbDatas();
                 }
             });
+            cpt++;
+            if(cpt == currTotalInv && nbErr > 0){
+                AlertDialog.Builder builder = new AlertDialog.Builder(HttpActivity.this);
+                builder.setMessage(nbErr + goodFormatForWordInventaire() + "à plus de 100m hors des limites de sites");
+                builder.setPositiveButton(getString(R.string.accord), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                builder.create().show();
+            }
+        }
+
+        private String goodFormatForWordInventaire(){
+            if(nbErr > 1)
+                return " inventaires ";
+            return " inventaire ";
         }
 
         @Override
         protected void onCancelled() { }
 
         private boolean interpreteJson(JSONObject json){
-            int err = -1;
+            int err;
             _id = -1;
             boolean importStatus;
             try{
