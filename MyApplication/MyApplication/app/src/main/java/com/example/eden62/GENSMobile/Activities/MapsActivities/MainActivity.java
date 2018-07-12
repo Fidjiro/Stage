@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.LinearLayout;
@@ -212,7 +213,7 @@ public abstract class MainActivity extends AppCompatActivity{
         }
 
         @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) { }
+        public void onStatusChanged(String provider, int status, Bundle extras) { Log.e("TOTO", "onStatusChanged: " + provider + ",status : " + status);}
 
         @Override
         public void onProviderEnabled(String provider) { }

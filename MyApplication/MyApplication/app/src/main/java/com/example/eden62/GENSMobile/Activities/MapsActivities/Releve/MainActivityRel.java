@@ -1,13 +1,18 @@
 package com.example.eden62.GENSMobile.Activities.MapsActivities.Releve;
 
 import android.app.Dialog;
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -34,8 +39,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-
-import static java.lang.Math.log;
 
 /**
  * Activité carte pour les relevés de terrain
@@ -64,6 +67,9 @@ public class MainActivityRel extends MainActivity {
     protected final int LINE = 1;
     protected final int NO_RELEVE = 0;
 
+    protected PointsTakerService mService;
+    protected boolean mBound = false;
+
     protected Paint paintFill = Utils.createPaint(
             AndroidGraphicFactory.INSTANCE.createColor(Color.GREEN), 2,
             Style.FILL);
@@ -77,6 +83,7 @@ public class MainActivityRel extends MainActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e("TOTO","TEST");
 
         handler = new Handler();
 
@@ -497,7 +504,6 @@ public class MainActivityRel extends MainActivity {
     protected void setRelocButton(View.OnClickListener listener) {
         Button reloc2 = (Button) findViewById(R.id.reloc2);
         reloc2.setOnClickListener(listener);
-
     }
 
     @Override
@@ -530,4 +536,44 @@ public class MainActivityRel extends MainActivity {
         super.onDestroy();
         dao.close();
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(!noReleveInProgress()) {
+            startService(new Intent(this,PointsTakerService.class));
+            bindService(new Intent(this,PointsTakerService.class),mConnection,BIND_AUTO_CREATE);
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (mBound){
+            List<LatLong> takenPoints = mService.getTakenPoints();
+            if(currentReleveIsLine()){
+                polyline.addPoints(takenPoints);
+                polyline.requestRedraw();
+            }else if(currentReleveIsPolygon()){
+                polygon.addPoints(takenPoints);
+                polygon.requestRedraw();
+            }
+            unbindService(mConnection);
+            mBound = false;
+        }
+    }
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            PointsTakerService.PointsTakerBinder binder = (PointsTakerService.PointsTakerBinder) service;
+            mService = binder.getService();
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mBound = false;
+        }
+    };
 }
