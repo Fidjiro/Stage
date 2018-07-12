@@ -503,7 +503,7 @@ public class HistoryRecensementActivity extends HistoryActivity<InventaireAdapte
 
     @Override
     protected void setAdapter(){
-        List<Inventaire> inventaires = campagneDao.getInventairesOfTheUsr(getCurrentUsrId());
+        List<Inventaire> inventaires = campagneDao.getInventairesOfTheUsr(Utils.getCurrUsrId(HistoryRecensementActivity.this));
 
         adapter = new InventaireAdapter(this,inventaires);
         listItems.setAdapter(adapter);

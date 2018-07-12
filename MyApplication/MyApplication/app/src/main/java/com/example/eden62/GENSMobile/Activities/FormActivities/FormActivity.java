@@ -171,8 +171,7 @@ public abstract class FormActivity extends AppCompatActivity {
      * Récupère l'id de l'utilisateur courant grâce aux {@link SharedPreferences}
      */
     protected void setUsrId(){
-        SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
-        usrId = loginPreferences.getLong("usrId",0);
+        usrId = Utils.getCurrUsrId(this);
     }
 
     /**

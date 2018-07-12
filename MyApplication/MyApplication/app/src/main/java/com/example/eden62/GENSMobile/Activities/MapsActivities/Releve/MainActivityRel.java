@@ -202,8 +202,7 @@ public class MainActivityRel extends MainActivity {
 
     // Renvoi le releve à insérer dans la base
     private Releve createReleveToInsert(){
-        SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
-        long creatorId = loginPreferences.getLong("usrId",0);
+        long creatorId = Utils.getCurrUsrId(this);
         String latitude;
         String longitude;
         String formatedLatLongs = "";

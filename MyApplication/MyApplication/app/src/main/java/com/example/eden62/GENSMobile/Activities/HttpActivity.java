@@ -78,7 +78,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
 
         SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         username = loginPreferences.getString("username","");
-        usrId = loginPreferences.getLong("usrId" , 0);
+        usrId = Utils.getCurrUsrId(HttpActivity.this);
         setTxtNbDatas();
 
         snackbar = Snackbar.make(txtJson, "Requête en cours d'exécution",
@@ -100,11 +100,12 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(View view) {
                 if (!Utils.isConnected(HttpActivity.this)) {
-                    Snackbar.make(txtJson, "Aucune connexion à internet.", Snackbar.LENGTH_LONG).show();
+                    psswText.setError(getString(R.string.noConnection));
+                    psswText.requestFocus();
                     return;
                 }
                 mdp = psswText.getText().toString();
-                AttemptLoginTask task = new HttpActivity.AttemptLoginTask(httpService.createConnectionRequest(username,mdp));
+                AttemptLoginTask task = new AttemptLoginTask(httpService.createConnectionRequest(username,mdp));
                 task.execute((Void)null);
             }
         });
@@ -168,7 +169,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(final View view) {
         if (!Utils.isConnected(HttpActivity.this)) {
-            Snackbar.make(view, "Aucune connexion à internet.", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(view, getString(R.string.noConnection), Snackbar.LENGTH_LONG).show();
             return;
         }
 
@@ -228,7 +229,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
 
             try {
                 if (!Utils.isConnected(HttpActivity.this)) {
-                    Snackbar.make(launchSync, "Aucune connexion à internet.", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(launchSync, getString(R.string.noConnection), Snackbar.LENGTH_LONG).show();
                     return false;
                 }
                 Response response = httpService.executeRequest(mRequete);
@@ -400,8 +401,8 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 });
             } else {
+                psswText.setError(getString(R.string.mdpError));
                 psswText.requestFocus();
-                psswText.setError(getString(R.string.error_incorrect_login));
             }
         }
 

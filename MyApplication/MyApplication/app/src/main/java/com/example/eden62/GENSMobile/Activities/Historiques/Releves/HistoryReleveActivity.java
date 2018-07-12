@@ -1,16 +1,15 @@
 package com.example.eden62.GENSMobile.Activities.Historiques.Releves;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.eden62.GENSMobile.Activities.Historiques.HistoryActivity;
 import com.example.eden62.GENSMobile.Activities.Historiques.Releves.InfoRelevesPopups.PopUpLigne;
@@ -20,6 +19,7 @@ import com.example.eden62.GENSMobile.Database.ReleveDatabase.HistoryDao;
 import com.example.eden62.GENSMobile.Database.ReleveDatabase.Releve;
 import com.example.eden62.GENSMobile.HistoryAdapters.ReleveAdapter;
 import com.example.eden62.GENSMobile.R;
+import com.example.eden62.GENSMobile.Tools.Utils;
 
 import java.io.File;
 import java.util.HashMap;
@@ -30,6 +30,7 @@ public class HistoryReleveActivity extends HistoryActivity<ReleveAdapter> {
 
     protected HistoryDao dao;
     protected Map<Releve,File> exportedReleves;
+    static final int CHOOSE_GPX_NAME = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,32 +43,35 @@ public class HistoryReleveActivity extends HistoryActivity<ReleveAdapter> {
         exportSelection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String name = "toto";
-                final Snackbar exportSnackbar = Snackbar.make(listItems,"Exportation en cours",Snackbar.LENGTH_INDEFINITE);
-                AlertDialog.Builder builder = new AlertDialog.Builder(HistoryReleveActivity.this);
-                builder.setMessage("stockageInterne/Android/data/" + HistoryReleveActivity.this.getPackageName() + "/files/\n \nL' envoyer par mail ?");
-                builder.setTitle("Localisation des fichiers");
-                builder.setPositiveButton(getString(R.string.oui), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        exportSnackbar.show();
-                        adapter.getCheckedItemsStocker().exportReleveAndSendMail(name);
-                        exportSnackbar.dismiss();
-                        dialog.dismiss();
-                    }
-                });
-                builder.setNegativeButton(getString(R.string.non), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int i) {
-                        exportSnackbar.show();
-                        adapter.getCheckedItemsStocker().exportReleves(name);
-                        exportSnackbar.dismiss();
-                        dialog.dismiss();
-                    }
-                });
-                builder.create().show();
+                if (adapter.getCheckedItemsStocker().getCheckedItems().size() > 0) {
+                    Intent intent = new Intent(HistoryReleveActivity.this, NameExportFileActivity.class);
+                    intent.putExtra("filePath","stockageInterne/Android/data/" + HistoryReleveActivity.this.getPackageName() + "/files/");
+                    startActivityForResult(intent,CHOOSE_GPX_NAME);
+                } else{
+                    Toast.makeText(HistoryReleveActivity.this,"Aucun relevés sélectionnés",Toast.LENGTH_SHORT).show();
+                }
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        final Snackbar exportSnackbar = Snackbar.make(listItems, "Exportation en cours", Snackbar.LENGTH_INDEFINITE);
+        if(requestCode == CHOOSE_GPX_NAME){
+            if(resultCode == RESULT_OK){
+                String name = data.getStringExtra("gpxName");
+                if(data.getBooleanExtra("sendByMail",false)){
+                    exportSnackbar.show();
+                    adapter.getCheckedItemsStocker().exportReleveAndSendMail(name);
+                    exportSnackbar.dismiss();
+                }else{
+                    exportSnackbar.show();
+                    adapter.getCheckedItemsStocker().exportReleves(name);
+                    exportSnackbar.dismiss();
+                }
+            }
+        }
     }
 
     @Override
@@ -102,7 +106,7 @@ public class HistoryReleveActivity extends HistoryActivity<ReleveAdapter> {
 
     @Override
     protected void setAdapter() {
-        List<Releve> releves = dao.getReleveOfTheUsr(getCurrentUsrId());
+        List<Releve> releves = dao.getReleveOfTheUsr(Utils.getCurrUsrId(HistoryReleveActivity.this));
 
         adapter = new ReleveAdapter(this,releves,exportedReleves);
         listItems.setAdapter(adapter);

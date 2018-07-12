@@ -44,7 +44,8 @@ public class MyHttpService {
 
     public Request createSendInfoCampagneRequest(int idCampagne, int nbInv){
         RequestBody requestBody = new FormBody.Builder().add("idCampagne",idCampagne + "").
-                                                        add("nbInv", nbInv + "").build();
+                                                        add("nbInv", nbInv + "").
+                                                        add("refUser",Utils.getCurrUsrId(ctx) + "").build();
         return new Request.Builder().url(URL_INFO_CAMPAGNE).post(requestBody).build();
     }
 

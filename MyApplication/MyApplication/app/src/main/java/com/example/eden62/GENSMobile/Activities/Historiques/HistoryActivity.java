@@ -70,15 +70,6 @@ public abstract class HistoryActivity<T extends ItemsAdapter> extends AppCompatA
     }
 
     /**
-     * Récupère l'id de l'utilisateur actuel
-     * @return l'id de l'utilisateur
-     */
-    protected long getCurrentUsrId(){
-        SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
-        return loginPreferences.getLong("usrId",0);
-    }
-
-    /**
      * Dialog de sûreté qui prévient l'utilisateur de la supression des items
      * @return Un dialog d'avertissement
      */

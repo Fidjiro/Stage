@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.example.eden62.GENSMobile.Database.CampagneDatabase.Inventaire;
 import com.example.eden62.GENSMobile.Database.DAO;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 

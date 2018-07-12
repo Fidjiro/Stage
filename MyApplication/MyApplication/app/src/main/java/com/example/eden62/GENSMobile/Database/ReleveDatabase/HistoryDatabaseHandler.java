@@ -4,7 +4,9 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class HistoryDatabaseHandler extends SQLiteOpenHelper {
+import java.io.Serializable;
+
+public class HistoryDatabaseHandler extends SQLiteOpenHelper{
 
     public static final String HISTORY_TABLE_NAME = "History";
     public static final String HISTORY_KEY = "_id";

@@ -17,10 +17,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class RelToGpx {
+public class RelToGpx implements Serializable{
 
     private String DIRECTORY_PATH;
     private static final String GPX_EXTENSION = ".gpx";

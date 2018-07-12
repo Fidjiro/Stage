@@ -3,7 +3,12 @@ package com.example.eden62.GENSMobile.Activities.Historiques.Stocker;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
 
+import com.example.eden62.GENSMobile.Activities.Historiques.Inventaires.HistoryRecensementActivity;
+import com.example.eden62.GENSMobile.Activities.Historiques.Releves.HistoryReleveActivity;
+import com.example.eden62.GENSMobile.Database.CampagneDatabase.Inventaire;
 import com.example.eden62.GENSMobile.Parser.RelToGpx;
 import com.example.eden62.GENSMobile.Database.ReleveDatabase.HistoryDao;
 import com.example.eden62.GENSMobile.Database.ReleveDatabase.Releve;
@@ -13,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ReleveStocker extends StockCheckedItems<Releve,HistoryDao> {
+public class ReleveStocker extends StockCheckedItems<Releve,HistoryDao>{
 
     private RelToGpx convertisseur;
     private Map<List<Releve>,File> exportedReleves;

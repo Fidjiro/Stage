@@ -14,13 +14,11 @@ package com.example.eden62.GENSMobile.Tools;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.view.View;
-import android.view.View.MeasureSpec;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
@@ -197,5 +195,13 @@ public final class Utils {
                 (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         return networkInfo != null && networkInfo.isConnected();
+    }
+
+    /**
+     * Récupère l'id de l'utilisateur actuel
+     * @return l'id de l'utilisateur
+     */
+    public static long getCurrUsrId(Context ctx){
+        return ctx.getSharedPreferences("loginPrefs", Context.MODE_PRIVATE).getLong("usrId",0);
     }
 }
