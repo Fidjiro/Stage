@@ -138,11 +138,13 @@ public class MainActivityRel extends MainActivity {
         pointButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                clearLayers();
                 Marker marker = Utils.createMarker(MainActivityRel.this,R.drawable.marker_green,getUsrLatLong());
                 lastMarkerPosition = marker.getLatLong();
                 addLayer(marker);
-                finirReleve();
+                releveToAdd = createReleveToInsert();
+                Intent intent = new Intent(MainActivityRel.this,NameRelevePopup.class);
+                intent.putExtra("releveToAdd",releveToAdd);
+                startActivity(intent);
             }
         });
 
