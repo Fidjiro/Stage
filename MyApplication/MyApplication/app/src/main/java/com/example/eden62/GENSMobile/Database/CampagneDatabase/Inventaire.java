@@ -5,6 +5,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.example.eden62.GENSMobile.Database.DatabaseItem;
+import com.example.eden62.GENSMobile.Database.ReleveDatabase.Releve;
 
 /**
  * Représente une ligne de la table Campagne <br>
@@ -439,5 +440,18 @@ public class Inventaire implements Parcelable,DatabaseItem{
 
     public void setRemarques(String remarques) {
         this.remarques = remarques;
+    }
+
+    @Override
+    public int hashCode() {
+        return (int)this._id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof Inventaire){
+            Inventaire other = (Inventaire) o;
+            return (this.hashCode() == other.hashCode()) && this.heure.equals(other.heure);
+        }return false;
     }
 }

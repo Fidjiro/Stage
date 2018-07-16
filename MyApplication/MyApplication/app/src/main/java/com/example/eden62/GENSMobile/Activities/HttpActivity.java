@@ -197,20 +197,108 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 snackbar.show();
-                cpt = 0;
-                nbErr = 0;
-                for(Inventaire inv : inventairesToSend){
-                    SendDataTask task = new SendDataTask(httpService.createSendDataRequest(inv,idCampagne));
-                    task.execute((Void) null);
-                }
-                idCampagne++;
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putInt("idCampagne",idCampagne);
-                editor.commit();
+
+                SendCampagneInfoTask task = new SendCampagneInfoTask(httpService.createSendInfoCampagneRequest(idCampagne,currTotalInv),inventairesToSend);
+                task.execute((Void) null);
+
                 dialogInterface.dismiss();
             }
         });
         builder.create().show();
+    }
+
+    private class SendCampagneInfoTask extends AsyncTask<Void,Void,Boolean> {
+
+        private final Request mRequete;
+        private long _id;
+        private String errMsg;
+        private List<Inventaire> inventairesToSend;
+
+        SendCampagneInfoTask(Request requete, List<Inventaire> invs) {
+            mRequete = requete;
+            inventairesToSend = invs;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+
+            try {
+                if (!Utils.isConnected(HttpActivity.this)) {
+                    Snackbar.make(launchSync, "Aucune connexion à internet.", Snackbar.LENGTH_LONG).show();
+                    return false;
+                }
+
+                Response response = httpService.executeRequest(mRequete);
+                if (!response.isSuccessful()) {
+                    throw new IOException(response.toString());
+                }
+
+                final String body = response.body().string();
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        txtJson.setText(body);
+                    }
+                });
+
+                JSONObject js = parseStringToJsonObject(body);
+                return interpreteJson(js);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Snackbar.make(launchSync, "Mauvaise forme de json", Snackbar.LENGTH_LONG).show();
+            }
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+
+            if (success) {
+                cpt = 0;
+                nbErr = 0;
+                for (Inventaire inv : inventairesToSend) {
+                    SendDataTask task = new SendDataTask(httpService.createSendDataRequest(inv, idCampagne));
+                    task.execute((Void) null);
+                }
+                idCampagne++;
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putInt("idCampagne", idCampagne);
+                editor.commit();
+            } else {
+                if (errMsg != null) {
+                    Snackbar.make(launchSync, errMsg, Snackbar.LENGTH_SHORT).show();
+                } else {
+                    Snackbar.make(launchSync, "Erreur sur l'inventaire " + _id, Snackbar.LENGTH_SHORT).show();
+                }
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+        }
+
+        private boolean interpreteJson(JSONObject json) {
+            int err;
+            _id = -1;
+            boolean importStatus;
+            try {
+                err = json.getInt("err");
+                importStatus = json.getBoolean("import");
+                if (err == 1) {
+                    errMsg = json.getString("msg");
+                    return false;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                errMsg = "Mauvais parsage de JSON";
+                return false;
+            }
+            return importStatus;
+        }
     }
 
     private class SendDataTask extends AsyncTask<Void,Void,Boolean>{
@@ -265,7 +353,6 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
                 Snackbar.make(txtJson,"Synchronisation réussie",Snackbar.LENGTH_SHORT).show();
                 campagneDao.deleteInventaire(_id);
             } else {
-                nbErr++;
                 if(errMsg != null){
                     Snackbar.make(txtJson, errMsg,Snackbar.LENGTH_SHORT).show();
                 }else{
@@ -313,6 +400,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
                     errMsg = json.getString("msg");
                     Inventaire inv = campagneDao.getInventaire(_id);
                     inv.setErr(1);
+                    nbErr++;
                     campagneDao.modifInventaire(inv);
                     return false;
                 }

@@ -73,6 +73,8 @@ public class InventaireAdapter extends ItemsAdapter<InventoryStocker,Inventaire>
 
         if(inv.getErr() == 1)
             convertView.setBackgroundColor(Color.RED);
+        else
+            convertView.setBackgroundColor(Color.TRANSPARENT);
 
         viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -83,6 +85,10 @@ public class InventaireAdapter extends ItemsAdapter<InventoryStocker,Inventaire>
                     checkedItemsStocker.remove(inv);
             }
         });
+        if(checkedItemsStocker.getCheckedItems().contains(inv))
+            viewHolder.checkBox.setChecked(true);
+        else
+            viewHolder.checkBox.setChecked(false);
 
         return convertView;
     }

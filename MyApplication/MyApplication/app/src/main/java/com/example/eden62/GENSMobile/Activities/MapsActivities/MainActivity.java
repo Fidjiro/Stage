@@ -203,7 +203,7 @@ public abstract class MainActivity extends AppCompatActivity{
         if(!locationManager.isProviderEnabled(provider)){
             createDialog(BOITE_GPS_MANQUANT).show();
         }else
-            locationManager.requestLocationUpdates(provider, 1000, 10, locationListener);
+            locationManager.requestLocationUpdates(provider, 2000, 10, locationListener);
     }
 
     protected class MyLocationListener implements LocationListener {
@@ -228,9 +228,8 @@ public abstract class MainActivity extends AppCompatActivity{
             progressDialog.dismiss();
             usrPosition = getLocationPoint(location);
             setMyMarkerOnUsr();
-            if(!freeLance){
+            if(!freeLance)
                 centerOnTheUsr();
-            }
             if(firstLaunch) {
                 firstLaunch = false;
                 displayLayout();

@@ -71,6 +71,10 @@ public class ReleveAdapter extends ItemsAdapter<ReleveStocker,Releve>{
                 }
             }
         });
+        if(checkedItemsStocker.getCheckedItems().contains(rel))
+            viewHolder.checkBox.setChecked(true);
+        else
+            viewHolder.checkBox.setChecked(false);
         return convertView;
     }
 

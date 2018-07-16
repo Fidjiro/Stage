@@ -15,6 +15,7 @@ import org.mapsforge.map.datastore.MapDataStore;
 import org.mapsforge.map.layer.Layers;
 import org.mapsforge.map.layer.cache.TileCache;
 import org.mapsforge.map.layer.overlay.Marker;
+import org.mapsforge.map.layer.overlay.Polygon;
 import org.mapsforge.map.layer.renderer.TileRendererLayer;
 import org.mapsforge.map.model.Model;
 import org.mapsforge.map.reader.MapFile;
@@ -35,6 +36,9 @@ public class MyMapView {
     private Byte maxZoom = 21;
     private String mapFileName = "nord-pas-de-calais.map";
     private MapView mapView;
+
+    public static final int SHAPE_LAYER_INDEX = 1;
+    public static final int POSITION_LAYER_INDEX = 2;
 
     private TileCache myCache;
 
@@ -87,7 +91,13 @@ public class MyMapView {
      */
     private void addMarker(){
         positionMarker = Utils.createMarker(mapView.getContext(),R.drawable.marker_red,null);
+        System.out.println(getLayers().get(0));
+        getLayers().add(new Polygon(null,null,null));
         mapView.getLayerManager().getLayers().add(positionMarker);
+    }
+
+    public int getMarkerIdx(){
+        return getLayers().indexOf(positionMarker);
     }
 
     /**
@@ -102,6 +112,10 @@ public class MyMapView {
             TileRendererLayer tileRendererLayer = generateTileRenderer(myCache,mapDataStore);
             mapView.getLayerManager().getLayers().add(tileRendererLayer);
         }
+    }
+
+    public void redrawMarker(){
+        positionMarker.requestRedraw();
     }
 
     /**

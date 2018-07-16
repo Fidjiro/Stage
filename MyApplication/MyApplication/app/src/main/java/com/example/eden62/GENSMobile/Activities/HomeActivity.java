@@ -85,8 +85,9 @@ public class HomeActivity extends AppCompatActivity {
      */
     public Intent generateIntent (boolean isReleveActivity){
         Intent intent;
-        if(isReleveActivity)
-            intent = new Intent(HomeActivity.this,MainActivityRel.class);
+        if(isReleveActivity) {
+            intent = new Intent(HomeActivity.this, MainActivityRel.class);
+        }
         else
             intent = new Intent(HomeActivity.this,MainActivityRec.class);
         return intent;

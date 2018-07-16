@@ -122,7 +122,6 @@ public class HistoryRecensementActivity extends HistoryActivity<InventaireAdapte
         }
         return res;
     }
-
     private class SendCampagneInfoTask extends AsyncTask<Void,Void,Boolean> {
 
         private final Request mRequete;
@@ -215,6 +214,7 @@ public class HistoryRecensementActivity extends HistoryActivity<InventaireAdapte
             }
             return importStatus;
         }
+
     }
 
     private class AttemptLoginTask extends AsyncTask<Void,Void,Boolean> {
@@ -347,7 +347,6 @@ public class HistoryRecensementActivity extends HistoryActivity<InventaireAdapte
                 Snackbar.make(syncInvs,"Synchronisation réussie",Snackbar.LENGTH_SHORT).show();
                 campagneDao.deleteInventaire(_id);
             } else {
-                nbErr ++;
                 if(errMsg != null){
                     Snackbar.make(syncInvs, errMsg,Snackbar.LENGTH_SHORT).show();
                 }else{
@@ -355,16 +354,18 @@ public class HistoryRecensementActivity extends HistoryActivity<InventaireAdapte
                 }
             }
             cpt++;
-            if(cpt == currTotalInv && nbErr > 0){
-                AlertDialog.Builder builder = new AlertDialog.Builder(HistoryRecensementActivity.this);
-                builder.setMessage(nbErr + goodFormatForWordInventaire() + "à plus de 100m hors des limites de sites");
-                builder.setPositiveButton(getString(R.string.accord), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
-                builder.create().show();
+            if(cpt == currTotalInv ){
+                if (nbErr > 0) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(HistoryRecensementActivity.this);
+                    builder.setMessage(nbErr + goodFormatForWordInventaire() + "à plus de 100m hors des limites de sites");
+                    builder.setPositiveButton(getString(R.string.accord), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    });
+                    builder.create().show();
+                }
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -392,6 +393,7 @@ public class HistoryRecensementActivity extends HistoryActivity<InventaireAdapte
                 _id = json.getLong("_id");
                 importStatus = json.getBoolean("import");
                 if(err == 1){
+                    nbErr ++;
                     errMsg = json.getString("msg");
                     Inventaire inv = campagneDao.getInventaire(_id);
                     inv.setErr(1);

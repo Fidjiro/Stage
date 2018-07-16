@@ -1,18 +1,16 @@
 package com.example.eden62.GENSMobile.Activities.MapsActivities.Releve;
 
 import android.app.Dialog;
-import android.app.Notification;
-import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.location.Location;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -21,6 +19,7 @@ import com.example.eden62.GENSMobile.Activities.Historiques.Releves.HistoryRelev
 import com.example.eden62.GENSMobile.Activities.MapsActivities.MainActivity;
 import com.example.eden62.GENSMobile.Database.ReleveDatabase.Releve;
 import com.example.eden62.GENSMobile.R;
+import com.example.eden62.GENSMobile.Tools.MyMapView;
 import com.example.eden62.GENSMobile.Tools.Utils;
 import com.example.eden62.GENSMobile.Tools.XY;
 import com.google.gson.Gson;
@@ -51,11 +50,9 @@ public class MainActivityRel extends MainActivity {
 
     protected Releve releveToAdd;
 
-    protected Handler handler;
-    protected Runnable pointsTaker;
-
     protected Polyline polyline;
     protected double lineLength;
+    protected List<Marker> markers;
     protected double polygonPerimeter, polygonArea;
     protected Polygon polygon;
     protected List<LatLong> latLongs;
@@ -68,7 +65,7 @@ public class MainActivityRel extends MainActivity {
     protected final int NO_RELEVE = 0;
 
     protected PointsTakerService mService;
-    protected boolean mBound = false;
+    public static boolean mBound = false;
 
     protected Paint paintFill = Utils.createPaint(
             AndroidGraphicFactory.INSTANCE.createColor(Color.GREEN), 2,
@@ -79,19 +76,19 @@ public class MainActivityRel extends MainActivity {
     public static final int PAINT_STROKE = AndroidGraphicFactory.INSTANCE.createColor(Color.BLUE);
 
     private static final int BOITE_FIN_RELEVE = 3;
+    private static final int BOITE_CANCEL_RELEVE = 4;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.e("TOTO","TEST");
-
-        handler = new Handler();
 
         lineButton = (ImageButton) findViewById(R.id.bouton_releve_ligne);
         polygonButton = (ImageButton) findViewById(R.id.bouton_releve_polygone);
         pointButton = (ImageButton) findViewById(R.id.bouton_releve_point);
         finReleve = (Button) findViewById(R.id.finReleve);
         mesReleve = (Button) findViewById(R.id.mesReleves);
+
+        locationListener = new MyRelLocationListener();
 
         mesReleve.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,22 +137,57 @@ public class MainActivityRel extends MainActivity {
             public void onClick(View view) {
                 Marker marker = Utils.createMarker(MainActivityRel.this,R.drawable.marker_green,getUsrLatLong());
                 lastMarkerPosition = marker.getLatLong();
-                addLayer(marker);
-                releveToAdd = createReleveToInsert();
+                myMap.getLayers().add(marker);
+                if(currentReleveIsLine())
+                    markers.add(marker);
+                else
+                    previousLayer = marker;
+                releveToAdd = createPointReleveToInsert();
                 Intent intent = new Intent(MainActivityRel.this,NameRelevePopup.class);
                 intent.putExtra("releveToAdd",releveToAdd);
                 startActivity(intent);
             }
         });
 
+        markers = new ArrayList<>();
+
+    }
+
+    private Releve createPointReleveToInsert(){
+        long creatorId = Utils.getCurrUsrId(this);
+        String latitude = lastMarkerPosition.getLatitude() + "";
+        String longitude = lastMarkerPosition.getLongitude() + "";
+        return new Releve(creatorId,"","Point", latitude, longitude, "", "false", Utils.getDate(),Utils.getTime(),lineLength,polygonPerimeter,polygonArea);
+
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (Integer.parseInt(android.os.Build.VERSION.SDK) > 5
+                && keyCode == KeyEvent.KEYCODE_BACK
+                && event.getRepeatCount() == 0) {
+            if(!noReleveInProgress())
+                createAvertissementDialog(BOITE_CANCEL_RELEVE).show();
+            else
+                onBackPressed();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void clearMarkers(){
+        if(markers.size()>0){
+            for(Marker m : markers){
+                myMap.getLayers().remove(m);
+            }
+        }
     }
 
     //Reset les relevés de terrain
     private void clearLayers(){
-        try {
+        if(previousLayer != null) {
             myMap.getLayers().remove(previousLayer);
-        }catch (Exception e){
-            e.printStackTrace();
+            clearMarkers();
         }
     }
 
@@ -323,7 +355,7 @@ public class MainActivityRel extends MainActivity {
      */
     protected void instantiatePolyline(){
         polyline = createPolyline();
-
+        markers = new ArrayList<>();
         latLongs = polyline.getLatLongs();
     }
 
@@ -364,6 +396,23 @@ public class MainActivityRel extends MainActivity {
                         dialogInterface.dismiss();
                     }
                 });
+                break;
+            case BOITE_CANCEL_RELEVE:
+                builder.setMessage(getString(R.string.releveCanceled));
+                builder.setCancelable(false);
+                builder.setPositiveButton(getText(R.string.oui), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        currentReleve = NO_RELEVE;
+                        onBackPressed();
+                    }
+                });
+                builder.setNegativeButton(getText(R.string.non), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
         }
         box = builder.create();
         return box;
@@ -375,9 +424,7 @@ public class MainActivityRel extends MainActivity {
     protected void startLine() {
         instantiatePolyline();
         polyline.addPoint(getUsrLatLong());
-        addLayer(polyline);
-        pointsTaker = new PointsTaker();
-        pointsTaker.run();
+        addShapeLayer(polyline);
     }
 
     /***
@@ -397,7 +444,6 @@ public class MainActivityRel extends MainActivity {
      * Stop le relevé de ligne
      */
     protected void stopLine() {
-        handler.removeCallbacks(pointsTaker);
         lineLength = polylineLengthInMeters(latLongs);
     }
 
@@ -425,17 +471,13 @@ public class MainActivityRel extends MainActivity {
     protected void startPolygon(){
         instantiatePolygon();
         polygon.addPoint(getUsrLatLong());
-        addLayer(polygon);
-        pointsTaker = new PointsTaker();
-        pointsTaker.run();
+        addShapeLayer(polygon);
     }
 
     /**
      * Arrête le relevé de polygone
      */
     protected void stopPolygon() {
-        handler.removeCallbacks(pointsTaker);
-
         //On ajoute le premier point du polygone si il est différent du dernier
         LatLong firstPoint = latLongs.get(0);
         if(!firstPoint.equals(latLongs.get(latLongs.size() - 1)))
@@ -462,41 +504,6 @@ public class MainActivityRel extends MainActivity {
         latLongs = polygon.getLatLongs();
     }
 
-    /**
-     * Action qui relève des points toutes les  secondes
-     */
-    protected class PointsTaker implements Runnable{
-
-        /**
-         * Délai entre chaque relevé de point en ms
-         */
-        protected static final int DELAY = 5000;
-
-        @Override
-        public void run() {
-            addPointToGoodLayer();
-            callGoodRedraw();
-            handler.postDelayed(this,DELAY);
-        }
-
-        protected void addPointToGoodLayer(){
-            if(currentReleveIsLine()){
-                polyline.addPoint(getUsrLatLong());
-            } else if(currentReleveIsPolygon()){
-                polygon.addPoint(getUsrLatLong());
-            }
-        }
-
-        protected void callGoodRedraw(){
-            if(currentReleve == LINE){
-                polyline.requestRedraw();
-            } else if(currentReleve == POLYGON){
-                polygon.requestRedraw();
-            }
-        }
-
-    }
-
     @Override
     protected void setView() {
         setContentView(R.layout.activity_main_rel);
@@ -515,12 +522,12 @@ public class MainActivityRel extends MainActivity {
     }
 
     /**
-     * Ajoute le layer l à la carte
+     * Ajoute une ligne ou un polygone à l'index 0 des layers pour que le marqueur de position soit toujours au dessus
      *
      * @param l le layer à ajouter
      */
-    protected void addLayer(Layer l){
-        myMap.getLayers().add(l);
+    protected void addShapeLayer(Layer l){
+        myMap.getLayers().add(MyMapView.SHAPE_LAYER_INDEX,l);
         previousLayer = l;
     }
 
@@ -578,4 +585,39 @@ public class MainActivityRel extends MainActivity {
             mBound = false;
         }
     };
+
+    private class MyRelLocationListener extends MyLocationListener{
+
+        @Override
+        public void onLocationChanged(Location location) {
+            LatLong lastUsrPosition = usrPosition;
+            super.onLocationChanged(location);
+
+            if(!noReleveInProgress() && isNotSamePositionAs(lastUsrPosition)){
+                addPointToGoodLayer();
+                callGoodRedraw();
+            }
+        }
+
+        private boolean isNotSamePositionAs(LatLong pos){
+            return !usrPosition.equals(pos);
+        }
+
+        protected void addPointToGoodLayer(){
+            if(currentReleveIsLine()){
+                polyline.addPoint(getUsrLatLong());
+            } else if(currentReleveIsPolygon()){
+                polygon.addPoint(getUsrLatLong());
+            }
+        }
+
+        protected void callGoodRedraw(){
+            if(currentReleveIsLine()){
+                polyline.requestRedraw();
+            } else if(currentReleveIsPolygon()){
+                polygon.requestRedraw();
+            }
+            myMap.redrawMarker();
+        }
+    }
 }
