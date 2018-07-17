@@ -48,8 +48,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:text="@string/valider"
+                android:textAllCaps="false"
                 android:textStyle="bold" />
-
+            <Button
+                android:id="@+id/majUsrButton"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:text="@string/majUsr"
+                android:textAllCaps="false"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/tvJsonItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

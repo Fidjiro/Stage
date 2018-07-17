@@ -358,6 +358,7 @@ public abstract class FormActivity extends AppCompatActivity {
 
     /**
      * Action réalisé lorsque les EditText perdent le focus. Cela permet de définir quand l'utilisateur a fini son input
+     * et de cacher le clavier en conséquence
      */
     public class MyFocusChangeListener implements View.OnFocusChangeListener{
 

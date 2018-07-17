@@ -19,6 +19,7 @@ import com.example.eden62.GENSMobile.R;
 public class HomeActivity extends AppCompatActivity {
 
     private Intent intent;
+    public final static int RESULT_CLOSE_ALL = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +111,15 @@ public class HomeActivity extends AppCompatActivity {
      */
     protected void synchroniserMission(){
         Intent intent = new Intent(this,HttpActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent,RESULT_CLOSE_ALL);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_CLOSE_ALL){
+            finish();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     /**

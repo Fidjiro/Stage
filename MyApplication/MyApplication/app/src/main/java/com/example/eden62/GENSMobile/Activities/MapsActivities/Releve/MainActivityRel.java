@@ -599,6 +599,7 @@ public class MainActivityRel extends MainActivity {
             }
         }
 
+        //Vérifie si le point récupéré est le même que le précédent, si oui, il n'est pas ajouté au relevé
         private boolean isNotSamePositionAs(LatLong pos){
             return !usrPosition.equals(pos);
         }

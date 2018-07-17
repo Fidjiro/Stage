@@ -78,6 +78,14 @@ public class FauneActivity extends FormActivity {
         consultedInv.setNbMale(nbMale);
     }
 
+    /**
+     * Change le champ genre correspondant via les données de l'inventaire consulté.
+     * Méthode valable pour le champ mâle et femelle
+     *
+     * @param nbGenre Décompte du genre
+     * @param checkBox La checkBox correspondante au genre
+     * @param editText L'editText correspondante au genre
+     */
     protected void setGenreFields(int nbGenre, CheckBox checkBox, EditText editText){
         if(nbGenre > -1){
             checkBox.setChecked(true);

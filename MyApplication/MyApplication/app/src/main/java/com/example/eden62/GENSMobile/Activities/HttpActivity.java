@@ -1,9 +1,12 @@
 package com.example.eden62.GENSMobile.Activities;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -55,6 +58,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
     private long usrId;
     protected int idCampagne;
     protected SharedPreferences prefs;
+    protected SharedPreferences.Editor editor;
 
     private MyHttpService httpService;
 
@@ -72,7 +76,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         campagneDao.open();
         releveDao.open();
         prefs = getSharedPreferences("loginPrefs", MODE_PRIVATE);
-        idCampagne = prefs.getInt("idCampagne",0);
+        editor = prefs.edit();
 
         makeView();
 
@@ -197,7 +201,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 snackbar.show();
-
+                idCampagne = prefs.getInt("idCampagne",0);
                 SendCampagneInfoTask task = new SendCampagneInfoTask(httpService.createSendInfoCampagneRequest(idCampagne,currTotalInv),inventairesToSend);
                 task.execute((Void) null);
 
@@ -265,12 +269,14 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
                     task.execute((Void) null);
                 }
                 idCampagne++;
-                SharedPreferences.Editor editor = prefs.edit();
                 editor.putInt("idCampagne", idCampagne);
                 editor.commit();
             } else {
                 if (errMsg != null) {
-                    Snackbar.make(launchSync, errMsg, Snackbar.LENGTH_SHORT).show();
+                    if(errMsg.equals(getString(R.string.wrongVersion))){
+
+                    }else
+                        Snackbar.make(launchSync, errMsg, Snackbar.LENGTH_SHORT).show();
                 } else {
                     Snackbar.make(launchSync, "Erreur sur l'inventaire " + _id, Snackbar.LENGTH_SHORT).show();
                 }
@@ -504,13 +510,26 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
             int con = -1;
             String titre = "";
             String msg = "";
+            int version = -1;
             try {
                 err = json.getInt("err");
+                version = json.getInt("version");
                 con = json.getInt("con");
                 titre = json.getString("titre");
                 msg = json.getString("msg");
             } catch (JSONException e) {
                 e.printStackTrace();
+            }
+            if(!checkVersion(version)){
+                final int finalVersion = version;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        editor.putInt("goodAppVersion", finalVersion);
+                        editor.commit();
+                        createWrongVersionDialog().show();
+                    }
+                });
             }
             if(err == 0){
                 if(con == 0){
@@ -525,6 +544,31 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }return false;
         }
+
+        private boolean checkVersion(int servVersion){
+            try {
+                PackageInfo packageInfo = HttpActivity.this.getPackageManager().getPackageInfo(getPackageName(),0);
+                int verCode = packageInfo.versionCode;
+                return verCode == servVersion;
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+    }
+
+    private Dialog createWrongVersionDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.updateApp);
+        builder.setPositiveButton(getString(R.string.accord), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                setResult(HomeActivity.RESULT_CLOSE_ALL);
+                finish();
+            }
+        });
+        builder.setCancelable(false);
+        return builder.create();
     }
 
     @Override

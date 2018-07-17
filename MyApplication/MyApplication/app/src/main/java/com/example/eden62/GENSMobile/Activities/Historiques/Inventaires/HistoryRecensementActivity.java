@@ -65,7 +65,6 @@ public class HistoryRecensementActivity extends HistoryActivity<InventaireAdapte
         httpService = new MyHttpService(this);
 
         prefs = getSharedPreferences("loginPrefs", MODE_PRIVATE);
-        idCampagne = prefs.getInt("idCampagne",0);
 
         Intent intent = getIntent();
 
@@ -105,6 +104,7 @@ public class HistoryRecensementActivity extends HistoryActivity<InventaireAdapte
 
                     dial = ProgressDialog.show(HistoryRecensementActivity.this, "", "Synchronisation en cours...", true);
                     currTotalInv = listSize;
+                    idCampagne = prefs.getInt("idCampagne",0);
                     SendCampagneInfoTask task2 = new SendCampagneInfoTask(httpService.createSendInfoCampagneRequest(idCampagne,listSize),inventairesToSend);
                     task2.execute((Void)null);
                 }
