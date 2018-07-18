@@ -62,4 +62,9 @@ public class TaxUsrDatabaseHandler extends SQLiteOpenHelper {
         db.execSQL(USERS_TABLE_DROP);
         onCreate(db);
     }
+
+    public void clearUsers(SQLiteDatabase db){
+        db.execSQL(USERS_TABLE_DROP);
+        db.execSQL(USERS_TABLE_CREATE);
+    }
 }

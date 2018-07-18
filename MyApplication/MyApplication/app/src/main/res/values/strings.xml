@@ -15,7 +15,7 @@
     <string name="prompt_password">Mot de passe</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="invToSync">inventaires à synchroniser</string>
-    <string name="relToSync">relevés de terrain à synchroniser</string>
+    <string name="relToSync">relevés de terrain</string>
     <string name="displayMdp">Afficher le mot de passe</string>
     <string name="noConnection">Aucune connexion à internet</string>
     <string name="mdpError">Mot de passe incorrect</string>
@@ -33,7 +33,7 @@
     <string name="obs_ponct">Observation ponctuelle</string>
     <string name="protocole">Protocole de suivi</string>
     <string name="relevé">Outil de relevé de terrain</string>
-    <string name="sync">Synchroniser</string>
+    <string name="sync">Synchroniser / Exporter</string>
     <string name="chargement">Chargement de la carte &#8230;</string>
     <string name="syncInvs">Synchroniser les inventaires</string>
 

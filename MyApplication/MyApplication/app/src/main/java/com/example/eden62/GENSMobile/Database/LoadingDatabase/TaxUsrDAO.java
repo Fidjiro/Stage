@@ -98,6 +98,14 @@ public class TaxUsrDAO {
         return c.getLong(c.getColumnIndex(KEY));
     }
 
+    public void clearUsers(){
+        mHandler.clearUsers(mDb);
+    }
+
+    public int getNbUsers(){
+        Cursor c = mDb.rawQuery("SELECT * FROM " + USERS,new String[]{});
+        return c.getCount();
+    }
 
     //Partie taxon
 

@@ -1,8 +1,6 @@
 package com.example.eden62.GENSMobile.Activities;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,7 +9,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -22,15 +19,17 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.eden62.GENSMobile.Database.CampagneDatabase.Inventaire;
 import com.example.eden62.GENSMobile.Database.LoadingDatabase.TaxUsrDAO;
+import com.example.eden62.GENSMobile.Database.LoadingDatabase.User;
 import com.example.eden62.GENSMobile.Parser.CsvToSQLite.TaxRefParser;
 import com.example.eden62.GENSMobile.Parser.CsvToSQLite.UserParser;
 import com.example.eden62.GENSMobile.R;
 import com.example.eden62.GENSMobile.Tools.MyHttpService;
 import com.example.eden62.GENSMobile.Tools.Utils;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -60,11 +59,27 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mLoginView;
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
+    private ProgressDialog majUsrInProcessDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        int verCode = getVerCode();
+        loginPrefsEditor = loginPreferences.edit();
+
+        if(loginPreferences.getInt("idCampagne",-1) == -1) {
+            loginPrefsEditor.putInt("idCampagne", 0);
+            loginPrefsEditor.commit();
+        }
+
+        if(loginPreferences.getInt("goodAppVersion",-1) == -1) {
+            loginPrefsEditor.putInt("goodAppVersion", verCode);
+            loginPrefsEditor.commit();
+        }
+        checkVersion(verCode);
 
         httpService = new MyHttpService(this);
         dao = new TaxUsrDAO(this);
@@ -74,22 +89,6 @@ public class LoginActivity extends AppCompatActivity {
         // Set up the login form.
         mLoginView = (EditText) findViewById(R.id.login);
         txtJson = (TextView) findViewById(R.id.tvJsonItem);
-
-        loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
-        int verCode = getVerCode();
-        checkVersion(verCode);
-        loginPrefsEditor = loginPreferences.edit();
-
-        if(loginPreferences.getInt("idCampagne",-1) == -1) {
-            loginPrefsEditor.putInt("idCampagne", 0);
-            loginPrefsEditor.commit();
-        }
-
-        if(loginPreferences.getInt("goodAppVersion",-1) == -1) {
-
-            loginPrefsEditor.putInt("goodAppVersion", verCode);
-            loginPrefsEditor.commit();
-        }
 
         Button mSignInButton = (Button) findViewById(R.id.sign_in_button);
         majUsr = (Button) findViewById(R.id.majUsrButton);
@@ -103,6 +102,8 @@ public class LoginActivity extends AppCompatActivity {
         majUsr.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                majUsrInProcessDialog = ProgressDialog.show(LoginActivity.this,"","Mise à jour en cours", true);
+                majUsrInProcessDialog.setCancelable(false);
                 MajUsrTask task = new MajUsrTask(httpService.createUpdateUsrListRequest());
                 task.execute((Void)null);
             }
@@ -277,6 +278,9 @@ public class LoginActivity extends AppCompatActivity {
     private class MajUsrTask extends AsyncTask<Void,Void,Boolean>{
 
         private final Request mRequete;
+        private String errMsg;
+        private JSONArray users;
+        private int nbUsers;
 
         public MajUsrTask(Request requete) {
             mRequete = requete;
@@ -317,12 +321,52 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(Boolean aBoolean) {
-            super.onPostExecute(aBoolean);
+        protected void onPostExecute(Boolean success) {
+            if (success) {
+                long id;
+                String login;
+                User usrToAdd;
+                //System.out.println("Old nb user : " + dao.getNbUsers());
+                dao.clearUsers();
+                for (int i = 0; i < nbUsers; ++i) {
+                    try {
+                        JSONObject user = users.optJSONObject(i);
+                        id = user.getInt("id");
+                        login = user.getString("login");
+                        usrToAdd = new User(id,login);
+                        dao.insertUsr(usrToAdd);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                majUsrInProcessDialog.dismiss();
+                Toast.makeText(LoginActivity.this,"Mise à jour terminée",Toast.LENGTH_LONG).show();
+                //System.out.println("Serv nb user: " + nbUsers + ", dao nb users: " + dao.getNbUsers());
+            } else {
+                if (errMsg != null) {
+                    Snackbar.make(majUsr, errMsg, Snackbar.LENGTH_SHORT).show();
+                } else {
+                    Snackbar.make(majUsr, "Erreur de mise à jour", Snackbar.LENGTH_SHORT).show();
+                }
+            }
         }
 
         private boolean interpreteJson(JSONObject json){
-            return false;
+            int err;
+            try{
+                err = json.getInt("err");
+                if(err == 1) {
+                    errMsg = json.getString("msg");
+                    return false;
+                }
+                nbUsers = json.getInt("nb_users");
+                users = json.getJSONArray("users");
+            }catch (JSONException e){
+                e.printStackTrace();
+                errMsg = "Mauvais parsage JSON";
+                return false;
+            }
+            return true;
         }
     }
 

@@ -273,10 +273,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
                 editor.commit();
             } else {
                 if (errMsg != null) {
-                    if(errMsg.equals(getString(R.string.wrongVersion))){
-
-                    }else
-                        Snackbar.make(launchSync, errMsg, Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(launchSync, errMsg, Snackbar.LENGTH_SHORT).show();
                 } else {
                     Snackbar.make(launchSync, "Erreur sur l'inventaire " + _id, Snackbar.LENGTH_SHORT).show();
                 }
