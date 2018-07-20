@@ -55,9 +55,7 @@ public class OiseauxActivity extends FauneActivity {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
+            public void onNothingSelected(AdapterView<?> adapterView) { }
         });
 
         statut.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -67,7 +65,6 @@ public class OiseauxActivity extends FauneActivity {
                     nidificationLayout.setVisibility(View.VISIBLE);
                 else
                     hideNidificationField();
-
             }
 
             @Override

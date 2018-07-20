@@ -67,8 +67,8 @@ public final class Utils {
         return paint;
     }
 
-    @SuppressWarnings("deprecation")
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    //@SuppressWarnings("deprecation")
+   /* @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     static Marker createTappableMarker(final Context c, int resourceIdentifier,
                                        LatLong latLong) {
         Drawable drawable = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? c.getDrawable(resourceIdentifier) : c.getResources().getDrawable(resourceIdentifier);
@@ -87,7 +87,7 @@ public final class Utils {
                 return false;
             }
         };
-    }
+    }*/
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     public static File getFileFromAssets(Context ctx, String aFileName) throws IOException {
