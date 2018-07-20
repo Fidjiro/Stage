@@ -70,15 +70,17 @@ public class FloreActivity extends FormActivity {
         nombre.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
-                if (keyCode == KeyEvent.KEYCODE_ENTER && keyEvent.getAction() == KeyEvent.ACTION_UP) {
+                if (usrClicOnEnterKey(keyCode,keyEvent))
                     setIndiceFromDenombrement();
-                }
                 return false;
             }
         });
-
         typeTaxon = 1;
         setIndices();
+    }
+
+    private boolean usrClicOnEnterKey(int keyCode, KeyEvent keyEvent){
+        return keyCode == KeyEvent.KEYCODE_ENTER && keyEvent.getAction() == KeyEvent.ACTION_UP;
     }
 
     @Override

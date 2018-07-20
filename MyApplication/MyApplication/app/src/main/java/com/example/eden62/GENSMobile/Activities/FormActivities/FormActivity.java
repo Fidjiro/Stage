@@ -259,6 +259,7 @@ public abstract class FormActivity extends AppCompatActivity {
         setValuesFromUsrInput();
         consultedInv.setNombre(nb);
         consultedInv.setRemarques(remarquesTxt);
+        consultedInv.setErr();
     }
 
     /**
