@@ -1,0 +1,8 @@
+Bruno Cosemant v1 18/07/2018 version sans position dans revisualisation de relevé ni le bon checkVersion. Doit avoir bug retire le fond rouge si modif 
+sur inventaire
+
+Alexandre Driencourt v1.1 20/07/2018
+
+	Propositions: - Champ juvéniles pour ornitho?
+
+Pierre THELLIER v1.1 20/07/2018

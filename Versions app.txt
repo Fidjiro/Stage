@@ -1,0 +1,5 @@
+V1: ...
+
+v1.1: - Rajout position dans la reconsultation de relevés/inventaires
+      - Correction bug inversion du stockage de la version de l'application avec le niveau du taxon
+      - Correction bug après modif d'inventaire hors-site, il n'est plus considéré comme tel

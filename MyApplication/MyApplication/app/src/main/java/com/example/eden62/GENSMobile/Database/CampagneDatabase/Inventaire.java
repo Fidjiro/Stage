@@ -105,7 +105,7 @@ public class Inventaire implements Parcelable,DatabaseItem{
      * @param nombre
      * @param type_obs
      */
-    public Inventaire(long ref_taxon, int nv_taxon, int appVersion, long user, String nomFr, String nomLatin, int typeTaxon, double latitude, double longitude, String date, String heure, int nombre, String type_obs, String remarques) {
+    public Inventaire(long ref_taxon, int appVersion, int nv_taxon, long user, String nomFr, String nomLatin, int typeTaxon, double latitude, double longitude, String date, String heure, int nombre, String type_obs, String remarques) {
         this.ref_taxon = ref_taxon;
         this.appVersion = appVersion;
         this.nv_taxon = nv_taxon;
@@ -233,6 +233,7 @@ public class Inventaire implements Parcelable,DatabaseItem{
         out.writeString(statut);
         out.writeString(nidif);
         out.writeInt(indiceAbondance);
+        out.writeInt(err);
     }
 
     public static final Parcelable.Creator<Inventaire> CREATOR = new Parcelable.Creator<Inventaire>() {
@@ -268,6 +269,7 @@ public class Inventaire implements Parcelable,DatabaseItem{
         statut = in.readString();
         nidif = in.readString();
         indiceAbondance = in.readInt();
+        err = in.readInt();
     }
 
     public int getNombre() {

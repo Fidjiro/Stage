@@ -70,7 +70,7 @@ public abstract class MainActivity extends AppCompatActivity{
         progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialogInterface) {
-                startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                MainActivity.this.onBackPressed();
             }
         });
 
