@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.example.eden62.GENSMobile.Activities.FormActivities.FormActivity;
 import com.example.eden62.GENSMobile.Database.CampagneDatabase.Inventaire;
 import com.example.eden62.GENSMobile.R;
+import com.example.eden62.GENSMobile.Tools.Utils;
 
 /**
  * Activité formulaire pour la faune qui n'est pas ni oiseaux ni amphibien
@@ -40,7 +41,7 @@ public class FauneActivity extends FormActivity {
 
     @Override
     protected Inventaire createPersonalInventaire() {
-        return new Inventaire(ref_taxon, nv_taxon, usrId, nomFrString, nomLatinString, typeTaxon, lat, lon, dat, heure, nb, obs, remarquesTxt, nbMale, nbFemale);
+        return new Inventaire(ref_taxon, Utils.getVerCode(this), nv_taxon, usrId, nomFrString, nomLatinString, typeTaxon, lat, lon, dat, heure, nb, obs, remarquesTxt, nbMale, nbFemale);
     }
 
     @Override

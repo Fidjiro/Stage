@@ -1,11 +1,8 @@
 package com.example.eden62.GENSMobile.Parser;
 
 import android.content.Context;
-import android.content.Intent;
 import android.media.MediaScannerConnection;
-import android.net.Uri;
 import android.os.Environment;
-import android.util.Log;
 
 import com.example.eden62.GENSMobile.Database.ReleveDatabase.Releve;
 import com.google.gson.Gson;
@@ -14,13 +11,15 @@ import com.google.gson.reflect.TypeToken;
 import org.mapsforge.core.model.LatLong;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
 
+/**
+ * Parseur de relevés en un fichier gpx
+ */
 public class RelToGpx implements Serializable{
 
     private String DIRECTORY_PATH;
@@ -90,66 +89,25 @@ public class RelToGpx implements Serializable{
         try {
             writer = new FileOutputStream(file);
             initGpxFile();
-            for(Releve rel : rels){
+            for (Releve rel : rels) {
                 addRelGpxToFile(rel);
             }
             endGpxFile();
-            if(writer != null){
+            if (writer != null) {
                 writer.close();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        /* try {
-            file.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        String header = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?><gpx xmlns=\"http://www.topografix.com/GPX/1/1\" creator=\"MapSource 6.15.5\" version=\"1.1\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"  xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd\"><trk>\n";
-        String name = "<name>" + rel.getNom() + "</name><trkseg>\n";
-        String segments = createGoodGpxSegment(rel);
-        String footer = "</trkseg></trk></gpx>";
-
-        try {
-            FileOutputStream writer = new FileOutputStream(file);
-            writer.write(header.getBytes());
-            writer.write(name.getBytes());
-            writer.write(segments.getBytes());
-            writer.write(footer.getBytes());
-            if(writer != null){
-                writer.close();
-            }
-
-        } catch (IOException e) {
-            Log.e("generateGpx", "Error Writting Path",e);
-        }*/
     }
 
     /**
-     * Exporte le relevé dans le téléphone
-     * @param rel Le relevé à exporter
-     * @return Le File correspondant au relevé exporté
+     * Exporte les relevés rels dans un fichier nommé gpxName
+     *
+     * @param rels Les relevés à exporter dans un gpx
+     * @param gpxName Le nom du fichier
+     * @return Le fichier créé
      */
-/*    public File export(Releve rel) {
-        File dir = new File(DIRECTORY_PATH);
-        if(!dir.exists())
-            dir.mkdirs();
-        String currFilePath = DIRECTORY_PATH + rel.getNom() + GPX_EXTENSION;
-        File mFile = new File(currFilePath);
-        try {
-            if (appHasAccessToStorage()) {
-                mFile.createNewFile();
-                MediaScannerConnection.scanFile(ctx, new String[] {currFilePath}, null, null);
-                generateGpx(mFile,rel);
-                return mFile;
-            } else
-                System.out.println("Pas accès");
-        } catch (IOException e){
-            e.printStackTrace();
-        }
-        return null;
-    }*/
-
     public File exportReleves(List<Releve> rels, String gpxName){
         File dir = new File(DIRECTORY_PATH);
         if(!dir.exists())
@@ -159,6 +117,7 @@ public class RelToGpx implements Serializable{
         try {
             if(appHasAccessToStorage()) {
                 mFile.createNewFile();
+                // Scan le fichier pour qu'il soit visible quand l'appareil est connecté à l'ordinateur
                 MediaScannerConnection.scanFile(ctx,new String[] {currFilePath},null, null);
                 generateGpx(mFile,rels);
                 return mFile;

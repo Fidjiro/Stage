@@ -2,7 +2,6 @@ package com.example.eden62.GENSMobile.Activities.Historiques;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -18,9 +17,13 @@ import android.widget.ListView;
 import com.example.eden62.GENSMobile.HistoryAdapters.ItemsAdapter;
 import com.example.eden62.GENSMobile.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Activité d'historique de relevé ou inventaire
+ *
+ * @param <T> Adapter de relevés ou d'inventaires
+ */
 public abstract class HistoryActivity<T extends ItemsAdapter> extends AppCompatActivity {
     protected ListView listItems;
     protected CheckBox changeAllCheckboxes;

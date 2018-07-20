@@ -9,8 +9,9 @@ import com.example.eden62.GENSMobile.Tools.XY;
 
 import org.mapsforge.core.model.LatLong;
 
-import static java.lang.Math.log;
-
+/**
+ * Pop up d'information sur un point
+ */
 public class PopUpPoint extends ReleveInfoPopup {
 
     protected TextView posWgs, posL93;

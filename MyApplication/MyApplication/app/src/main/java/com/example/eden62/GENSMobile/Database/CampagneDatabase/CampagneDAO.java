@@ -26,6 +26,7 @@ public class CampagneDAO implements DAO<Inventaire> {
     public static final String KEY = "_id";
     public static final String REF_USR = "ref_usr";
     public static final String REF_TAXON = "ref_taxon";
+    public static final String APP_VERSION = "app_version";
     public static final String NV_TAXON = "nv_taxon";
     public static final String NOM_FR = "nom_fr";
     public static final String NOM_LATIN = "nom_latin";
@@ -50,17 +51,13 @@ public class CampagneDAO implements DAO<Inventaire> {
         this.mHandler = new CampagneDatabaseHandler(pContext, NAME, null, VERSION);
     }
 
-    /**
-     * Ouvre la base de donnée
-     */
+    @Override
     public void open() {
         // Pas besoin de fermer la dernière base puisque getWritableDatabase s'en charge
         mDb = mHandler.getWritableDatabase();
     }
 
-    /**
-     * Ferme la base de données
-     */
+    @Override
     public void close() {
         mDb.close();
     }
@@ -89,17 +86,18 @@ public class CampagneDAO implements DAO<Inventaire> {
         return mDb.insert(CAMPAGNE,null,cv);
     }
 
+    /**
+     * Récupère un inventaire via son id
+     *
+     * @param id L'id de l'inventaire à récupérer
+     * @return L'inventaire correspondant à l'id en paramètre
+     */
     public Inventaire getInventaire(long id){
         String request = "SELECT * FROM " + CAMPAGNE + " WHERE " + KEY + " = ?";
         return dealWithSingleCursor(mDb.rawQuery(request,new String[]{id + ""}));
     }
 
-    /**
-     * Supprime l'inventaire de la base
-     *
-     * @param inv L'inventaire à supprimer
-     * @return Le résultat de la suppression de l'inventaire
-     */
+    @Override
     public long delete(Inventaire inv){
         return mDb.delete(CAMPAGNE,KEY + " = ?",new String[]{inv.get_id() + ""});
     }
@@ -135,6 +133,7 @@ public class CampagneDAO implements DAO<Inventaire> {
     private ContentValues getCvFrom(Inventaire inv){
         ContentValues cv = new ContentValues();
         cv.put(REF_TAXON,inv.getRef_taxon());
+        cv.put(APP_VERSION,inv.getAppVersion());
         cv.put(NV_TAXON,inv.getNv_taxon());
         cv.put(REF_USR,inv.getUser());
         cv.put(NOM_FR,inv.getNomFr());
@@ -187,11 +186,13 @@ public class CampagneDAO implements DAO<Inventaire> {
         return dealWithCursor(c);
     }
 
+    // Récupère un inventaire grâce au curseur qui n'a qu'une seule ligne
     private Inventaire dealWithSingleCursor(Cursor c){
         c.moveToNext();
 
         long _id = c.getLong(c.getColumnIndex(KEY));
         long ref_taxon = c.getLong(c.getColumnIndex(REF_TAXON));
+        int app_version = c.getInt(c.getColumnIndex(APP_VERSION));
         int nv_taxon = c.getInt(c.getColumnIndex(NV_TAXON));
         long ref_usr = c.getLong(c.getColumnIndex(REF_USR));
         String nomFr = c.getString(c.getColumnIndex(NOM_FR));
@@ -213,7 +214,7 @@ public class CampagneDAO implements DAO<Inventaire> {
         int indiceAbondance = c.getInt(c.getColumnIndex(ABONDANCE));
         int err = c.getInt(c.getColumnIndex(ERR));
 
-        return new Inventaire(_id,ref_taxon,nv_taxon,ref_usr, nomFr, nomLatin, type_taxon, latitude,longitude,date, heure, nb,type_obs,remarques,nbMale,nbFemale,presencePonte,activite,statut,nidif,indiceAbondance,err);
+        return new Inventaire(_id,ref_taxon,app_version,nv_taxon,ref_usr, nomFr, nomLatin, type_taxon, latitude,longitude,date, heure, nb,type_obs,remarques,nbMale,nbFemale,presencePonte,activite,statut,nidif,indiceAbondance,err);
     }
 
     //Récupère une liste d'inventaire via le curseur en paramètre
@@ -224,6 +225,7 @@ public class CampagneDAO implements DAO<Inventaire> {
             do {
                 long _id = c.getLong(c.getColumnIndex(KEY));
                 long ref_taxon = c.getLong(c.getColumnIndex(REF_TAXON));
+                int app_version = c.getInt(c.getColumnIndex(APP_VERSION));
                 int nv_taxon = c.getInt(c.getColumnIndex(NV_TAXON));
                 long ref_usr = c.getLong(c.getColumnIndex(REF_USR));
                 String nomFr = c.getString(c.getColumnIndex(NOM_FR));
@@ -245,7 +247,7 @@ public class CampagneDAO implements DAO<Inventaire> {
                 int indiceAbondance = c.getInt(c.getColumnIndex(ABONDANCE));
                 int err = c.getInt(c.getColumnIndex(ERR));
 
-                Inventaire tmp = new Inventaire(_id,ref_taxon,nv_taxon,ref_usr, nomFr, nomLatin, type_taxon, latitude,longitude,date, heure, nb,type_obs,remarques,nbMale,nbFemale,presencePonte,activite,statut,nidif,indiceAbondance,err);
+                Inventaire tmp = new Inventaire(_id,ref_taxon,app_version,nv_taxon,ref_usr, nomFr, nomLatin, type_taxon, latitude,longitude,date, heure, nb,type_obs,remarques,nbMale,nbFemale,presencePonte,activite,statut,nidif,indiceAbondance,err);
 
                 res.add(tmp);
             }while(c.moveToNext());

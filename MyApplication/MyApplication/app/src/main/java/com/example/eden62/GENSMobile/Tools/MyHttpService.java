@@ -16,6 +16,9 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * Regroupe les actions avec le serveur
+ */
 public class MyHttpService {
 
     private Context ctx;
@@ -33,16 +36,37 @@ public class MyHttpService {
         this.client = new OkHttpClient.Builder().cookieJar(cookieJar).build();
     }
 
+    /**
+     * Crée la requête http pour connecter l'utilisateur au serveur
+     *
+     * @param login Le login de l'utilisateur
+     * @param mdp Le mot de passe de l'utilisateur
+     * @return La requête POST à envoyer
+     */
     public Request createConnectionRequest(String login, String mdp){
         RequestBody requestBody = new FormBody.Builder().add("log",login).add("mdp",mdp).build();
         return new Request.Builder().url(URL_CONNEXION).post(requestBody).build();
     }
 
+    /**
+     * Crée la requête http pour envoyer un inventaire au serveur
+     *
+     * @param inv L'inventaire à envoyer
+     * @param idCampagne L'id de campagne de cet inventaire
+     * @return La requête POST à envoyer
+     */
     public Request createSendDataRequest(Inventaire inv, int idCampagne){
         RequestBody requestBody = createRequestBodyToSend(inv, idCampagne);
         return new Request.Builder().url(URL_ADD_DATA).post(requestBody).build();
     }
 
+    /**
+     * Crée la requête http pour envoyer les informations de la campagne au serveur
+     *
+     * @param idCampagne L'id de la campagne
+     * @param nbInv Le nombre d'inventaires dans cette campagne
+     * @return La requête POST à envoyer
+     */
     public Request createSendInfoCampagneRequest(int idCampagne, int nbInv){
         RequestBody requestBody = new FormBody.Builder().add("idCampagne",idCampagne + "").
                                                         add("nbInv", nbInv + "").
@@ -50,10 +74,22 @@ public class MyHttpService {
         return new Request.Builder().url(URL_INFO_CAMPAGNE).post(requestBody).build();
     }
 
+    /**
+     * Crée la requête http pour connecter l'utilisateur au serveur
+     *
+     * @return La requête POST à envoyer
+     */
     public Request createUpdateUsrListRequest(){
         return new Request.Builder().url(URL_MAJ_USR).build();
     }
 
+    /**
+     * Exécute la requête http en paramètre
+     *
+     * @param request La requête à exécuter
+     * @return La réponse du serveur suite à l'exécution de la requête
+     * @throws IOException si la requête n'a pas pu être exécutée
+     */
     public Response executeRequest(Request request) throws IOException {
         return client.newCall(request).execute();
     }

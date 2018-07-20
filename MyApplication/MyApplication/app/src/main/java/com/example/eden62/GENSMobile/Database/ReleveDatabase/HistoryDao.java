@@ -5,13 +5,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.eden62.GENSMobile.Database.CampagneDatabase.Inventaire;
 import com.example.eden62.GENSMobile.Database.DAO;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Méthode de communication avec la base de données des relevés
+ */
 public class HistoryDao implements DAO<Releve>{
 
     protected final static int VERSION = 1;
@@ -40,17 +41,13 @@ public class HistoryDao implements DAO<Releve>{
         this.mHandler = new HistoryDatabaseHandler(pContext, NAME, null, VERSION);
     }
 
-    /**
-     * Ouvre la base de donnée
-     */
+    @Override
     public void open() {
         // Pas besoin de fermer la dernière base puisque getWritableDatabase s'en charge
         mDb = mHandler.getWritableDatabase();
     }
 
-    /**
-     * Ferme la base de données
-     */
+    @Override
     public void close() {
         mDb.close();
     }
@@ -66,11 +63,7 @@ public class HistoryDao implements DAO<Releve>{
         return mDb.insert(TABLE_NAME,null,cv);
     }
 
-    /**
-     * Supprime un relevé de la bas
-     * @param rel Le relevé à supprimer
-     * @return Le résultat de la suppression du relevé de la base
-     */
+    @Override
     public long delete(Releve rel){
         return mDb.delete(TABLE_NAME,KEY + " = ?",new String[]{rel.get_id() + ""});
     }
@@ -115,6 +108,7 @@ public class HistoryDao implements DAO<Releve>{
 
         return dealWithCursor(c);
     }
+
 
     private Cursor selectReleveFromNomTypeDateHeure(String[] fields){
         String request = "SELECT * FROM " + TABLE_NAME + " WHERE " + NOM + " = ? AND " + TYPE + " = ? AND " + TIME + " = ?;";

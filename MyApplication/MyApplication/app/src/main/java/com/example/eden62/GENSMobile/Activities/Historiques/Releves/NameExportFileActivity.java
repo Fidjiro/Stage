@@ -14,9 +14,11 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.eden62.GENSMobile.Activities.Historiques.Stocker.ReleveStocker;
 import com.example.eden62.GENSMobile.R;
 
+/**
+ * Activité permettant de nommer le fichier gpx exporté
+ */
 public class NameExportFileActivity extends AppCompatActivity {
 
     protected LinearLayout nameFileLayout;

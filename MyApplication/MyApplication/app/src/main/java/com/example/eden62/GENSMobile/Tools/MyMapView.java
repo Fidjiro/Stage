@@ -2,8 +2,6 @@ package com.example.eden62.GENSMobile.Tools;
 
 import android.os.Environment;
 import android.support.annotation.NonNull;
-import android.view.DragEvent;
-import android.view.View;
 
 import com.example.eden62.GENSMobile.R;
 
@@ -38,7 +36,6 @@ public class MyMapView {
     private MapView mapView;
 
     public static final int SHAPE_LAYER_INDEX = 1;
-    public static final int POSITION_LAYER_INDEX = 2;
 
     private TileCache myCache;
 
@@ -62,7 +59,7 @@ public class MyMapView {
         setZoom();
 
         //Ajout d'un marqueur
-        addMarker();
+        initPositionMarker();
     }
 
     /**
@@ -87,17 +84,15 @@ public class MyMapView {
     }
 
     /**
-     * Ajoute un marqueur
+     * Ajoute le marqueur qui représentera la position de l'utilisateur
      */
-    private void addMarker(){
+    private void initPositionMarker(){
         positionMarker = Utils.createMarker(mapView.getContext(),R.drawable.marker_red,null);
-        System.out.println(getLayers().get(0));
-        getLayers().add(new Polygon(null,null,null));
-        mapView.getLayerManager().getLayers().add(positionMarker);
-    }
 
-    public int getMarkerIdx(){
-        return getLayers().indexOf(positionMarker);
+        // Aloue la place pour les futur relevés polygon/ligne
+        getLayers().add(new Polygon(null,null,null));
+
+        mapView.getLayerManager().getLayers().add(positionMarker);
     }
 
     /**
@@ -124,9 +119,7 @@ public class MyMapView {
      * @return <code>True</code> si il y a de la place, <code>false</code> sinon
      */
     private boolean externalStorageAvailable() {
-        return
-                Environment.MEDIA_MOUNTED
-                        .equals(Environment.getExternalStorageState());
+        return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
     }
 
     /**
@@ -189,7 +182,7 @@ public class MyMapView {
      */
     public void centerOn(LatLong lat){
         //mapView.setZoomLevel(baseZoom);
-        mapView.getModel().mapViewPosition.animateTo(lat);
+        getModel().mapViewPosition.animateTo(lat);
     }
 
     /**

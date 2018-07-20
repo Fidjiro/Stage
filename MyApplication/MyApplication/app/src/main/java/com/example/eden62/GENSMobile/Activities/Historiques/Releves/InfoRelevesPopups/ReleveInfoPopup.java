@@ -4,21 +4,20 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.example.eden62.GENSMobile.Activities.Historiques.Releves.HistoryReleveActivity;
 import com.example.eden62.GENSMobile.Activities.MapsActivities.ShowInvRelActivity;
-import com.example.eden62.GENSMobile.Parser.RelToGpx;
 import com.example.eden62.GENSMobile.Database.ReleveDatabase.HistoryDao;
 import com.example.eden62.GENSMobile.Database.ReleveDatabase.Releve;
+import com.example.eden62.GENSMobile.Parser.RelToGpx;
 import com.example.eden62.GENSMobile.R;
 import com.example.eden62.GENSMobile.Tools.Utils;
 
@@ -26,6 +25,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Pop ups d'informations sur un relevé réalisé
+ */
 public abstract class ReleveInfoPopup extends AppCompatActivity {
 
     protected TextView nom, type, date, heure;
@@ -189,8 +191,9 @@ public abstract class ReleveInfoPopup extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onDestroy() {
+        super.onDestroy();
+        dao.close();
     }
 
     /**

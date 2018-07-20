@@ -1,7 +1,6 @@
 package com.example.eden62.GENSMobile.Activities.MapsActivities.Releve;
 
 import android.app.Notification;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -20,9 +19,13 @@ import org.mapsforge.core.model.LatLong;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Service arrière plan qui continue le relevé en cours si l'écran s'éteint ou que l'utilisateur fait autre chose sur son
+ * appareil
+ */
 public class PointsTakerService extends Service {
 
-    private static final String TAG = "BOOMBOOMTESTGPS";
+    private static final String TAG = "PointsTakerService";
     private static final int ONGOING_NOTIFICATION_ID = 1;
     private final IBinder mBinder = new PointsTakerBinder();
     private LocationManager mLocationManager = null;
@@ -72,6 +75,7 @@ public class PointsTakerService extends Service {
         return START_STICKY;
     }
 
+    // Construit une notification d'information de relevé en cours
     private Notification getNotification(){
         Notification.Builder notificationBuilder =
                 new Notification.Builder(this)
@@ -114,12 +118,14 @@ public class PointsTakerService extends Service {
     }
 
     private void initializeLocationManager() {
-        if (mLocationManager == null) {
+        if (mLocationManager == null)
             mLocationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-
-        }
     }
 
+    /**
+     * Retourne la liste des points obtenu et s'arrête
+     * @return La liste de points obtenu
+     */
     public List<LatLong> getTakenPoints(){
         stopSelf();
         return takenPoints;

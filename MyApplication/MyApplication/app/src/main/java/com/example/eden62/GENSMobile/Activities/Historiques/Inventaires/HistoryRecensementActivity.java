@@ -40,6 +40,9 @@ import java.util.List;
 import okhttp3.Request;
 import okhttp3.Response;
 
+/**
+ * Historique des inventaires non synchronisés ou hors sites de l'utilisateur
+ */
 public class HistoryRecensementActivity extends HistoryActivity<InventaireAdapter> {
 
     protected CampagneDAO campagneDao;
@@ -122,6 +125,10 @@ public class HistoryRecensementActivity extends HistoryActivity<InventaireAdapte
         }
         return res;
     }
+
+    /**
+     * Tâche qui envoi les infos sur la campagne créée par l'utilisateur
+     */
     private class SendCampagneInfoTask extends AsyncTask<Void,Void,Boolean> {
 
         private final Request mRequete;
@@ -217,6 +224,9 @@ public class HistoryRecensementActivity extends HistoryActivity<InventaireAdapte
 
     }
 
+    /**
+     * Tâche qui connecte l'utilisateur au serveur
+     */
     private class AttemptLoginTask extends AsyncTask<Void,Void,Boolean> {
 
         private final Request mRequete;
@@ -296,6 +306,9 @@ public class HistoryRecensementActivity extends HistoryActivity<InventaireAdapte
         }
     }
 
+    /**
+     * Tâche qui permet d'envoyer un inventaire au serveur
+     */
     private class SendDataTask extends AsyncTask<Void,Void,Boolean> {
 
         private final Request mRequete;

@@ -2,7 +2,6 @@ package com.example.eden62.GENSMobile.AutoComplete.AutoCompleteListeners;
 
 import android.content.Context;
 
-import com.example.eden62.GENSMobile.Activities.MapsActivities.Recensement.MainActivityRec;
 import com.example.eden62.GENSMobile.Activities.MapsActivities.Recensement.SearchTaxonPopup;
 import com.example.eden62.GENSMobile.AutoComplete.ArrayAdapter.AutocompleteCustomFrArrayAdapter;
 import com.example.eden62.GENSMobile.Database.LoadingDatabase.Taxon;

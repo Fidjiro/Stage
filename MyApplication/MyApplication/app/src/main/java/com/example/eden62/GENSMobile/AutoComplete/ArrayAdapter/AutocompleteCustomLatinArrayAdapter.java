@@ -3,7 +3,6 @@ package com.example.eden62.GENSMobile.AutoComplete.ArrayAdapter;
 import android.content.Context;
 import android.graphics.Color;
 
-import com.example.eden62.GENSMobile.Activities.MapsActivities.Recensement.MainActivityRec;
 import com.example.eden62.GENSMobile.Activities.MapsActivities.Recensement.SearchTaxonPopup;
 import com.example.eden62.GENSMobile.Database.LoadingDatabase.Taxon;
 

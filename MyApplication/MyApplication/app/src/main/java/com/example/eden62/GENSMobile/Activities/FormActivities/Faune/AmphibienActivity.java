@@ -4,6 +4,7 @@ import android.widget.CheckBox;
 
 import com.example.eden62.GENSMobile.Database.CampagneDatabase.Inventaire;
 import com.example.eden62.GENSMobile.R;
+import com.example.eden62.GENSMobile.Tools.Utils;
 
 /**
  * Activité formulaire pour les amphibiens
@@ -21,7 +22,7 @@ public class AmphibienActivity extends FauneActivity {
 
     @Override
     protected Inventaire createPersonalInventaire() {
-        return new Inventaire(ref_taxon, nv_taxon, usrId, nomFrString, nomLatinString, typeTaxon, lat, lon, dat, heure, nb, obs, remarquesTxt, nbMale, nbFemale,presencePonteValue);
+        return new Inventaire(ref_taxon, Utils.getVerCode(this), nv_taxon, usrId, nomFrString, nomLatinString, typeTaxon, lat, lon, dat, heure, nb, obs, remarquesTxt, nbMale, nbFemale,presencePonteValue);
     }
 
     @Override

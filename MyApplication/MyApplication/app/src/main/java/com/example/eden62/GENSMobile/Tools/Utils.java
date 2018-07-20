@@ -14,6 +14,8 @@ package com.example.eden62.GENSMobile.Tools;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -121,6 +123,11 @@ public final class Utils {
         return formatInt(day) + "/" + formatInt(month) + "/" + year;
     }
 
+    /**
+     * Renvoi la date en paramètre avec une année en 2 chiffres
+     * @param date La date à convertir
+     * @return La date convertie
+     */
     public static String printDateWithYearIn2Digit(String date){
         int idxSlash = date.lastIndexOf("/");
         String year = date.substring(idxSlash + 1);
@@ -128,6 +135,11 @@ public final class Utils {
         return date.replace(year,newYear);
     }
 
+    /**
+     * Récupère l'heure de l'appareil
+     *
+     * @return L'heure relevé à partir de l'appareil
+     */
     public static String getTime(){
         Calendar c = Calendar.getInstance();
         int hours = c.get(Calendar.HOUR_OF_DAY);
@@ -147,10 +159,17 @@ public final class Utils {
         return "" + i;
     }
 
+    // Calcule l'arc tangente hyperbolique
     private static double atanh(double x){
         return (log(1+x) - log(1-x))/2;
     }
 
+    /**
+     * Transforme Une LatLong WGS en XY Lambert
+     *
+     * @param latLong La position à convertir
+     * @return La position en Lambert
+     */
     public static XY convertWgs84ToL93(LatLong latLong){
 
         double latitude = latLong.getLatitude();
@@ -203,5 +222,21 @@ public final class Utils {
      */
     public static long getCurrUsrId(Context ctx){
         return ctx.getSharedPreferences("loginPrefs", Context.MODE_PRIVATE).getLong("usrId",0);
+    }
+
+    /**
+     * Récupère la version de l'application
+     *
+     * @param ctx Le context de l'activité appellante
+     * @return La version de l'application installée
+     */
+    public static int getVerCode(Context ctx) {
+        PackageInfo packageInfo = null;
+        try {
+            packageInfo = ctx.getPackageManager().getPackageInfo(ctx.getPackageName(),0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return packageInfo.versionCode;
     }
 }

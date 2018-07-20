@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.example.eden62.GENSMobile.Database.CampagneDatabase.Inventaire;
 import com.example.eden62.GENSMobile.R;
+import com.example.eden62.GENSMobile.Tools.Utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -118,7 +119,7 @@ public class OiseauxActivity extends FauneActivity {
 
     @Override
     protected Inventaire createPersonalInventaire() {
-        return new Inventaire(ref_taxon, nv_taxon, usrId, nomFrString, nomLatinString, typeTaxon, lat, lon, dat, heure, nb, obs, remarquesTxt, nbMale, nbFemale, activiteValue, statutValue, nidificationValue);
+        return new Inventaire(ref_taxon, Utils.getVerCode(this), nv_taxon, usrId, nomFrString, nomLatinString, typeTaxon, lat, lon, dat, heure, nb, obs, remarquesTxt, nbMale, nbFemale, activiteValue, statutValue, nidificationValue);
     }
 
     @Override

@@ -1,15 +1,12 @@
 package com.example.eden62.GENSMobile.Activities.MapsActivities.Recensement;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.LinearLayout;
 
 import com.example.eden62.GENSMobile.Activities.FormActivities.Faune.AmphibienActivity;
 import com.example.eden62.GENSMobile.Activities.FormActivities.Faune.FauneActivity;
@@ -26,6 +23,9 @@ import com.example.eden62.GENSMobile.Database.LoadingDatabase.Taxon;
 import com.example.eden62.GENSMobile.R;
 import com.example.eden62.GENSMobile.Tools.Utils;
 
+/**
+ * Activité permettant de questionner la base de donner pour trouver son taxon
+ */
 public class SearchTaxonPopup extends AppCompatActivity {
 
     public AutocompleteCustomArrayAdapter myLatinAdapter;
@@ -202,6 +202,13 @@ public class SearchTaxonPopup extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        // Change la transition de finition -> sort vers le haut de l'appareil
         overridePendingTransition(0,R.anim.exit_from_top);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dao.close();
     }
 }

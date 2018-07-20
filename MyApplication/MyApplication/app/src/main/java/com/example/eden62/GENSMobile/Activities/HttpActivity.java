@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -42,6 +40,9 @@ import java.util.List;
 import okhttp3.Request;
 import okhttp3.Response;
 
+/**
+ * Classe qui synchronise les relevés avec le serveur
+ */
 public class HttpActivity extends AppCompatActivity implements View.OnClickListener {
 
     private LinearLayout psswLayout,nbInvLayout, nbRelLayout;
@@ -211,6 +212,9 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         builder.create().show();
     }
 
+    /**
+     * Envoi au serveur les infos de la campagne
+     */
     private class SendCampagneInfoTask extends AsyncTask<Void,Void,Boolean> {
 
         private final Request mRequete;
@@ -304,6 +308,9 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * Envoi un inventaire
+     */
     private class SendDataTask extends AsyncTask<Void,Void,Boolean>{
 
         private final Request mRequete;
@@ -369,6 +376,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
                 }
             });
             cpt++;
+            // Si c'est la dernière tâche et que le nombre d'erreur n'est pas nul, on affiche un message
             if(cpt == currTotalInv && nbErr > 0){
                 AlertDialog.Builder builder = new AlertDialog.Builder(HttpActivity.this);
                 builder.setMessage(nbErr + goodFormatForWordInventaire() + "à plus de 100m hors des limites de sites");
@@ -427,6 +435,9 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         return new JSONObject(s);
     }
 
+    /**
+     * Tâche de connexion au serveur
+     */
     private class AttemptLoginTask extends AsyncTask<Void,Void,Boolean> {
 
         private final Request mRequete;
@@ -543,17 +554,11 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         private boolean checkVersion(int servVersion){
-            try {
-                PackageInfo packageInfo = HttpActivity.this.getPackageManager().getPackageInfo(getPackageName(),0);
-                int verCode = packageInfo.versionCode;
-                return verCode == servVersion;
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
-                return false;
-            }
+            return Utils.getVerCode(HttpActivity.this) == servVersion;
         }
     }
 
+    // Créé un message d'avertissement pour prévenir de la version obsolète de l'application
     private Dialog createWrongVersionDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.updateApp);
@@ -572,6 +577,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
     protected void onDestroy() {
         super.onDestroy();
         campagneDao.close();
+        releveDao.close();
     }
 
     @Override

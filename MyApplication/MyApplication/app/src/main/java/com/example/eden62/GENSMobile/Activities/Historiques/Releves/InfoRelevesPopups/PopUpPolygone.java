@@ -6,6 +6,9 @@ import android.widget.TextView;
 import com.example.eden62.GENSMobile.R;
 import com.example.eden62.GENSMobile.Tools.Utils;
 
+/**
+ * Pop up d'information sur un polygone
+ */
 public class PopUpPolygone extends ReleveInfoPopup {
 
     protected TextView perimeter, area;

@@ -8,7 +8,6 @@ import android.content.ServiceConnection;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
 import android.view.View;
@@ -153,6 +152,7 @@ public class MainActivityRel extends MainActivity {
 
     }
 
+    // Créé l'objet Releve point à insérer dans la base depuis le marker créé par l'utilisateur
     private Releve createPointReleveToInsert(){
         long creatorId = Utils.getCurrUsrId(this);
         String latitude = lastMarkerPosition.getLatitude() + "";
@@ -163,6 +163,7 @@ public class MainActivityRel extends MainActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        // Récupère l'event du clic sur le bouton retour de l'appareil
         if (Integer.parseInt(android.os.Build.VERSION.SDK) > 5
                 && keyCode == KeyEvent.KEYCODE_BACK
                 && event.getRepeatCount() == 0) {
@@ -175,6 +176,7 @@ public class MainActivityRel extends MainActivity {
         return super.onKeyDown(keyCode, event);
     }
 
+    // Efface les markers réalisés en même temps qu'une polyline
     private void clearMarkers(){
         if(markers.size()>0){
             for(Marker m : markers){
@@ -447,6 +449,11 @@ public class MainActivityRel extends MainActivity {
         lineLength = polylineLengthInMeters(latLongs);
     }
 
+    /**
+     * Renvoi la longueur de la ligne en mètres
+     * @param polyline La ligne à mesurer
+     * @return La longueur de la ligne
+     */
     protected double polylineLengthInMeters(List<LatLong> polyline){
         ListIterator<LatLong> it = polyline.listIterator();
         double res = 0;
@@ -507,18 +514,6 @@ public class MainActivityRel extends MainActivity {
     @Override
     protected void setView() {
         setContentView(R.layout.activity_main_rel);
-    }
-
-    @Override
-    protected void setRelocButton(View.OnClickListener listener) {
-        Button reloc2 = (Button) findViewById(R.id.reloc2);
-        reloc2.setOnClickListener(listener);
-    }
-
-    @Override
-    protected void displayLayout(){
-        ConstraintLayout layout = (ConstraintLayout)findViewById(R.id.releveLayout);
-        layout.setVisibility(View.VISIBLE);
     }
 
     /**
@@ -586,6 +581,9 @@ public class MainActivityRel extends MainActivity {
         }
     };
 
+    /**
+     * Redéfini le location listener pour qu'il prenne des points pour tracer le relevé
+     */
     private class MyRelLocationListener extends MyLocationListener{
 
         @Override
@@ -593,17 +591,21 @@ public class MainActivityRel extends MainActivity {
             LatLong lastUsrPosition = usrPosition;
             super.onLocationChanged(location);
 
+            // Si il y a un relevé en cours et si le point est différent du précédent, on l'ajoute au relevé
             if(!noReleveInProgress() && isNotSamePositionAs(lastUsrPosition)){
                 addPointToGoodLayer();
                 callGoodRedraw();
             }
         }
 
-        //Vérifie si le point récupéré est le même que le précédent, si oui, il n'est pas ajouté au relevé
+        //Vérifie si le point récupéré est le même que le précédent
         private boolean isNotSamePositionAs(LatLong pos){
             return !usrPosition.equals(pos);
         }
 
+        /**
+         * Ajoute le point au bon type de relevé
+         */
         protected void addPointToGoodLayer(){
             if(currentReleveIsLine()){
                 polyline.addPoint(getUsrLatLong());
@@ -612,6 +614,9 @@ public class MainActivityRel extends MainActivity {
             }
         }
 
+        /**
+         * Appelle le bon redraw en fonction du type de relevé en cours
+         */
         protected void callGoodRedraw(){
             if(currentReleveIsLine()){
                 polyline.requestRedraw();

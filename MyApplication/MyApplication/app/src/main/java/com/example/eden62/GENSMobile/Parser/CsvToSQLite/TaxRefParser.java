@@ -2,9 +2,8 @@ package com.example.eden62.GENSMobile.Parser.CsvToSQLite;
 
 import android.content.Context;
 
-import com.example.eden62.GENSMobile.Database.LoadingDatabase.Taxon;
 import com.example.eden62.GENSMobile.Database.LoadingDatabase.TaxUsrDAO;
-import com.example.eden62.GENSMobile.Parser.CsvToSQLite.CSVParser;
+import com.example.eden62.GENSMobile.Database.LoadingDatabase.Taxon;
 
 /**
  * Parse le fichier Taxref dans les assets pour insérer son contenu dans la table équivalente

@@ -1,5 +1,8 @@
 package com.example.eden62.GENSMobile.Tools;
 
+/**
+ * Classe représentant une position en Lambert
+ */
 public class XY {
 
     public double x;

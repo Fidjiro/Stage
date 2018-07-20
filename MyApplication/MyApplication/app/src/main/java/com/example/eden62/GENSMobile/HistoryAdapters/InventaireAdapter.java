@@ -5,19 +5,20 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import com.example.eden62.GENSMobile.Activities.Historiques.Stocker.InventoryStocker;
+import com.example.eden62.GENSMobile.Stocker.InventoryStocker;
 import com.example.eden62.GENSMobile.Database.CampagneDatabase.Inventaire;
 import com.example.eden62.GENSMobile.R;
 import com.example.eden62.GENSMobile.Tools.Utils;
 
-import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Adapter d'inventaires
+ */
 public class InventaireAdapter extends ItemsAdapter<InventoryStocker,Inventaire> {
 
     public InventaireAdapter(Context context, List<Inventaire> inventaires) {
@@ -45,7 +46,7 @@ public class InventaireAdapter extends ItemsAdapter<InventoryStocker,Inventaire>
             convertView.setTag(viewHolder);
         }
 
-        //getItem(position) va récupérer l'item [position] de la List<Tweet> tweets
+        //getItem(position) va récupérer l'item [position] de la liste des inventaires
         final Inventaire inv = getItem(position);
 
         String nom;
@@ -71,6 +72,7 @@ public class InventaireAdapter extends ItemsAdapter<InventoryStocker,Inventaire>
         viewHolder.date.setText(Utils.printDateWithYearIn2Digit(inv.getDate()));
         viewHolder.heure.setText(inv.getHeure());
 
+        // Si l'inventaire est hors-site, on met un fond rouge, sinon un fond transparent
         if(inv.getErr() == 1)
             convertView.setBackgroundColor(Color.RED);
         else
@@ -85,6 +87,7 @@ public class InventaireAdapter extends ItemsAdapter<InventoryStocker,Inventaire>
                     checkedItemsStocker.remove(inv);
             }
         });
+
         if(checkedItemsStocker.getCheckedItems().contains(inv))
             viewHolder.checkBox.setChecked(true);
         else
@@ -93,12 +96,14 @@ public class InventaireAdapter extends ItemsAdapter<InventoryStocker,Inventaire>
         return convertView;
     }
 
+    // ajoute l'extension sp. au nom latin de l'espèce si son niveau est 5
     private String addSpToString(int nv, String name){
         if(nv == 5)
             return name + " sp.";
         return name;
     }
 
+    // Affecte une couleur au texte en fonction du niveau de l'espèce
     private void setNiceColorToView(int nv, TextView view){
         int color;
         if(nv == 5){

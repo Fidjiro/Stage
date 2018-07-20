@@ -3,19 +3,7 @@ package com.example.eden62.GENSMobile.Database.ReleveDatabase;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.example.eden62.GENSMobile.Activities.MapsActivities.Releve.MainActivityRel;
 import com.example.eden62.GENSMobile.Database.DatabaseItem;
-import com.example.eden62.GENSMobile.R;
-import com.example.eden62.GENSMobile.Tools.Utils;
-
-import org.mapsforge.core.graphics.Style;
-import org.mapsforge.core.model.LatLong;
-import org.mapsforge.map.android.graphics.AndroidGraphicFactory;
-import org.mapsforge.map.layer.Layer;
-import org.mapsforge.map.layer.overlay.Marker;
-import org.mapsforge.map.layer.overlay.Polyline;
-
-import java.util.ArrayList;
 
 public class Releve implements Parcelable,DatabaseItem{
 

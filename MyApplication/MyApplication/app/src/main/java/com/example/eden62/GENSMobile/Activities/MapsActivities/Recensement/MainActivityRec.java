@@ -2,7 +2,6 @@ package com.example.eden62.GENSMobile.Activities.MapsActivities.Recensement;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
 import android.view.View;
 import android.widget.Button;
 
@@ -54,17 +53,5 @@ public class MainActivityRec extends MainActivity {
     @Override
     protected void setView() {
         setContentView(R.layout.activity_main_rec);
-    }
-
-    @Override
-    protected void setRelocButton(View.OnClickListener listener) {
-        Button reloc1 = (Button) findViewById(R.id.reloc1);
-        reloc1.setOnClickListener(listener);
-    }
-
-    @Override
-    protected void displayLayout(){
-        ConstraintLayout layout = (ConstraintLayout)findViewById(R.id.missionLayout);
-        layout.setVisibility(View.VISIBLE);
     }
 }

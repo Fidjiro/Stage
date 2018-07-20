@@ -4,8 +4,9 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.io.Serializable;
-
+/**
+ * Base de données pour les relevés
+ */
 public class HistoryDatabaseHandler extends SQLiteOpenHelper{
 
     public static final String HISTORY_TABLE_NAME = "History";

@@ -3,7 +3,6 @@ package com.example.eden62.GENSMobile.Parser.CsvToSQLite;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.example.eden62.GENSMobile.Database.LoadingDatabase.TaxUsrDAO;
 
@@ -70,7 +69,7 @@ public abstract class CSVParser {
     }
 
     /**
-     * Insère les valeurs dans colums dans la base dao
+     * Insère les valeurs de colums dans la base dao
      *
      * @param columns Les valeurs à insérer
      * @param dao La base où on insèrera les valeurs

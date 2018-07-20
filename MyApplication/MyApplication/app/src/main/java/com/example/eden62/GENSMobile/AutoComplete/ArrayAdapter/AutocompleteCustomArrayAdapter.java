@@ -8,9 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.example.eden62.GENSMobile.Activities.MapsActivities.Recensement.MainActivityRec;
 import com.example.eden62.GENSMobile.Activities.MapsActivities.Recensement.SearchTaxonPopup;
-import com.example.eden62.GENSMobile.Activities.MapsActivities.ShowInvRelActivity;
 import com.example.eden62.GENSMobile.Database.LoadingDatabase.Taxon;
 import com.example.eden62.GENSMobile.R;
 

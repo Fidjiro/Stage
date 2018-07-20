@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -41,7 +39,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 /**
- * Activité login qui permet de se log via un login/mot de passe.
+ * Activité login qui permet de se log via le login de l'utilisateur
  */
 public class LoginActivity extends AppCompatActivity {
 
@@ -67,14 +65,16 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
-        int verCode = getVerCode();
+        int verCode = Utils.getVerCode(this);
         loginPrefsEditor = loginPreferences.edit();
 
+        // Si l'id de campagne n'est pas encore défini
         if(loginPreferences.getInt("idCampagne",-1) == -1) {
             loginPrefsEditor.putInt("idCampagne", 0);
             loginPrefsEditor.commit();
         }
 
+        // Si la goodAppVersion n'est pas encore défini
         if(loginPreferences.getInt("goodAppVersion",-1) == -1) {
             loginPrefsEditor.putInt("goodAppVersion", verCode);
             loginPrefsEditor.commit();
@@ -110,18 +110,13 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    public int getVerCode() {
-        PackageInfo packageInfo = null;
-        try {
-            packageInfo = this.getPackageManager().getPackageInfo(getPackageName(),0);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        return packageInfo.versionCode;
-    }
-
+    /*Premier if: si la version de l'appli est inférieure à celle stockée ( via requête au serveur) on bloque
+      Second if: si la version de l'application est plus grande que celle stockée (l'utilisateur à mis a jour l'application
+      sans passer par la vérification avant la synchro) on met à jour la version stockée
+     */
     private void checkVersion(int currentVersion){
-        if(currentVersion != loginPreferences.getInt("goodAppVersion",-1)){
+        int registeredVersion = loginPreferences.getInt("goodAppVersion",-1);
+        if(currentVersion < registeredVersion){
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage(R.string.updateApp);
             builder.setPositiveButton(getString(R.string.accord), new DialogInterface.OnClickListener() {
@@ -132,6 +127,9 @@ public class LoginActivity extends AppCompatActivity {
             });
             builder.setCancelable(false);
             builder.create().show();
+        }else if(currentVersion > registeredVersion){
+            loginPrefsEditor.putInt("goodAppVersion", currentVersion);
+            loginPrefsEditor.commit();
         }
     }
 
@@ -275,6 +273,9 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Tâche qui permet de mettre à jour la liste d'utilisateur
+     */
     private class MajUsrTask extends AsyncTask<Void,Void,Boolean>{
 
         private final Request mRequete;

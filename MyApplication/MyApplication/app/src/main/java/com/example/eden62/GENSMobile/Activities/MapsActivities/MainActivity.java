@@ -13,12 +13,11 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.widget.LinearLayout;
+import android.widget.Button;
 
 import com.example.eden62.GENSMobile.Activities.HomeActivity;
 import com.example.eden62.GENSMobile.Activities.MapsActivities.Recensement.MainActivityRec;
@@ -114,7 +113,10 @@ public abstract class MainActivity extends AppCompatActivity{
      *
      * @param listener L'évènement à ajouter au bouton
      */
-    protected abstract void setRelocButton(View.OnClickListener listener);
+    protected void setRelocButton(View.OnClickListener listener){
+        Button reloc = (Button) findViewById(R.id.reloc);
+        reloc.setOnClickListener(listener);
+    }
 
     @Override
     public void onResume(){
@@ -138,7 +140,7 @@ public abstract class MainActivity extends AppCompatActivity{
     /**
      * Crée un dialog différent en fonction de l'identifiant
      *
-     * @param identifiant BOITE_AVERTISSEMENT BOITE_FIN_RELEVE BOITE_GPS_MANQUANT
+     * @param identifiant BOITE_AVERTISSEMENT BOITE_GPS_MANQUANT
      * @return Le dialog correspondant à l'identifiant
      */
     public Dialog createDialog(int identifiant) {
@@ -240,7 +242,10 @@ public abstract class MainActivity extends AppCompatActivity{
     /**
      * Affiche le layout en bas de la page
      */
-    protected abstract void displayLayout();
+    protected void displayLayout(){
+        ConstraintLayout layout = (ConstraintLayout)findViewById(R.id.mapButtonLayout);
+        layout.setVisibility(View.VISIBLE);
+    }
 
     /**
      * Récupère une {@link Location} en {@link LatLong}

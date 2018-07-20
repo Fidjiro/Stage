@@ -1,15 +1,13 @@
 package com.example.eden62.GENSMobile.Activities.MapsActivities.Releve;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -23,8 +21,9 @@ import com.example.eden62.GENSMobile.Tools.XY;
 
 import org.mapsforge.core.model.LatLong;
 
-import static java.lang.Math.log;
-
+/**
+ * Activité permettant de nommer un relevé
+ */
 public class NameRelevePopup extends AppCompatActivity {
 
     protected TextView lineLengthText,perimeterText, polygonAreaText, positionWGSText,positionL93Text;
@@ -124,5 +123,11 @@ public class NameRelevePopup extends AppCompatActivity {
         });
         box = builder.create();
         return box;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dao.close();
     }
 }

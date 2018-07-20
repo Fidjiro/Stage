@@ -26,6 +26,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Historiques des rekevés réalisés
+ */
 public class HistoryReleveActivity extends HistoryActivity<ReleveAdapter> {
 
     protected HistoryDao dao;

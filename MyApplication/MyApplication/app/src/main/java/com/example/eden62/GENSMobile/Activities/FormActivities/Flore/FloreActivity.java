@@ -7,6 +7,7 @@ import android.widget.Spinner;
 import com.example.eden62.GENSMobile.Activities.FormActivities.FormActivity;
 import com.example.eden62.GENSMobile.Database.CampagneDatabase.Inventaire;
 import com.example.eden62.GENSMobile.R;
+import com.example.eden62.GENSMobile.Tools.Utils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -55,7 +56,7 @@ public class FloreActivity extends FormActivity {
      */
     @Override
     protected Inventaire createPersonalInventaire() {
-        return new Inventaire(ref_taxon, nv_taxon, usrId, nomFrString,nomLatinString, typeTaxon, lat, lon, dat, heure, nb, "Vu", remarquesTxt, indiceAbondanceValue);
+        return new Inventaire(ref_taxon, Utils.getVerCode(this), nv_taxon, usrId, nomFrString,nomLatinString, typeTaxon, lat, lon, dat, heure, nb, "Vu", remarquesTxt, indiceAbondanceValue);
     }
 
     /**
