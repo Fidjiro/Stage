@@ -7,16 +7,6 @@
     tools:context=".Activities.HomeActivity"
     android:background="@drawable/back">
 
-    <TextView
-        android:id="@+id/action_progress"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:textSize="22dp"
-        android:text="@string/chargement"
-        android:visibility="invisible" />
-
     <LinearLayout
         android:id="@+id/buttonList"
         android:layout_width="match_parent"

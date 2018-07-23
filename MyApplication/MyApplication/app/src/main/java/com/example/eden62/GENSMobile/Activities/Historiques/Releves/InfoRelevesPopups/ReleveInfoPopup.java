@@ -19,6 +19,7 @@ import com.example.eden62.GENSMobile.Database.ReleveDatabase.HistoryDao;
 import com.example.eden62.GENSMobile.Database.ReleveDatabase.Releve;
 import com.example.eden62.GENSMobile.Parser.RelToGpx;
 import com.example.eden62.GENSMobile.R;
+import com.example.eden62.GENSMobile.Tools.LoadingMapDialog;
 import com.example.eden62.GENSMobile.Tools.Utils;
 
 import java.io.File;
@@ -38,10 +39,14 @@ public abstract class ReleveInfoPopup extends AppCompatActivity {
 
     protected Releve rel;
 
+    protected LoadingMapDialog lmd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView();
+
+        lmd = new LoadingMapDialog(this);
 
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -143,7 +148,7 @@ public abstract class ReleveInfoPopup extends AppCompatActivity {
 
     /**
      * Permet d'ajoute le File en paramètre en pièce jointe d'un mail
-     * @param file La file qui servira de pièce jointemary
+     * @param file La file qui servira de pièce jointe
      */
     public void sendFileByMail(File file){
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -184,10 +189,7 @@ public abstract class ReleveInfoPopup extends AppCompatActivity {
      * @param show Si <code>true</code> le message s'affiche, n'efface si <code>false</code>
      */
     protected void showProgress(final boolean show) {
-
-        TextView mProgressView = (TextView) findViewById(R.id.action_progress);
-
-        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+        lmd.show(show);
     }
 
     @Override

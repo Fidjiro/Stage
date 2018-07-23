@@ -9,7 +9,11 @@ import com.example.eden62.GENSMobile.Database.CampagneDatabase.Inventaire;
 import com.example.eden62.GENSMobile.R;
 import com.example.eden62.GENSMobile.Tools.Utils;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,7 +22,13 @@ import java.util.Map;
 public class FloreActivity extends FormActivity {
 
     protected Spinner indiceAbondance;
-    protected Map<Integer,IntegerTuple> indices;
+    protected static final List<IntegerTuple> INDICES = new ArrayList<>(Arrays.asList(new IntegerTuple[]{
+            new IntegerTuple(0,0),
+            new IntegerTuple(1,25),
+            new IntegerTuple(26,100),
+            new IntegerTuple(101,1000),
+            new IntegerTuple(1001,10000),
+            new IntegerTuple(10001,IntegerTuple.INFINI)}));
 
     protected int indiceAbondanceValue;
 
@@ -70,13 +80,12 @@ public class FloreActivity extends FormActivity {
         nombre.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
-                if (usrClicOnEnterKey(keyCode,keyEvent))
+                if(usrClicOnEnterKey(keyCode,keyEvent))
                     setIndiceFromDenombrement();
                 return false;
             }
         });
         typeTaxon = 1;
-        setIndices();
     }
 
     private boolean usrClicOnEnterKey(int keyCode, KeyEvent keyEvent){
@@ -103,7 +112,7 @@ public class FloreActivity extends FormActivity {
     protected boolean coherentDenombrement(){
         int nombreText = getDenombrement();
         Integer indice = getSelectedIndiceValue();
-        IntegerTuple bornes = indices.get(indice);
+        IntegerTuple bornes = INDICES.get(indice);
 
         return bornes.contains(nombreText);
     }
@@ -127,19 +136,6 @@ public class FloreActivity extends FormActivity {
         return Integer.parseInt(c.toString());
     }
 
-    /**
-     * Affecte les bornes qui serviront à vérifier la bonne valeur du dénombrement en fonction de l'indice
-     */
-    protected void setIndices(){
-        indices = new HashMap<>();
-        indices.put(0,new IntegerTuple(0,0));
-        indices.put(1,new IntegerTuple(1,25));
-        indices.put(2,new IntegerTuple(26,100));
-        indices.put(3,new IntegerTuple(101,1000));
-        indices.put(4,new IntegerTuple(1001,10000));
-        indices.put(5,new IntegerTuple(10001,IntegerTuple.INFINI));
-    }
-
     @Override
     protected void actionWhenFormNotValidable() {
         super.actionWhenFormNotValidable();
@@ -157,7 +153,7 @@ public class FloreActivity extends FormActivity {
     /**
      * Représente les bornes des indices d'abondance. -1 est ici traduit comme l'infini
      */
-    public class IntegerTuple {
+    public static class IntegerTuple {
         public final int x;
         public final int y;
         public final static int INFINI = -1;
@@ -176,7 +172,7 @@ public class FloreActivity extends FormActivity {
         public boolean contains(int i){
             if(y == INFINI)
                 return x <= i;
-            return (x <= i) && (y >= i);
+            return (x <= i) && ( i <= y);
         }
 
         @Override
@@ -189,20 +185,12 @@ public class FloreActivity extends FormActivity {
      * Change l'indice d'abondance du formulaire en fonction du dénombrement inséré par l'utilisateur
      */
     protected void setIndiceFromDenombrement(){
-        int denombrement;
-        try{
-            denombrement = getDenombrement();
-        } catch(Exception e){
-            denombrement = 0;
-        }
-        for (HashMap.Entry<Integer, IntegerTuple> entry : indices.entrySet()) {
-            Integer ind = entry.getKey();
-            IntegerTuple bornes = entry.getValue();
-            if (bornes.contains(denombrement)) {
-                indiceAbondance.setSelection(ind);
-                return;
-            }
-        }
+        int denombrement = getDenombrement(), i = 0;
+
+        while(!INDICES.get(i).contains(denombrement))
+            i++;
+
+        indiceAbondance.setSelection(i);
     }
 
     /**
@@ -216,9 +204,8 @@ public class FloreActivity extends FormActivity {
         @Override
         public void onFocusChange(View view, boolean b) {
             super.onFocusChange(view, b);
-            if(!b) {
+            if(!b)
                 setIndiceFromDenombrement();
-            }
         }
     }
 }

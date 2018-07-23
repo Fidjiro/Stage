@@ -1,5 +1,7 @@
 package com.example.eden62.GENSMobile.Activities;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,26 +14,29 @@ import android.widget.TextView;
 import com.example.eden62.GENSMobile.Activities.MapsActivities.Recensement.MainActivityRec;
 import com.example.eden62.GENSMobile.Activities.MapsActivities.Releve.MainActivityRel;
 import com.example.eden62.GENSMobile.R;
+import com.example.eden62.GENSMobile.Tools.LoadingMapDialog;
 
 /**
  * Activité regroupant les boutons menant au différentes action possible de l'application
  */
 public class HomeActivity extends AppCompatActivity {
 
-    private Intent intent;
     public final static int RESULT_CLOSE_ALL = 2;
+    LoadingMapDialog lmd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        lmd = new LoadingMapDialog(this);
+
         Button obsPonctButton = (Button) findViewById(R.id.obs_ponc_button);
         obsPonctButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showProgress(true);
-                HomeActivity.this.executeLaunchActivity(false);
+                startActivity(new Intent(HomeActivity.this,MainActivityRec.class));
             }
         });
 
@@ -40,7 +45,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showProgress(true);
-                HomeActivity.this.executeLaunchActivity(false);
+                startActivity(new Intent(HomeActivity.this,MainActivityRec.class));
             }
         });
 
@@ -49,7 +54,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showProgress(true);
-                HomeActivity.this.executeLaunchActivity(true);
+                startActivity(new Intent(HomeActivity.this,MainActivityRel.class));
             }
         });
 
@@ -62,16 +67,6 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Lance l'activité correspondant à isReleveActivity
-     *
-     * @param isReleveActivity Si il vaut true, on lance la {@link MainActivityRel}, sinon {@link MainActivityRec}
-     */
-    protected void executeLaunchActivity(boolean isReleveActivity){
-        final ProgressTask relActivityLaunch = new ProgressTask(isReleveActivity);
-        relActivityLaunch.execute();
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -79,31 +74,10 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     /**
-     * Génère l'intent en fonction du paramètre isReleveActivity
-     *
-     * @param isReleveActivity Si il vaut true, on lance la {@link MainActivityRel}, sinon {@link MainActivityRec}
-     * @return Le bon intent
-     */
-    public Intent generateIntent (boolean isReleveActivity){
-        Intent intent;
-        if(isReleveActivity) {
-            intent = new Intent(HomeActivity.this, MainActivityRel.class);
-        }
-        else
-            intent = new Intent(HomeActivity.this,MainActivityRec.class);
-        return intent;
-    }
-
-    /**
      * Shows the progress UI and hides the login form.
      */
     protected void showProgress(final boolean show) {
-
-        LinearLayout buttonList = (LinearLayout) findViewById(R.id.buttonList);
-        TextView mProgressView = (TextView) findViewById(R.id.action_progress);
-
-        mProgressView.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
-        buttonList.setVisibility(show ? View.INVISIBLE : View.VISIBLE);
+        lmd.show(show);
     }
 
     /**
@@ -116,36 +90,8 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == RESULT_CLOSE_ALL){
+        if(resultCode == RESULT_CLOSE_ALL)
             finish();
-        }
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    /**
-     * Lance l'activité correspondant au bouton pressé par l'utilisateur et affiche un message de chargement
-     */
-    public class ProgressTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final boolean isRelActivity;
-
-        public ProgressTask(boolean isRelActivity) {
-            this.isRelActivity = isRelActivity;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            intent = generateIntent(isRelActivity);
-            startActivity(intent);
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) { }
-
-        @Override
-        protected void onCancelled() {
-            showProgress(false);
-        }
     }
 }

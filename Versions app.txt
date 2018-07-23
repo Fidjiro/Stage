@@ -1,5 +1,8 @@
-V1: ...
+V1, 18/07: ...
 
-v1.1: - Rajout position dans la reconsultation de relevés/inventaires
-      - Correction bug inversion du stockage de la version de l'application avec le niveau du taxon
-      - Correction bug après modif d'inventaire hors-site, il n'est plus considéré comme tel
+v1.1, 20/07: - Rajout position dans la reconsultation de relevés/inventaires
+	     - Correction bug inversion du stockage de la version de l'application avec le niveau du taxon
+	     - Correction bug après modif d'inventaire hors-site, il n'est plus considéré comme tel
+
+v1.2, 23/07: - Changement du message chargement de la carte en progress dialog
+	     - Ajout progress dialog chargement de la carte lors de la revisualisation d'inventaires

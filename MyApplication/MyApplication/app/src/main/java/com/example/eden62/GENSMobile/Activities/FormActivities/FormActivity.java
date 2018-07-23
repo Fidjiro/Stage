@@ -19,6 +19,7 @@ import com.example.eden62.GENSMobile.Database.CampagneDatabase.CampagneDAO;
 import com.example.eden62.GENSMobile.Database.CampagneDatabase.Inventaire;
 import com.example.eden62.GENSMobile.Database.LoadingDatabase.TaxUsrDAO;
 import com.example.eden62.GENSMobile.R;
+import com.example.eden62.GENSMobile.Tools.LoadingMapDialog;
 import com.example.eden62.GENSMobile.Tools.Utils;
 
 import java.text.Normalizer;
@@ -47,6 +48,8 @@ public abstract class FormActivity extends AppCompatActivity {
     protected int nb,nv_taxon;
     protected Inventaire consultedInv;
 
+    protected LoadingMapDialog lmd;
+
     /**
      * Initialise les champs commun au différents formulaires
      * @see AppCompatActivity#onCreate(Bundle)
@@ -62,17 +65,9 @@ public abstract class FormActivity extends AppCompatActivity {
 
         initFields();
 
-        LinearLayout layout = (LinearLayout) findViewById(R.id.container);
-        layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                clearFocus();
-            }
-        });
-        nombre.addTextChangedListener(new UnsetError());
-        remarques.setOnFocusChangeListener(new MyFocusChangeListener());
         Intent intent = getIntent();
         consultedInv = intent.getParcelableExtra("selectedInv");
+
         if(consultedInv != null) {
             setFormNotModifiable();
             buttonsModifLayout.setVisibility(View.VISIBLE);
@@ -182,11 +177,7 @@ public abstract class FormActivity extends AppCompatActivity {
             setUsrId();
             ref_taxon = taxDao.getRefTaxon(new String[]{nomLatinString, nomFrString});
         }
-        try{
-            nb = getDenombrement();
-        } catch (NumberFormatException e) {
-            nb = 0;
-        }
+        nb = getDenombrement();
         remarquesTxt = remarques.getText().toString();
     }
 
@@ -196,6 +187,7 @@ public abstract class FormActivity extends AppCompatActivity {
      * Récupère les différentes View présente dans le layout de base
      */
     protected void initFields(){
+        lmd = new LoadingMapDialog(this);
         nomfr = (TextView) findViewById(R.id.nomFr);
         nomlatin = (TextView) findViewById(R.id.nomLatin);
         date = (TextView) findViewById(R.id.date);
@@ -237,6 +229,7 @@ public abstract class FormActivity extends AppCompatActivity {
         visualise.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                showProgress(true);
                 Intent intent = new Intent(FormActivity.this, ShowInvRelActivity.class);
                 intent.putExtra("inv",consultedInv);
                 startActivity(intent);
@@ -250,6 +243,17 @@ public abstract class FormActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        LinearLayout layout = (LinearLayout) findViewById(R.id.container);
+        layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clearFocus();
+            }
+        });
+
+        nombre.addTextChangedListener(new UnsetError());
+        remarques.setOnFocusChangeListener(new MyFocusChangeListener());
     }
 
     /**
@@ -265,9 +269,8 @@ public abstract class FormActivity extends AppCompatActivity {
      * Action réalisée lorque le formulaire soumis par l'utilisateur ne respecte pas les conditions voulues
      */
     protected void actionWhenFormNotValidable(){
-        if(!checkNombreValid()){
+        if(!checkNombreValid())
             nombre.setError(getString(R.string.error_edit_nombre));
-        }
     }
 
     /**
@@ -286,13 +289,7 @@ public abstract class FormActivity extends AppCompatActivity {
      */
     protected boolean checkNombreValid(){
         String nombreText = nombre.getText().toString();
-        int nombre;
-        try{
-            nombre = getDenombrement();
-            return (nombre > 0);
-        } catch(Exception e){
-            return nombreText.isEmpty();
-        }
+        return nombreText.isEmpty() || (getDenombrement() > 0);
     }
 
     /**
@@ -314,6 +311,14 @@ public abstract class FormActivity extends AppCompatActivity {
     }
 
     /**
+     * Affiche un message pour prévenir l'utilisateur du chargement de la carte
+     * @param show Si <code>true</code> le message s'affiche, n'efface si <code>false</code>
+     */
+    protected void showProgress(final boolean show) {
+        lmd.show(show);
+    }
+
+    /**
      * Ferme les bases de données
      * @see AppCompatActivity#onDestroy()
      */
@@ -323,13 +328,24 @@ public abstract class FormActivity extends AppCompatActivity {
         closeDatabase();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        showProgress(false);
+    }
+
     /**
      * Retourne le dénombrement fourni par l'utilisateur si le champ n'est pas vide, sinon une exception
      * @return Dénombrement inséré par l'utilisateur
-     * @throws NumberFormatException
      */
-    protected int getDenombrement() throws NumberFormatException{
-        return Integer.parseInt(nombre.getText().toString());
+    protected int getDenombrement() {
+        int nb = 0;
+        try{
+            nb = Integer.parseInt(nombre.getText().toString());
+        }catch (NumberFormatException ex){
+            ex.printStackTrace();
+        }
+        return nb;
     }
 
     /**
@@ -338,22 +354,16 @@ public abstract class FormActivity extends AppCompatActivity {
     public class UnsetError implements TextWatcher{
 
         @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-        }
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
 
         /**
          * Enlève l'erreur sur le champ dénombrement
          */
         @Override
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            nombre.setError(null);
-        }
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { nombre.setError(null); }
 
         @Override
-        public void afterTextChanged(Editable editable) {
-
-        }
+        public void afterTextChanged(Editable editable) { }
     }
 
     /**
@@ -367,9 +377,8 @@ public abstract class FormActivity extends AppCompatActivity {
          */
         @Override
         public void onFocusChange(View view, boolean b) {
-            if(!b){
+            if(!b)
                 Utils.hideKeyboard(getApplicationContext(),view);
-            }
         }
     }
 }

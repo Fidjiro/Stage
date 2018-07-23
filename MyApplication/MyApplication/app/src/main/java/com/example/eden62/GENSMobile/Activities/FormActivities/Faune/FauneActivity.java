@@ -135,37 +135,59 @@ public class FauneActivity extends FormActivity {
             }
         });
 
-        maleCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                CharSequence maleText = maleTextView.getText();
-                if(b){
-                    nbMaleText.setVisibility(View.VISIBLE);
-                    maleTextView.setText(maleText + STRING_TO_ADD);
-                }else{
-                    nbMaleText.setVisibility(View.INVISIBLE);
-                    nbMaleText.setText("");
-                    maleTextView.setText(maleText.subSequence(0,maleText.length() - STRING_TO_ADD.length()));
-                }
-            }
-        });
+        maleCheckbox.setOnCheckedChangeListener(new MyGenreOnCheckedChangeListener(maleTextView,nbMaleText));
 
-        femaleCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                CharSequence femaleText = femaleTextView.getText();
-                if(b){
-                    nbFemaleText.setVisibility(View.VISIBLE);
-                    femaleTextView.setText(femaleText + STRING_TO_ADD);
-                }else{
-                    nbFemaleText.setVisibility(View.INVISIBLE);
-                    nbFemaleText.setText("");
-                    femaleTextView.setText(femaleText.subSequence(0,femaleText.length() - STRING_TO_ADD.length()));
-                }
-            }
-        });
+        femaleCheckbox.setOnCheckedChangeListener(new MyGenreOnCheckedChangeListener(femaleTextView,nbFemaleText));
     }
 
+    /**
+     * Listener utilisé pour les Checkboxes de genre
+     */
+    private class MyGenreOnCheckedChangeListener implements CompoundButton.OnCheckedChangeListener {
+
+        TextView genreTv;
+        EditText nbGenreEdt;
+
+        public MyGenreOnCheckedChangeListener(TextView genreTv, EditText nbGenreEdt) {
+            this.genreTv = genreTv;
+            this.nbGenreEdt = nbGenreEdt;
+        }
+
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            genreCheckboxOnCheckedChangeAction(isChecked, genreTv, nbGenreEdt);
+        }
+
+        // Change l'affichage des champs genre, si on coche la checkbox, on ajoute ":" au label et on affiche l'editText,
+        // inversement si on décoche la checkbox
+        private void genreCheckboxOnCheckedChangeAction(boolean checked, TextView genreTv, EditText nbGenreEdt) {
+            if (checked) {
+                addStringToAddToGenreLabel(genreTv);
+                showNbGenreField(nbGenreEdt);
+            } else {
+                removeStringToAddToGenreLabel(genreTv);
+                hideNbGenreField(nbGenreEdt);
+            }
+        }
+
+        protected void showNbGenreField(EditText nbGenreEdt) {
+            nbGenreEdt.setVisibility(View.VISIBLE);
+        }
+
+        protected void hideNbGenreField(EditText nbGenreEdt) {
+            nbGenreEdt.setVisibility(View.INVISIBLE);
+            nbGenreEdt.setText("");
+        }
+
+        protected void addStringToAddToGenreLabel(TextView genreTv) {
+            genreTv.setText(genreTv.getText() + STRING_TO_ADD);
+        }
+
+        protected void removeStringToAddToGenreLabel(TextView genreTv) {
+            CharSequence genreText = genreTv.getText();
+            genreTv.setText(genreText.subSequence(0, genreText.length() - STRING_TO_ADD.length()));
+        }
+    }
     /**
      * Vérifie si un bouton d'observation (vu ou entendu) est coché
      *
@@ -189,8 +211,8 @@ public class FauneActivity extends FormActivity {
      * @return <code>True</code> si le dénombrement est cohérant, <code>false</code> sinon
      */
     protected boolean coherantNumberGenre(){
-        Integer tot = getNbgenre();
-        return nombre.getText().toString().isEmpty() || tot <= getDenombrement();
+        String nombreText = nombre.getText().toString();
+        return nombreText.isEmpty() || getNbgenre() <= getDenombrement();
     }
 
     /**
@@ -199,16 +221,7 @@ public class FauneActivity extends FormActivity {
      * @return L'entier correspondant au nombre de mâle/femelle
      */
     protected int getNbgenre(){
-        boolean isNbMaleTextEmpty = nbMaleText.getText().toString().isEmpty();
-        boolean isNbFemaleTextEmpty = nbFemaleText.getText().toString().isEmpty();
-        if(!isNbMaleTextEmpty){
-            if(!isNbFemaleTextEmpty)
-                return getNbFemale() + getNbMale();
-            return getNbMale();
-        }
-        if(!isNbFemaleTextEmpty)
-            return getNbFemale();
-        return 0;
+        return getNbFemaleWhenChecked() + getNbMaleWhenChecked();
     }
 
     /**

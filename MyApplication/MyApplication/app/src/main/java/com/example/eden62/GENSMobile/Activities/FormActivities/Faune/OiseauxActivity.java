@@ -68,9 +68,7 @@ public class OiseauxActivity extends FauneActivity {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
+            public void onNothingSelected(AdapterView<?> adapterView) { }
         });
     }
 
@@ -188,7 +186,7 @@ public class OiseauxActivity extends FauneActivity {
     protected void onResume() {
         super.onResume();
         if(!statut.getSelectedItem().equals("Nicheur"))
-            nidificationLayout.setVisibility(View.GONE);
+            hideNidificationField();
     }
 
     @Override
