@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
@@ -15,9 +16,11 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.example.eden62.GENSMobile.Activities.Historiques.Releves.HistoryReleveActivity;
+import com.example.eden62.GENSMobile.Activities.HomeActivity;
 import com.example.eden62.GENSMobile.Activities.MapsActivities.MainActivity;
 import com.example.eden62.GENSMobile.Database.ReleveDatabase.Releve;
 import com.example.eden62.GENSMobile.R;
+import com.example.eden62.GENSMobile.Tools.LoadingMapDialog;
 import com.example.eden62.GENSMobile.Tools.MyMapView;
 import com.example.eden62.GENSMobile.Tools.Utils;
 import com.example.eden62.GENSMobile.Tools.XY;
@@ -150,6 +153,7 @@ public class MainActivityRel extends MainActivity {
 
         markers = new ArrayList<>();
 
+        HomeActivity.lmd.show(false);
     }
 
     // Créé l'objet Releve point à insérer dans la base depuis le marker créé par l'utilisateur
@@ -164,7 +168,7 @@ public class MainActivityRel extends MainActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // Récupère l'event du clic sur le bouton retour de l'appareil
-        if (Integer.parseInt(android.os.Build.VERSION.SDK) > 5
+        if (Build.VERSION.SDK_INT > 5
                 && keyCode == KeyEvent.KEYCODE_BACK
                 && event.getRepeatCount() == 0) {
             if(!noReleveInProgress())

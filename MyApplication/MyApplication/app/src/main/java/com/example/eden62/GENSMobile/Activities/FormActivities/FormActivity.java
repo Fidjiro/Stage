@@ -48,7 +48,7 @@ public abstract class FormActivity extends AppCompatActivity {
     protected int nb,nv_taxon;
     protected Inventaire consultedInv;
 
-    protected LoadingMapDialog lmd;
+    public static LoadingMapDialog lmd;
 
     /**
      * Initialise les champs commun au différents formulaires
@@ -229,7 +229,7 @@ public abstract class FormActivity extends AppCompatActivity {
         visualise.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showProgress(true);
+                lmd.show(true);
                 Intent intent = new Intent(FormActivity.this, ShowInvRelActivity.class);
                 intent.putExtra("inv",consultedInv);
                 startActivity(intent);
@@ -311,14 +311,6 @@ public abstract class FormActivity extends AppCompatActivity {
     }
 
     /**
-     * Affiche un message pour prévenir l'utilisateur du chargement de la carte
-     * @param show Si <code>true</code> le message s'affiche, n'efface si <code>false</code>
-     */
-    protected void showProgress(final boolean show) {
-        lmd.show(show);
-    }
-
-    /**
      * Ferme les bases de données
      * @see AppCompatActivity#onDestroy()
      */
@@ -326,12 +318,6 @@ public abstract class FormActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         closeDatabase();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        showProgress(false);
     }
 
     /**

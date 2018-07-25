@@ -37,6 +37,14 @@ public abstract class HistoryActivity<T extends ItemsAdapter> extends AppCompatA
 
         setView();
 
+        initFields();
+
+        openDatabases();
+
+        setAdapter();
+    }
+
+    protected void initFields(){
         setListViewHeader();
         listItems = (ListView) findViewById(R.id.listViewHistory);
         listItems.addHeaderView(header,null,false);
@@ -47,10 +55,6 @@ public abstract class HistoryActivity<T extends ItemsAdapter> extends AppCompatA
                 actionOnItemClick(adapterView, view, i, l);
             }
         });
-
-        openDatabases();
-
-        setAdapter();
 
         changeAllCheckboxes = (CheckBox) header.findViewById(R.id.itemCheckbox);
         changeAllCheckboxes.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.eden62.GENSMobile.Activities.FormActivities.FormActivity;
+import com.example.eden62.GENSMobile.Activities.Historiques.Releves.InfoRelevesPopups.ReleveInfoPopup;
 import com.example.eden62.GENSMobile.Database.CampagneDatabase.Inventaire;
 import com.example.eden62.GENSMobile.Database.ReleveDatabase.Releve;
 import com.example.eden62.GENSMobile.R;
@@ -46,11 +48,14 @@ public class ShowInvRelActivity extends MainActivity {
         Intent intent = getIntent();
         try {
             Releve rel = intent.getParcelableExtra("releve");
+            ReleveInfoPopup.lmd.show(false);
             redrawReleve(rel);
         }catch (Exception e){
             Inventaire inv = intent.getParcelableExtra("inv");
+            FormActivity.lmd.show(false);
             drawPoint(new LatLong(inv.getLatitude(), inv.getLongitude()));
         }
+
     }
 
     @Override

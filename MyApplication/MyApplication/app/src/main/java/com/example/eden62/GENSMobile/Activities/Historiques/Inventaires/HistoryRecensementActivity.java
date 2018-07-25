@@ -1,6 +1,5 @@
 package com.example.eden62.GENSMobile.Activities.Historiques.Inventaires;
 
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,6 +21,8 @@ import com.example.eden62.GENSMobile.Activities.FormActivities.Faune.FauneActivi
 import com.example.eden62.GENSMobile.Activities.FormActivities.Faune.OiseauxActivity;
 import com.example.eden62.GENSMobile.Activities.FormActivities.Flore.FloreActivity;
 import com.example.eden62.GENSMobile.Activities.Historiques.HistoryActivity;
+import com.example.eden62.GENSMobile.Activities.HttpActivity;
+import com.example.eden62.GENSMobile.Activities.SyncInvActivity;
 import com.example.eden62.GENSMobile.Database.CampagneDatabase.CampagneDAO;
 import com.example.eden62.GENSMobile.Database.CampagneDatabase.Inventaire;
 import com.example.eden62.GENSMobile.Database.LoadingDatabase.TaxUsrDAO;
@@ -49,37 +50,34 @@ public class HistoryRecensementActivity extends HistoryActivity<InventaireAdapte
     protected TaxUsrDAO taxUsrDao;
 
     protected Button syncInvs;
-    protected MyHttpService httpService;
-    protected int idCampagne;
     protected SharedPreferences prefs;
-    protected ProgressDialog dial;
     protected TextView txtJson;
 
-    private static int currTotalInv;
-    private static int cpt;
-    private static int nbErr;
-
+    protected String mdp;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        txtJson = (TextView) findViewById(R.id.txtJson);
-        syncInvs = (Button) findViewById(R.id.createCampagne);
-        httpService = new MyHttpService(this);
-
-        prefs = getSharedPreferences("loginPrefs", MODE_PRIVATE);
 
         Intent intent = getIntent();
 
         if(intent.getBooleanExtra("createCampagne",false)){
             syncInvs.setVisibility(View.VISIBLE);
             deleteSelection.setVisibility(View.GONE);
-            AttemptLoginTask task1 = new AttemptLoginTask(httpService.createConnectionRequest(prefs.getString("username",""),intent.getStringExtra("mdp")));
-            task1.execute((Void)null);
+            mdp = intent.getStringExtra("mdp");
         }else{
             syncInvs.setVisibility(View.GONE);
             deleteSelection.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    protected void initFields() {
+        super.initFields();
+
+        txtJson = (TextView) findViewById(R.id.txtJson);
+        syncInvs = (Button) findViewById(R.id.createCampagne);
+
+        prefs = getSharedPreferences("loginPrefs", MODE_PRIVATE);
 
         syncInvs.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,7 +95,7 @@ public class HistoryRecensementActivity extends HistoryActivity<InventaireAdapte
                     builder.create().show();
                 }else{
                     //sync invs selectionnés
-                    final List<Inventaire> inventairesToSend = getCheckedInventairesToSend();
+                    final ArrayList<Inventaire> inventairesToSend = getCheckedInventairesToSend();
                     int listSize = inventairesToSend.size();
 
                     if(listSize == 0) {
@@ -105,321 +103,30 @@ public class HistoryRecensementActivity extends HistoryActivity<InventaireAdapte
                         return;
                     }
 
-                    dial = ProgressDialog.show(HistoryRecensementActivity.this, "", "Synchronisation en cours...", true);
-                    currTotalInv = listSize;
-                    idCampagne = prefs.getInt("idCampagne",0);
-                    SendCampagneInfoTask task2 = new SendCampagneInfoTask(httpService.createSendInfoCampagneRequest(idCampagne,listSize),inventairesToSend);
-                    task2.execute((Void)null);
+                    Intent intent = new Intent(HistoryRecensementActivity.this,SyncInvActivity.class);
+                    intent.putParcelableArrayListExtra("inventairesToSend",inventairesToSend);
+                    intent.putExtra("mdp",mdp);
+                    startActivityForResult(intent,HttpActivity.END_OF_SYNC);
                 }
-
             }
         });
     }
 
-    private List<Inventaire> getCheckedInventairesToSend(){
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == HttpActivity.END_OF_SYNC)
+            setAdapter();
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private ArrayList<Inventaire> getCheckedInventairesToSend(){
         List<Inventaire> tmp = adapter.getCheckedItemsStocker().getCheckedItems();
-        List<Inventaire> res = new ArrayList<>();
+        ArrayList<Inventaire> res = new ArrayList<>();
         for (Inventaire inv : tmp){
             if(inv.getErr() == 0)
                 res.add(inv);
         }
         return res;
-    }
-
-    /**
-     * Tâche qui envoi les infos sur la campagne créée par l'utilisateur
-     */
-    private class SendCampagneInfoTask extends AsyncTask<Void,Void,Boolean> {
-
-        private final Request mRequete;
-        private long _id;
-        private String errMsg;
-        private List<Inventaire> inventairesToSend;
-
-        SendCampagneInfoTask(Request requete, List<Inventaire> invs) {
-            mRequete = requete;
-            inventairesToSend = invs;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-
-            try {
-                if (!Utils.isConnected(HistoryRecensementActivity.this)) {
-                    Snackbar.make(syncInvs, "Aucune connexion à internet.", Snackbar.LENGTH_LONG).show();
-                    return false;
-                }
-
-                Response response = httpService.executeRequest(mRequete);
-                if (!response.isSuccessful()) {
-                    throw new IOException(response.toString());
-                }
-
-                final String body = response.body().string();
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        txtJson.setText(body);
-                        dial.dismiss();
-                    }
-                });
-
-                JSONObject js = parseStringToJsonObject(body);
-                return interpreteJson(js);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-                Snackbar.make(syncInvs, "Mauvaise forme de json",Snackbar.LENGTH_LONG).show();
-            } return false;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-
-            if (success) {
-                cpt = 0;
-                nbErr = 0;
-                for(Inventaire inv : inventairesToSend){
-                    SendDataTask task = new SendDataTask(httpService.createSendDataRequest(inv,idCampagne));
-                    task.execute((Void) null);
-                }
-                idCampagne++;
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putInt("idCampagne",idCampagne);
-                editor.commit();
-                dial.dismiss();
-            } else {
-                if(errMsg != null){
-                    Snackbar.make(syncInvs, errMsg,Snackbar.LENGTH_SHORT).show();
-                }else{
-                    Snackbar.make(syncInvs,"Erreur sur l'inventaire " + _id,Snackbar.LENGTH_SHORT).show();
-                }
-            }
-        }
-
-        @Override
-        protected void onCancelled() { }
-
-        private boolean interpreteJson(JSONObject json){
-            int err = -1;
-            _id = -1;
-            boolean importStatus;
-            try{
-                err = json.getInt("err");
-                importStatus = json.getBoolean("import");
-                if(err == 1){
-                    errMsg = json.getString("msg");
-                    return false;
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-                errMsg = "Mauvais parsage de JSON";
-                return false;
-            }
-            return importStatus;
-        }
-
-    }
-
-    /**
-     * Tâche qui connecte l'utilisateur au serveur
-     */
-    private class AttemptLoginTask extends AsyncTask<Void,Void,Boolean> {
-
-        private final Request mRequete;
-
-        AttemptLoginTask(Request requete) {
-            mRequete = requete;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-
-            try {
-                Response response = httpService.executeRequest(mRequete);
-                if (!response.isSuccessful()) {
-                    throw new IOException(response.toString());
-                }
-
-                final String body = response.body().string();
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        txtJson.setText(body);
-                    }
-                });
-
-                JSONObject js = parseStringToJsonObject(body);
-                return interpreteJson(js);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-                Snackbar.make(txtJson, "Mauvaise forme de json",Snackbar.LENGTH_LONG).show();
-            } return false;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            //showProgress(false);
-
-            if (success) {
-                Snackbar.make(txtJson,"Connexion réussie",Snackbar.LENGTH_SHORT).show();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            //showProgress(false);
-        }
-
-        protected boolean interpreteJson(JSONObject json){
-            int err = -1;
-            int con = -1;
-            String titre = "";
-            String msg = "";
-            try {
-                err = json.getInt("err");
-                con = json.getInt("con");
-                titre = json.getString("titre");
-                msg = json.getString("msg");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            if(err == 0){
-                if(con == 0){
-                    Log.w(titre,msg);
-                    return false;
-                }else if(con == 1){
-                    Log.w("Connexion","Connexion réussi");
-                    return true;
-                }else {
-                    Log.w("Déconnexion", "Se déconnecte");
-                    return false;
-                }
-            }return false;
-        }
-    }
-
-    /**
-     * Tâche qui permet d'envoyer un inventaire au serveur
-     */
-    private class SendDataTask extends AsyncTask<Void,Void,Boolean> {
-
-        private final Request mRequete;
-        private long _id;
-        private String errMsg;
-
-        SendDataTask(Request requete) {
-            mRequete = requete;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-
-            try {
-                if (!Utils.isConnected(HistoryRecensementActivity.this)) {
-                    Snackbar.make(syncInvs, "Aucune connexion à internet.", Snackbar.LENGTH_LONG).show();
-                    return false;
-                }
-
-                Response response = httpService.executeRequest(mRequete);
-                if (!response.isSuccessful()) {
-                    throw new IOException(response.toString());
-                }
-
-                final String body = response.body().string();
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        txtJson.setText(body);
-                    }
-                });
-
-                JSONObject js = parseStringToJsonObject(body);
-                return interpreteJson(js);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-                Snackbar.make(syncInvs, "Mauvaise forme de json",Snackbar.LENGTH_LONG).show();
-            } return false;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-
-            if (success) {
-                Snackbar.make(syncInvs,"Synchronisation réussie",Snackbar.LENGTH_SHORT).show();
-                campagneDao.deleteInventaire(_id);
-            } else {
-                if(errMsg != null){
-                    Snackbar.make(syncInvs, errMsg,Snackbar.LENGTH_SHORT).show();
-                }else{
-                    Snackbar.make(syncInvs,"Erreur sur l'inventaire " + _id,Snackbar.LENGTH_SHORT).show();
-                }
-            }
-            cpt++;
-            if(cpt == currTotalInv ){
-                if (nbErr > 0) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(HistoryRecensementActivity.this);
-                    builder.setMessage(nbErr + goodFormatForWordInventaire() + "à plus de 100m hors des limites de sites");
-                    builder.setPositiveButton(getString(R.string.accord), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.dismiss();
-                        }
-                    });
-                    builder.create().show();
-                }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        setAdapter();
-                    }
-                });
-            }
-        }
-
-        private String goodFormatForWordInventaire(){
-            if(nbErr > 1)
-                return " inventaires ";
-            return " inventaire ";
-        }
-
-        @Override
-        protected void onCancelled() { }
-
-        private boolean interpreteJson(JSONObject json){
-            int err = -1;
-            _id = -1;
-            boolean importStatus;
-            try{
-                err = json.getInt("err");
-                _id = json.getLong("_id");
-                importStatus = json.getBoolean("import");
-                if(err == 1){
-                    nbErr ++;
-                    errMsg = json.getString("msg");
-                    Inventaire inv = campagneDao.getInventaire(_id);
-                    inv.setErr(1);
-                    campagneDao.modifInventaire(inv);
-                    return false;
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-                errMsg = "Mauvais parsage de JSON";
-                return false;
-            }
-            return importStatus;
-        }
     }
 
     /**

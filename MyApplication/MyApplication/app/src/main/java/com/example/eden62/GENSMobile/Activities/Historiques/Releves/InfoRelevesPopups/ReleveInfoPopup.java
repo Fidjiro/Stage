@@ -39,14 +39,12 @@ public abstract class ReleveInfoPopup extends AppCompatActivity {
 
     protected Releve rel;
 
-    protected LoadingMapDialog lmd;
+    public static LoadingMapDialog lmd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView();
-
-        lmd = new LoadingMapDialog(this);
 
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -58,6 +56,8 @@ public abstract class ReleveInfoPopup extends AppCompatActivity {
 
         dao = new HistoryDao(this);
         dao.open();
+
+        lmd = new LoadingMapDialog(this);
 
         Intent intent = getIntent();
         rel = intent.getParcelableExtra("releve");
@@ -104,11 +104,10 @@ public abstract class ReleveInfoPopup extends AppCompatActivity {
         redraw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showProgress(true);
+                lmd.show(true);
                 Intent intent = new Intent(ReleveInfoPopup.this,ShowInvRelActivity.class);
                 intent.putExtra("releve",rel);
                 startActivity(intent);
-                finishPopUp();
         }
         });
 
@@ -182,14 +181,6 @@ public abstract class ReleveInfoPopup extends AppCompatActivity {
         });
         box = builder.create();
         return box;
-    }
-
-    /**
-     * Affiche un message pour prévenir l'utilisateur du chargement de la carte
-     * @param show Si <code>true</code> le message s'affiche, n'efface si <code>false</code>
-     */
-    protected void showProgress(final boolean show) {
-        lmd.show(show);
     }
 
     @Override

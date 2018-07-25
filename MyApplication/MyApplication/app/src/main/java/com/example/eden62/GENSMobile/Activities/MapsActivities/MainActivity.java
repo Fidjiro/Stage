@@ -24,6 +24,7 @@ import com.example.eden62.GENSMobile.Activities.MapsActivities.Recensement.MainA
 import com.example.eden62.GENSMobile.Activities.MapsActivities.Releve.MainActivityRel;
 import com.example.eden62.GENSMobile.Database.LoadingDatabase.TaxUsrDAO;
 import com.example.eden62.GENSMobile.R;
+import com.example.eden62.GENSMobile.Tools.LoadingMapDialog;
 import com.example.eden62.GENSMobile.Tools.MyMapView;
 
 import org.mapsforge.core.model.LatLong;
@@ -88,9 +89,7 @@ public abstract class MainActivity extends AppCompatActivity{
             }
 
             @Override
-            public void onZoomEvent() {
-
-            }
+            public void onZoomEvent() { }
         });
 
         setRelocButton(new View.OnClickListener() {
@@ -100,7 +99,6 @@ public abstract class MainActivity extends AppCompatActivity{
                 freeLance = false;
             }
         });
-
     }
 
     /**

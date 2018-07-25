@@ -22,7 +22,8 @@ import com.example.eden62.GENSMobile.Tools.LoadingMapDialog;
 public class HomeActivity extends AppCompatActivity {
 
     public final static int RESULT_CLOSE_ALL = 2;
-    LoadingMapDialog lmd;
+    public static LoadingMapDialog lmd;
+    LinearLayout buttonList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,12 +32,14 @@ public class HomeActivity extends AppCompatActivity {
 
         lmd = new LoadingMapDialog(this);
 
+        buttonList = (LinearLayout) findViewById(R.id.buttonList);
+
         Button obsPonctButton = (Button) findViewById(R.id.obs_ponc_button);
         obsPonctButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showProgress(true);
-                startActivity(new Intent(HomeActivity.this,MainActivityRec.class));
+                startActivity(new Intent(HomeActivity.this, MainActivityRec.class));
             }
         });
 
@@ -45,7 +48,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showProgress(true);
-                startActivity(new Intent(HomeActivity.this,MainActivityRec.class));
+                startActivity(new Intent(HomeActivity.this, MainActivityRec.class));
             }
         });
 
@@ -54,7 +57,8 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showProgress(true);
-                startActivity(new Intent(HomeActivity.this,MainActivityRel.class));
+                Intent intent = new Intent(HomeActivity.this, MainActivityRel.class);
+                startActivity(intent);
             }
         });
 
@@ -70,27 +74,28 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        showProgress(false);
+        buttonList.setVisibility(View.VISIBLE);
     }
 
     /**
      * Shows the progress UI and hides the login form.
      */
     protected void showProgress(final boolean show) {
+        buttonList.setVisibility(show ? View.INVISIBLE : View.VISIBLE);
         lmd.show(show);
     }
 
     /**
      * Renvoi sur la page de synchronisation de mission
      */
-    protected void synchroniserMission(){
-        Intent intent = new Intent(this,HttpActivity.class);
-        startActivityForResult(intent,RESULT_CLOSE_ALL);
+    protected void synchroniserMission() {
+        Intent intent = new Intent(this, HttpActivity.class);
+        startActivityForResult(intent, RESULT_CLOSE_ALL);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == RESULT_CLOSE_ALL)
+        if (resultCode == RESULT_CLOSE_ALL)
             finish();
         super.onActivityResult(requestCode, resultCode, data);
     }

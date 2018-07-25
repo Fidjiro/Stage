@@ -6,8 +6,10 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.eden62.GENSMobile.Activities.Historiques.Inventaires.HistoryRecensementActivity;
+import com.example.eden62.GENSMobile.Activities.HomeActivity;
 import com.example.eden62.GENSMobile.Activities.MapsActivities.MainActivity;
 import com.example.eden62.GENSMobile.R;
+import com.example.eden62.GENSMobile.Tools.LoadingMapDialog;
 
 /**
  * Activité carte pour le recensement d'espèces
@@ -43,6 +45,8 @@ public class MainActivityRec extends MainActivity {
                 overridePendingTransition(R.anim.enter_from_top,0);
             }
         });
+
+        HomeActivity.lmd.show(false);
     }
 
     @Override
