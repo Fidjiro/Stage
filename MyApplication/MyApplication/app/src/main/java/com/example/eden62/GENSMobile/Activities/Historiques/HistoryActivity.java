@@ -129,6 +129,12 @@ public abstract class HistoryActivity<T extends ItemsAdapter> extends AppCompatA
         changeAllCheckboxes.setChecked(false);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        closeDatabases();
+    }
+
     /**
      * Coche toutes les checkboxes
      */
@@ -171,4 +177,6 @@ public abstract class HistoryActivity<T extends ItemsAdapter> extends AppCompatA
      * Ouvre les BDD utile pour cette classe
      */
     protected abstract void openDatabases();
+
+    protected abstract void closeDatabases();
 }

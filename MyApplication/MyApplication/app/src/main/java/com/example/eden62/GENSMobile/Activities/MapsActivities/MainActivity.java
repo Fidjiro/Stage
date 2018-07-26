@@ -64,6 +64,10 @@ public abstract class MainActivity extends AppCompatActivity{
 
         setView();
 
+        initFields();
+    }
+
+    protected void initFields(){
         progressDialog = ProgressDialog.show(this, "",
                 "En attente du signal GPS...", true);
         progressDialog.setCancelable(true);

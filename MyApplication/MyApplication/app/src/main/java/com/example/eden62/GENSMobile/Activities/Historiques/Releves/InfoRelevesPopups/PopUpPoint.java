@@ -17,11 +17,6 @@ public class PopUpPoint extends ReleveInfoPopup {
     protected TextView posWgs, posL93;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     protected void setContentView() {
         setContentView(R.layout.activity_pop_up_point);
     }

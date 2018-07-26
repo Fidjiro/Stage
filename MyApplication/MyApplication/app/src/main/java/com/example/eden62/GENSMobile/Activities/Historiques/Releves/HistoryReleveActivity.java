@@ -36,13 +36,11 @@ public class HistoryReleveActivity extends HistoryActivity<ReleveAdapter> {
     static final int CHOOSE_GPX_NAME = 1;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        Button exportSelection = (Button) findViewById(R.id.exportSelect);
+    protected void initFields() {
+        super.initFields();
 
         exportedReleves = new HashMap<>();
-
+        Button exportSelection = (Button) findViewById(R.id.exportSelect);
         exportSelection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -89,6 +87,11 @@ public class HistoryReleveActivity extends HistoryActivity<ReleveAdapter> {
     }
 
     @Override
+    protected void closeDatabases() {
+        dao.close();
+    }
+
+    @Override
     protected void setListViewHeader() {
         LayoutInflater inflater = getLayoutInflater();
         header = (ViewGroup)inflater.inflate(R.layout.row_item_releves,listItems,false);
@@ -113,12 +116,6 @@ public class HistoryReleveActivity extends HistoryActivity<ReleveAdapter> {
 
         adapter = new ReleveAdapter(this,releves,exportedReleves);
         listItems.setAdapter(adapter);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        dao.close();
     }
 
     @Override

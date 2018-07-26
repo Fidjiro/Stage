@@ -102,7 +102,7 @@
             android:theme="@style/AppTheme.CustomTheme"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".Activities.SyncInvActivity"
-            android:theme="@style/AppTheme.NoDisplay"/>
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

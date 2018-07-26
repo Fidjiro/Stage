@@ -19,8 +19,13 @@ public class MainActivityRec extends MainActivity {
     protected Button mesRecensement;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void initFields() {
+        super.initFields();
 
         Button recenser = (Button) findViewById(R.id.recenser);
 
@@ -47,11 +52,6 @@ public class MainActivityRec extends MainActivity {
         });
 
         HomeActivity.lmd.show(false);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 
     @Override

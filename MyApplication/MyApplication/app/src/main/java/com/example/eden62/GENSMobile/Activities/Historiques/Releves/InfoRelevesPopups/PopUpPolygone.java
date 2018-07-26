@@ -14,11 +14,6 @@ public class PopUpPolygone extends ReleveInfoPopup {
     protected TextView perimeter, area;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     protected void setContentView() {
         setContentView(R.layout.activity_pop_up_polygone);
     }

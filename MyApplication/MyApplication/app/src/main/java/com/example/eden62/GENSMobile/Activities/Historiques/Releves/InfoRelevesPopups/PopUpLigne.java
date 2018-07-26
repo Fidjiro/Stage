@@ -14,11 +14,6 @@ public class PopUpLigne extends ReleveInfoPopup {
     protected TextView length;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     protected void setContentView() {
         setContentView(R.layout.activity_pop_up_ligne);
     }

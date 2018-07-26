@@ -322,23 +322,23 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            if(!checkVersion(version)){
-                final int finalVersion = version;
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        editor.putInt("goodAppVersion", finalVersion);
-                        editor.commit();
-                        createWrongVersionDialog().show();
-                    }
-                });
-            }
             if(err == 0){
                 if(con == 0){
                     Log.w(titre,msg);
                     return false;
                 }else if(con == 1){
                     Log.w("Connexion","Connexion réussi");
+                    if(!checkVersion(version)){
+                        final int finalVersion = version;
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                editor.putInt("goodAppVersion", finalVersion);
+                                editor.commit();
+                                createWrongVersionDialog().show();
+                            }
+                        });
+                    }
                     return true;
                 }else {
                     Log.w("Déconnexion", "Se déconnecte");

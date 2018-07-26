@@ -60,14 +60,13 @@ public class HistoryRecensementActivity extends HistoryActivity<InventaireAdapte
 
         Intent intent = getIntent();
 
-        if(intent.getBooleanExtra("createCampagne",false)){
-            syncInvs.setVisibility(View.VISIBLE);
-            deleteSelection.setVisibility(View.GONE);
-            mdp = intent.getStringExtra("mdp");
-        }else{
-            syncInvs.setVisibility(View.GONE);
-            deleteSelection.setVisibility(View.VISIBLE);
-        }
+        displayGoodButton(intent.getBooleanExtra("createCampagne",false));
+        mdp = intent.getStringExtra("mdp");
+    }
+
+    private void displayGoodButton(boolean createCampagne){
+        syncInvs.setVisibility(createCampagne ? View.VISIBLE : View.GONE);
+        deleteSelection.setVisibility(createCampagne ? View.GONE : View.VISIBLE);
     }
 
     @Override
@@ -129,17 +128,6 @@ public class HistoryRecensementActivity extends HistoryActivity<InventaireAdapte
         return res;
     }
 
-    /**
-     * Transforme une chaîne de caractère en un objet JSON
-     *
-     * @param s La String à transformer
-     * @return L'objet JSON correspondant à la String
-     * @throws JSONException En cas d'echec de parsage
-     */
-    protected JSONObject parseStringToJsonObject(String s) throws JSONException {
-        return new JSONObject(s);
-    }
-
     @Override
     protected void setView() {
         setContentView(R.layout.activity_history_recensement);
@@ -151,6 +139,12 @@ public class HistoryRecensementActivity extends HistoryActivity<InventaireAdapte
         taxUsrDao = new TaxUsrDAO(this);
         campagneDao.open();
         taxUsrDao.open();
+    }
+
+    @Override
+    protected void closeDatabases() {
+        campagneDao.close();
+        taxUsrDao.close();
     }
 
     /**
@@ -205,6 +199,7 @@ public class HistoryRecensementActivity extends HistoryActivity<InventaireAdapte
 
         String noms = nomsInvTxt.getText().toString();
         String[] splittedNoms;
+
         if(noms.contains(" - "))
             splittedNoms = noms.split(" - ");
         else {
@@ -212,6 +207,7 @@ public class HistoryRecensementActivity extends HistoryActivity<InventaireAdapte
                 noms = noms.replace(" sp.","");
             splittedNoms = new String[]{noms, ""};
         }
+
         String[] params = new String[] {splittedNoms[0],splittedNoms[1],heureInvTxt.getText().toString()};
         Inventaire selectedInventaire = campagneDao.getInventaireFromHistory(params);
         startActivity(generateGoodIntent(selectedInventaire));
@@ -229,12 +225,5 @@ public class HistoryRecensementActivity extends HistoryActivity<InventaireAdapte
 
         adapter = new InventaireAdapter(this,inventaires);
         listItems.setAdapter(adapter);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        campagneDao.close();
-        taxUsrDao.close();
     }
 }

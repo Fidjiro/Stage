@@ -94,7 +94,6 @@ public class NameRelevePopup extends AppCompatActivity {
             positionL93Text.setText(Utils.dfPosL93.format(xy.x) + " ; " + Utils.dfPosL93.format(xy.y));
         } else if(type.equals(getString(R.string.line))){
             lineLengthText.setVisibility(View.VISIBLE);
-            System.out.println(releveToAdd.getLength());
             lineLengthText.setText(getString(R.string.longueur) + " " + Utils.dfLength.format(releveToAdd.getLength()));
         } else{
             polygonAreaText.setVisibility(View.VISIBLE);

@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.location.Location;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
@@ -20,7 +19,6 @@ import com.example.eden62.GENSMobile.Activities.HomeActivity;
 import com.example.eden62.GENSMobile.Activities.MapsActivities.MainActivity;
 import com.example.eden62.GENSMobile.Database.ReleveDatabase.Releve;
 import com.example.eden62.GENSMobile.R;
-import com.example.eden62.GENSMobile.Tools.LoadingMapDialog;
 import com.example.eden62.GENSMobile.Tools.MyMapView;
 import com.example.eden62.GENSMobile.Tools.Utils;
 import com.example.eden62.GENSMobile.Tools.XY;
@@ -81,8 +79,8 @@ public class MainActivityRel extends MainActivity {
     private static final int BOITE_CANCEL_RELEVE = 4;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void initFields() {
+        super.initFields();
 
         lineButton = (ImageButton) findViewById(R.id.bouton_releve_ligne);
         polygonButton = (ImageButton) findViewById(R.id.bouton_releve_polygone);
@@ -168,9 +166,7 @@ public class MainActivityRel extends MainActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // Récupère l'event du clic sur le bouton retour de l'appareil
-        if (Build.VERSION.SDK_INT > 5
-                && keyCode == KeyEvent.KEYCODE_BACK
-                && event.getRepeatCount() == 0) {
+        if (usrPressBackButton(keyCode,event)) {
             if(!noReleveInProgress())
                 createAvertissementDialog(BOITE_CANCEL_RELEVE).show();
             else
@@ -178,6 +174,12 @@ public class MainActivityRel extends MainActivity {
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    private boolean usrPressBackButton(int keyCode, KeyEvent event){
+        return Build.VERSION.SDK_INT > 5
+                && keyCode == KeyEvent.KEYCODE_BACK
+                && event.getRepeatCount() == 0;
     }
 
     // Efface les markers réalisés en même temps qu'une polyline
