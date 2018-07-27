@@ -102,11 +102,6 @@ public class TaxUsrDAO {
         mHandler.clearUsers(mDb);
     }
 
-    public int getNbUsers(){
-        Cursor c = mDb.rawQuery("SELECT * FROM " + USERS,new String[]{});
-        return c.getCount();
-    }
-
     //Partie taxon
 
     /**

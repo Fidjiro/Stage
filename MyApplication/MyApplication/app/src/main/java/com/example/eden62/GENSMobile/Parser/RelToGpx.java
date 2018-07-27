@@ -54,6 +54,7 @@ public class RelToGpx implements Serializable{
             segments = "<wpt lat=\"" + rel.getLatitudes() + "\" lon=\"" + rel.getLongitudes() + "\"><name>" + rel.getNom() + "</name><time>" + formatDateHeure(rel) + "</time></wpt>\n";
         }
         else{
+            // Récupération de la List<LatLong> via json
             Gson gson = new Gson();
             Type type = new TypeToken<List<LatLong>>() {}.getType();
             String relLatLongsString = rel.getLat_long();

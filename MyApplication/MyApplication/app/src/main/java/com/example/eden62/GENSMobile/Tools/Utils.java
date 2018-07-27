@@ -66,6 +66,7 @@ public final class Utils {
         return paint;
     }
 
+    //Peut être utile plus tard
     //@SuppressWarnings("deprecation")
    /* @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     static Marker createTappableMarker(final Context c, int resourceIdentifier,

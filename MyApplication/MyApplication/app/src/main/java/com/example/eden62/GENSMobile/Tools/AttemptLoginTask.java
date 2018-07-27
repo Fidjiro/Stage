@@ -1,10 +1,7 @@
 package com.example.eden62.GENSMobile.Tools;
 
 import android.os.AsyncTask;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
-
-import com.example.eden62.GENSMobile.Activities.HttpActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,7 +42,6 @@ public abstract class AttemptLoginTask extends AsyncTask<Void,Void,Boolean> {
         } catch (JSONException e) {
             e.printStackTrace();
             makeWrongJsonSnackbar();
-            //Snackbar.make(txtJson, "Mauvaise forme de json",Snackbar.LENGTH_LONG).show();
         } return false;
     }
 

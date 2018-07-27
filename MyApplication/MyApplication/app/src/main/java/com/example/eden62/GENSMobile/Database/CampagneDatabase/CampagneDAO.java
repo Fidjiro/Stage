@@ -63,7 +63,7 @@ public class CampagneDAO implements DAO<Inventaire> {
     }
 
     /**
-     * Ajout un inventaire à la base
+     * Ajoute un inventaire à la base
      *
      * @param inv L'Inventaire à ajouter
      * @return Le résultat de l'insertion de l'inventaire dans la base
@@ -94,7 +94,9 @@ public class CampagneDAO implements DAO<Inventaire> {
      */
     public Inventaire getInventaire(long id){
         String request = "SELECT * FROM " + CAMPAGNE + " WHERE " + KEY + " = ?";
-        return dealWithSingleCursor(mDb.rawQuery(request,new String[]{id + ""}));
+        Cursor c = mDb.rawQuery(request,new String[]{id + ""});
+        c.moveToNext();
+        return dealWithOneRowCursor(c);
     }
 
     @Override
@@ -121,7 +123,8 @@ public class CampagneDAO implements DAO<Inventaire> {
     public Inventaire getInventaireFromHistory(String[] params){
         String request = "SELECT * FROM " + CAMPAGNE + " WHERE " + NOM_LATIN + " = ? AND " + NOM_FR + " = ? AND " + HEURE + " = ?;";
         Cursor c = mDb.rawQuery(request,params);
-        return dealWithSingleCursor(c);
+        c.moveToNext();
+        return dealWithOneRowCursor(c);
     }
 
     /**
@@ -186,10 +189,8 @@ public class CampagneDAO implements DAO<Inventaire> {
         return dealWithCursor(c);
     }
 
-    // Récupère un inventaire grâce au curseur qui n'a qu'une seule ligne
-    private Inventaire dealWithSingleCursor(Cursor c){
-        c.moveToNext();
-
+    // Récupère un inventaire grâce au curseur qui n'a qu'une seule ligne déjà positionné sur celle-ci
+    private Inventaire dealWithOneRowCursor(Cursor c){
         long _id = c.getLong(c.getColumnIndex(KEY));
         long ref_taxon = c.getLong(c.getColumnIndex(REF_TAXON));
         int app_version = c.getInt(c.getColumnIndex(APP_VERSION));
@@ -223,32 +224,7 @@ public class CampagneDAO implements DAO<Inventaire> {
 
         if(c.moveToFirst()){
             do {
-                long _id = c.getLong(c.getColumnIndex(KEY));
-                long ref_taxon = c.getLong(c.getColumnIndex(REF_TAXON));
-                int app_version = c.getInt(c.getColumnIndex(APP_VERSION));
-                int nv_taxon = c.getInt(c.getColumnIndex(NV_TAXON));
-                long ref_usr = c.getLong(c.getColumnIndex(REF_USR));
-                String nomFr = c.getString(c.getColumnIndex(NOM_FR));
-                String nomLatin = c.getString(c.getColumnIndex(NOM_LATIN));
-                int type_taxon = c.getInt(c.getColumnIndex(TYPE_TAXON));
-                double latitude = c.getDouble(c.getColumnIndex(LATITUDE));
-                double longitude = c.getDouble(c.getColumnIndex(LONGITUDE));
-                String date = c.getString(c.getColumnIndex(DATE));
-                String heure = c.getString(c.getColumnIndex(HEURE));
-                int nb = c.getInt(c.getColumnIndex(NB));
-                String type_obs = c.getString(c.getColumnIndex(TYPE_OBS));
-                String remarques = c.getString(c.getColumnIndex(REMARQUES));
-                int nbMale = c.getInt(c.getColumnIndex(NBMALE));
-                int nbFemale = c.getInt(c.getColumnIndex(NBFEMALE));
-                String presencePonte = c.getString(c.getColumnIndex(PRESENCE_PONTE));
-                String activite = c.getString(c.getColumnIndex(ACTIVITE));
-                String statut = c.getString(c.getColumnIndex(STATUT));
-                String nidif = c.getString(c.getColumnIndex(NIDIF));
-                int indiceAbondance = c.getInt(c.getColumnIndex(ABONDANCE));
-                int err = c.getInt(c.getColumnIndex(ERR));
-
-                Inventaire tmp = new Inventaire(_id,ref_taxon,app_version,nv_taxon,ref_usr, nomFr, nomLatin, type_taxon, latitude,longitude,date, heure, nb,type_obs,remarques,nbMale,nbFemale,presencePonte,activite,statut,nidif,indiceAbondance,err);
-
+                Inventaire tmp = dealWithOneRowCursor(c);
                 res.add(tmp);
             }while(c.moveToNext());
         }

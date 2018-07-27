@@ -125,6 +125,10 @@ public class HistoryDao implements DAO<Releve>{
         Cursor c = selectReleveFromNomTypeDateHeure(fields);
         c.moveToNext();
 
+        return dealWithSingleRowCursor(c);
+    }
+
+    private Releve dealWithSingleRowCursor(Cursor c){
         long _id = c.getLong(c.getColumnIndex(KEY));
         long creator = c.getLong(c.getColumnIndex(CREATOR));
         String nom = c.getString(c.getColumnIndex(NOM));
@@ -152,22 +156,7 @@ public class HistoryDao implements DAO<Releve>{
 
         if(c.moveToFirst()){
             do {
-                long _id = c.getLong(c.getColumnIndex(KEY));
-                long creator = c.getLong(c.getColumnIndex(CREATOR));
-                String nom = c.getString(c.getColumnIndex(NOM));
-                String type = c.getString(c.getColumnIndex(TYPE));
-                String latitudes = c.getString(c.getColumnIndex(LATITUDES));
-                String longitudes = c.getString(c.getColumnIndex(LONGITUDES));
-                String lat_long = c.getString(c.getColumnIndex(LAT_LONG));
-                String importStatus = c.getString(c.getColumnIndex(IMPORT));
-                String date = c.getString(c.getColumnIndex(DATE));
-                String heure = c.getString(c.getColumnIndex(TIME));
-                double length = c.getDouble(c.getColumnIndex(LENGTH));
-                double perimeter = c.getDouble(c.getColumnIndex(AREA));
-                double area = c.getDouble(c.getColumnIndex(PERIMETER));
-
-                Releve rel = new Releve(_id,creator,nom,type,latitudes,longitudes,lat_long,importStatus,date,heure,length,perimeter,area);
-
+                Releve rel = dealWithSingleRowCursor(c);
                 res.add(rel);
             } while(c.moveToNext());
         }
