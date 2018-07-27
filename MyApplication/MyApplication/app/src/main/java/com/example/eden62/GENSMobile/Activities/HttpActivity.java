@@ -10,7 +10,9 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -27,6 +29,7 @@ import com.example.eden62.GENSMobile.Database.CampagneDatabase.CampagneDAO;
 import com.example.eden62.GENSMobile.Database.CampagneDatabase.Inventaire;
 import com.example.eden62.GENSMobile.Database.ReleveDatabase.HistoryDao;
 import com.example.eden62.GENSMobile.R;
+import com.example.eden62.GENSMobile.Tools.AttemptLoginTask;
 import com.example.eden62.GENSMobile.Tools.MyHttpService;
 import com.example.eden62.GENSMobile.Tools.Utils;
 
@@ -100,6 +103,18 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         psswLayout = (LinearLayout) findViewById(R.id.passwordLayout);
         nbInvLayout = (LinearLayout) findViewById(R.id.invToSyncLayout);
         nbRelLayout = (LinearLayout) findViewById(R.id.relToSyncLayout);
+        psswText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                psswText.setError(null);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
         validPssw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -109,7 +124,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
                     return;
                 }
                 mdp = psswText.getText().toString();
-                AttemptLoginTask task = new AttemptLoginTask(httpService.createConnectionRequest(username,mdp));
+                HttpActivityLoginTask task = new HttpActivityLoginTask(httpService.createConnectionRequest(username,mdp),httpService);
                 task.execute((Void)null);
             }
         });
@@ -218,133 +233,60 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    /**
-     * Transforme une chaîne de caractère en un objet JSON
-     *
-     * @param s La String à transformer
-     * @return L'objet JSON correspondant à la String
-     * @throws JSONException En cas d'echec de parsage
-     */
-    protected JSONObject parseStringToJsonObject(String s) throws JSONException {
-        return new JSONObject(s);
-    }
+    private class HttpActivityLoginTask extends com.example.eden62.GENSMobile.Tools.AttemptLoginTask{
 
-    /**
-     * Tâche de connexion au serveur
-     */
-    private class AttemptLoginTask extends AsyncTask<Void,Void,Boolean> {
-
-        private final Request mRequete;
-
-        AttemptLoginTask(Request requete) {
-            mRequete = requete;
+        public HttpActivityLoginTask(Request requete, MyHttpService httpService) {
+            super(requete, httpService);
         }
 
         @Override
-        protected Boolean doInBackground(Void... params) {
-            snackbar.show();
+        protected void makeWrongJsonSnackbar() {
+            Snackbar.make(txtJson, "Mauvaise forme de json",Snackbar.LENGTH_LONG).show();
+        }
 
+        @Override
+        protected void updateTxtJson(final String body) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    psswText.setError(null);
+                    txtJson.setText(body);
+                    snackbar.dismiss();
                 }
             });
-
-            try {
-                Response response = httpService.executeRequest(mRequete);
-                if (!response.isSuccessful()) {
-                    throw new IOException(response.toString());
-                }
-
-                final String body = response.body().string();
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        txtJson.setText(body);
-                        snackbar.dismiss();
-                    }
-                });
-
-                JSONObject js = parseStringToJsonObject(body);
-                return interpreteJson(js);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-                Snackbar.make(txtJson, "Mauvaise forme de json",Snackbar.LENGTH_LONG).show();
-            } return false;
         }
 
         @Override
-        protected void onPostExecute(final Boolean success) {
-            //showProgress(false);
-
+        protected void actionOnPostExecute(Boolean success) {
             if (success) {
                 Snackbar.make(txtJson,"Connexion réussie",Snackbar.LENGTH_SHORT).show();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        psswLayout.setVisibility(View.GONE);
-                        setTxtNbDatas();
-                        nbInvLayout.setVisibility(View.VISIBLE);
-                        nbRelLayout.setVisibility(View.VISIBLE);
-                        launchSync.setVisibility(View.VISIBLE);
-                        InputMethodManager imm = (InputMethodManager)HttpActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(psswText.getWindowToken(),0);
-                    }
-                });
+                if(!checkVersion(version)){
+                    final int finalVersion = version;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            editor.putInt("goodAppVersion", finalVersion);
+                            editor.commit();
+                            createWrongVersionDialog().show();
+                        }
+                    });
+                }else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            psswLayout.setVisibility(View.GONE);
+                            setTxtNbDatas();
+                            nbInvLayout.setVisibility(View.VISIBLE);
+                            nbRelLayout.setVisibility(View.VISIBLE);
+                            launchSync.setVisibility(View.VISIBLE);
+                            InputMethodManager imm = (InputMethodManager) HttpActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(psswText.getWindowToken(), 0);
+                        }
+                    });
+                }
             } else {
                 psswText.setError(getString(R.string.mdpError));
                 psswText.requestFocus();
             }
-        }
-
-        @Override
-        protected void onCancelled() {
-            //showProgress(false);
-        }
-
-        protected boolean interpreteJson(JSONObject json){
-            int err = -1;
-            int con = -1;
-            String titre = "";
-            String msg = "";
-            int version = -1;
-            try {
-                err = json.getInt("err");
-                version = json.getInt("version");
-                con = json.getInt("con");
-                titre = json.getString("titre");
-                msg = json.getString("msg");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            if(err == 0){
-                if(con == 0){
-                    Log.w(titre,msg);
-                    return false;
-                }else if(con == 1){
-                    Log.w("Connexion","Connexion réussi");
-                    if(!checkVersion(version)){
-                        final int finalVersion = version;
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                editor.putInt("goodAppVersion", finalVersion);
-                                editor.commit();
-                                createWrongVersionDialog().show();
-                            }
-                        });
-                    }
-                    return true;
-                }else {
-                    Log.w("Déconnexion", "Se déconnecte");
-                    return false;
-                }
-            }return false;
         }
 
         private boolean checkVersion(int servVersion){

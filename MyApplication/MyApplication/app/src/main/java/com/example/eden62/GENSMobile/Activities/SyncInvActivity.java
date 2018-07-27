@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.example.eden62.GENSMobile.Database.CampagneDatabase.CampagneDAO;
 import com.example.eden62.GENSMobile.Database.CampagneDatabase.Inventaire;
 import com.example.eden62.GENSMobile.R;
+import com.example.eden62.GENSMobile.Tools.AttemptLoginTask;
 import com.example.eden62.GENSMobile.Tools.MyHttpService;
 import com.example.eden62.GENSMobile.Tools.Utils;
 
@@ -63,85 +64,38 @@ public class SyncInvActivity extends AppCompatActivity {
         inventairesToSend = intent.getParcelableArrayListExtra("inventairesToSend");
         mdp = intent.getStringExtra("mdp");
         currTotalInv = inventairesToSend.size();
-        new AttemptLoginTask(httpService.createConnectionRequest(prefs.getString("username",""),mdp)).execute((Void)null);
+        new SyncInvLoginTask(httpService.createConnectionRequest(prefs.getString("username",""),mdp),httpService).execute((Void)null);
     }
 
-    /**
-     * Tâche qui connecte l'utilisateur au serveur
-     */
-    private class AttemptLoginTask extends AsyncTask<Void,Void,Boolean> {
-
-        private final Request mRequete;
-
-        AttemptLoginTask(Request requete) {
-            mRequete = requete;
+    private class SyncInvLoginTask extends com.example.eden62.GENSMobile.Tools.AttemptLoginTask{
+        public SyncInvLoginTask(Request requete, MyHttpService httpService) {
+            super(requete, httpService);
         }
 
         @Override
-        protected Boolean doInBackground(Void... params) {
+        protected void makeWrongJsonSnackbar() {
+            Snackbar.make(txtJson, "Mauvaise forme de json",Snackbar.LENGTH_LONG).show();
+        }
 
-            try {
-                Response response = httpService.executeRequest(mRequete);
-                if (!response.isSuccessful()) {
-                    throw new IOException(response.toString());
+        @Override
+        protected void updateTxtJson(final String body) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    txtJson.setText(body);
                 }
-
-                final String body = response.body().string();
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        txtJson.setText(body);
-                    }
-                });
-
-                JSONObject js = parseStringToJsonObject(body);
-                return interpreteJson(js);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-                Snackbar.make(txtJson, "Mauvaise forme de json",Snackbar.LENGTH_LONG).show();
-            } return false;
+            });
         }
 
         @Override
-        protected void onPostExecute(final Boolean success) {
+        protected void actionOnPostExecute(Boolean success) {
             if (success) {
                 Snackbar.make(txtJson,"Connexion réussie",Snackbar.LENGTH_SHORT).show();
                 new SendCampagneInfoTask(httpService.createSendInfoCampagneRequest(idCampagne,currTotalInv),inventairesToSend).execute((Void)null);
+            }else{
+                Snackbar.make(txtJson, "Connexion échouée",Snackbar.LENGTH_SHORT).show();
+                finish();
             }
-        }
-
-        @Override
-        protected void onCancelled() { }
-
-        protected boolean interpreteJson(JSONObject json){
-            int err = -1;
-            int con = -1;
-            String titre = "";
-            String msg = "";
-            try {
-                err = json.getInt("err");
-                con = json.getInt("con");
-                titre = json.getString("titre");
-                msg = json.getString("msg");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            if(err == 0){
-                if(con == 0){
-                    Log.w(titre,msg);
-                    return false;
-                }else if(con == 1){
-                    Log.w("Connexion","Connexion réussi");
-                    return true;
-                }else {
-                    Log.w("Déconnexion", "Se déconnecte");
-                    return false;
-                }
-            }return false;
         }
     }
 
