@@ -45,8 +45,16 @@ public abstract class AttemptLoginTask extends AsyncTask<Void,Void,Boolean> {
         } return false;
     }
 
+    /**
+     * Affiche une snackbar avertissant du maivais parsage de json
+     */
     protected abstract void makeWrongJsonSnackbar();
 
+    /**
+     * Change le texte de la textView qui affiche les résultats de requête
+     *
+     * @param body Le nouveau résultat de requête
+     */
     protected abstract void updateTxtJson(final String body);
 
     @Override
@@ -54,8 +62,19 @@ public abstract class AttemptLoginTask extends AsyncTask<Void,Void,Boolean> {
         actionOnPostExecute(success);
     }
 
+    /**
+     * Action réalisée après exécution de la tâche en arrière plan, propre à chaque tâche
+     *
+     * @param aBoolean Boolean représentant la réussite ou non de l'action en arrière plan
+     */
     protected abstract void actionOnPostExecute(Boolean aBoolean);
 
+    /**
+     * Interprète le json reçu pour savoir si la connexion s'est bien passée ou non
+     *
+     * @param json Le json obtenu suite à la requête Http
+     * @return <code>True</code> si l'utilisateur s'est conecté, <code>false</code> sinon
+     */
     protected boolean interpreteJson(JSONObject json){
         int err = -1;
         int con = -1;

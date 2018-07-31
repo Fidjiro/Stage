@@ -178,5 +178,8 @@ public abstract class HistoryActivity<T extends ItemsAdapter> extends AppCompatA
      */
     protected abstract void openDatabases();
 
+    /**
+     * Ferme les BDD utile pour cette classe
+     */
     protected abstract void closeDatabases();
 }

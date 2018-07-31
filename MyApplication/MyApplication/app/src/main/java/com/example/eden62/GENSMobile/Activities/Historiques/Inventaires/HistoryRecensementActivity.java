@@ -3,12 +3,10 @@ package com.example.eden62.GENSMobile.Activities.Historiques.Inventaires;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,18 +26,10 @@ import com.example.eden62.GENSMobile.Database.CampagneDatabase.Inventaire;
 import com.example.eden62.GENSMobile.Database.LoadingDatabase.TaxUsrDAO;
 import com.example.eden62.GENSMobile.R;
 import com.example.eden62.GENSMobile.HistoryAdapters.InventaireAdapter;
-import com.example.eden62.GENSMobile.Tools.MyHttpService;
 import com.example.eden62.GENSMobile.Tools.Utils;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import okhttp3.Request;
-import okhttp3.Response;
 
 /**
  * Historique des inventaires non synchronisés ou hors sites de l'utilisateur
@@ -54,6 +44,7 @@ public class HistoryRecensementActivity extends HistoryActivity<InventaireAdapte
     protected TextView txtJson;
 
     protected String mdp;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,8 +87,9 @@ public class HistoryRecensementActivity extends HistoryActivity<InventaireAdapte
                     //sync invs selectionnés
                     final ArrayList<Inventaire> inventairesToSend = getCheckedInventairesToSend();
                     int listSize = inventairesToSend.size();
+                    boolean noInvToSend = listSize == 0;
 
-                    if(listSize == 0) {
+                    if(noInvToSend) {
                         Snackbar.make(syncInvs, "Aucun inventaire à synchroniser", Snackbar.LENGTH_LONG).show();
                         return;
                     }
@@ -122,7 +114,7 @@ public class HistoryRecensementActivity extends HistoryActivity<InventaireAdapte
         List<Inventaire> tmp = adapter.getCheckedItemsStocker().getCheckedItems();
         ArrayList<Inventaire> res = new ArrayList<>();
         for (Inventaire inv : tmp){
-            if(inv.getErr() == 0)
+            if(inv.isToSync())
                 res.add(inv);
         }
         return res;
@@ -137,6 +129,7 @@ public class HistoryRecensementActivity extends HistoryActivity<InventaireAdapte
     protected void openDatabases() {
         campagneDao = new CampagneDAO(this);
         taxUsrDao = new TaxUsrDAO(this);
+
         campagneDao.open();
         taxUsrDao.open();
     }

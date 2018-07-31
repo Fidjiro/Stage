@@ -95,9 +95,6 @@ public class FauneActivity extends FormActivity {
         }
     }
 
-    /**
-     * Extension de la méthode initFields mère pour adapter au layout faune
-     */
     @Override
     protected void initFields() {
         super.initFields();
@@ -212,7 +209,7 @@ public class FauneActivity extends FormActivity {
      */
     protected boolean coherantNumberGenre(){
         String nombreText = nombre.getText().toString();
-        return nombreText.isEmpty() || getNbgenre() <= getDenombrement();
+        return nombreText.isEmpty() || (getNbgenre() <= getDenombrement());
     }
 
     /**
@@ -297,8 +294,8 @@ public class FauneActivity extends FormActivity {
     }
 
     @Override
-    protected void setValuesFromUsrInput() {
-        super.setValuesFromUsrInput();
+    protected void setStockedValuesFromUsrInput() {
+        super.setStockedValuesFromUsrInput();
 
         RadioButton checkedButton = (RadioButton) findViewById(rg.getCheckedRadioButtonId());
         obs = checkedButton.getText().toString();

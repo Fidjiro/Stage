@@ -21,17 +21,14 @@ public class OiseauxActivity extends FauneActivity {
 
     protected Spinner activite,statut,nidification;
     protected LinearLayout nidificationLayout;
-    protected final int POS_STATUT_NICHEUR = 3;
-    protected final int POS_NIDIF_PROB = 2;
-    protected final int POS_NIDIF_CERTAINE = 3;
+    protected final String NICHEUR_STRING = "Nicheur";
+    protected final String NIDIF_PROB_STRING = "Probable";
+    protected final String NIDIF_CERTAINE_STRING = "Certaine";
 
     protected String activiteValue;
     protected String statutValue;
     protected String nidificationValue;
 
-    /**
-     * Extension de la méthode mère pour adapter au layout oiseaux
-     */
     @Override
     protected void initFields() {
         super.initFields();
@@ -46,11 +43,11 @@ public class OiseauxActivity extends FauneActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if(isAccouplementTextView(view) || isParadeTextView(view)) {
-                    statut.setSelection(POS_STATUT_NICHEUR);
-                    nidification.setSelection(POS_NIDIF_PROB);
+                    setSpinnerSelection(statut,R.array.statuts,NICHEUR_STRING);
+                    setSpinnerSelection(nidification,R.array.nidification,NIDIF_PROB_STRING);
                 } else if(isPonteTextView(view) || isCouvaisonTextView(view)){
-                    statut.setSelection(POS_STATUT_NICHEUR);
-                    nidification.setSelection(POS_NIDIF_CERTAINE);
+                    setSpinnerSelection(statut,R.array.statuts,NICHEUR_STRING);
+                    setSpinnerSelection(nidification,R.array.nidification,NIDIF_CERTAINE_STRING);
                 }
             }
 
@@ -97,6 +94,7 @@ public class OiseauxActivity extends FauneActivity {
         consultedInv.setNidif(nidificationValue);
     }
 
+    // Mets la string object dans la liste de string d'identifiant id en sélection du spinner
     private void setSpinnerSelection(Spinner spinner, int id, String object){
         String[] stringArray = getResources().getStringArray(id);
         ArrayList<String> stringList = new ArrayList<>(Arrays.asList(stringArray));
@@ -107,8 +105,7 @@ public class OiseauxActivity extends FauneActivity {
      * Permet de cacher le champ Nidification et de remettre à zéro sa valeur
      */
     protected void hideNidificationField(){
-        int emptySelectionPos = 0;
-        nidification.setSelection(emptySelectionPos);
+        setSpinnerSelection(nidification,R.array.nidification,"");
         nidificationLayout.setVisibility(View.GONE);
     }
 
@@ -118,8 +115,8 @@ public class OiseauxActivity extends FauneActivity {
     }
 
     @Override
-    protected void setValuesFromUsrInput() {
-        super.setValuesFromUsrInput();
+    protected void setStockedValuesFromUsrInput() {
+        super.setStockedValuesFromUsrInput();
 
         activiteValue = (String) activite.getSelectedItem();
         statutValue = (String) statut.getSelectedItem();
@@ -185,7 +182,7 @@ public class OiseauxActivity extends FauneActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(!statut.getSelectedItem().equals("Nicheur"))
+        if(!statut.getSelectedItem().equals(NICHEUR_STRING))
             hideNidificationField();
     }
 
@@ -209,7 +206,7 @@ public class OiseauxActivity extends FauneActivity {
      * @return <code>True</code> si l'utilisateur à le statut nicheur, <code>false</code> sinon
      */
     protected boolean statutIsNicheur(){
-        return statut.getSelectedItem().equals("Nicheur");
+        return statut.getSelectedItem().equals(NICHEUR_STRING);
     }
 
     /**

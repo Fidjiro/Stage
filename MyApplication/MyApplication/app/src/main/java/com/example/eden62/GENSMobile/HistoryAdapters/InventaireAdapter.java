@@ -73,7 +73,7 @@ public class InventaireAdapter extends ItemsAdapter<InventoryStocker,Inventaire>
         viewHolder.heure.setText(inv.getHeure());
 
         // Si l'inventaire est hors-site, on met un fond rouge, sinon un fond transparent
-        if(inv.getErr() == 1)
+        if(!inv.isToSync())
             convertView.setBackgroundColor(Color.RED);
         else
             convertView.setBackgroundColor(Color.TRANSPARENT);

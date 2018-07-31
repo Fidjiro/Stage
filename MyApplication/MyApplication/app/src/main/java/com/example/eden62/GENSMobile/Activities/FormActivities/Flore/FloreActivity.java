@@ -9,12 +9,9 @@ import com.example.eden62.GENSMobile.Database.CampagneDatabase.Inventaire;
 import com.example.eden62.GENSMobile.R;
 import com.example.eden62.GENSMobile.Tools.Utils;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Activité formulaire pour la flore
@@ -55,7 +52,7 @@ public class FloreActivity extends FormActivity {
     @Override
     protected void modifConsultedInventaire() {
         super.modifConsultedInventaire();
-        setValuesFromUsrInput();
+        setStockedValuesFromUsrInput();
         consultedInv.setIndiceAbondance(indiceAbondanceValue);
     }
 
@@ -89,7 +86,7 @@ public class FloreActivity extends FormActivity {
     }
 
     private boolean usrClicOnEnterKey(int keyCode, KeyEvent keyEvent){
-        return keyCode == KeyEvent.KEYCODE_ENTER && keyEvent.getAction() == KeyEvent.ACTION_UP;
+        return (keyCode == KeyEvent.KEYCODE_ENTER) && (keyEvent.getAction() == KeyEvent.ACTION_UP);
     }
 
     @Override
@@ -144,8 +141,8 @@ public class FloreActivity extends FormActivity {
     }
 
     @Override
-    protected void setValuesFromUsrInput() {
-        super.setValuesFromUsrInput();
+    protected void setStockedValuesFromUsrInput() {
+        super.setStockedValuesFromUsrInput();
 
         indiceAbondanceValue = getSelectedIndiceValue();
     }

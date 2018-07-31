@@ -428,6 +428,10 @@ public class Inventaire implements Parcelable,DatabaseItem{
         return err;
     }
 
+    public boolean isToSync(){
+        return err == 0;
+    }
+
     public void setErr(int err) {
         this.err = err;
     }

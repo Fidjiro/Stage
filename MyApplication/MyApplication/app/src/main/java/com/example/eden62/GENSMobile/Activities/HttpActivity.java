@@ -179,7 +179,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         List<Inventaire> tmp =  campagneDao.getInventaireOfTheUsr(usrId);
         ArrayList<Inventaire> res = new ArrayList<>();
         for (Inventaire inv : tmp){
-            if(inv.getErr() == 0)
+            if(inv.isToSync())
                 res.add(inv);
         }
         return res;
@@ -194,8 +194,9 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
 
         final ArrayList<Inventaire> inventairesToSend = getInventairesToSend();
         int currTotalInv = inventairesToSend.size();
+        boolean noInvToSend = currTotalInv == 0;
 
-        if(currTotalInv == 0) {
+        if(noInvToSend) {
             Snackbar.make(txtJson, "Aucun inventaire à synchroniser", Snackbar.LENGTH_LONG).show();
             return;
         }

@@ -106,7 +106,6 @@ public class PointsTakerService extends Service {
 
     @Override
     public void onDestroy() {
-        Log.e(TAG,"Ondestroy");
         super.onDestroy();
         if(mLocationManager != null){
             try{

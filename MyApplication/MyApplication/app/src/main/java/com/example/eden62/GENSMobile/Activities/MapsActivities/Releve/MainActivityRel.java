@@ -159,8 +159,8 @@ public class MainActivityRel extends MainActivity {
         long creatorId = Utils.getCurrUsrId(this);
         String latitude = lastMarkerPosition.getLatitude() + "";
         String longitude = lastMarkerPosition.getLongitude() + "";
-        return new Releve(creatorId,"","Point", latitude, longitude, "", "false", Utils.getDate(),Utils.getTime(),lineLength,polygonPerimeter,polygonArea);
 
+        return new Releve(creatorId,"","Point", latitude, longitude, "", "false", Utils.getDate(),Utils.getTime(),lineLength,polygonPerimeter,polygonArea);
     }
 
     @Override

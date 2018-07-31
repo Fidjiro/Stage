@@ -56,8 +56,8 @@ public class AmphibienActivity extends FauneActivity {
     }
 
     @Override
-    protected void setValuesFromUsrInput() {
-        super.setValuesFromUsrInput();
-        presencePonteValue = presencePonte.isChecked()+"";
+    protected void setStockedValuesFromUsrInput() {
+        super.setStockedValuesFromUsrInput();
+        presencePonteValue = presencePonte.isChecked() + "";
     }
 }

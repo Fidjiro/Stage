@@ -57,8 +57,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showProgress(true);
-                Intent intent = new Intent(HomeActivity.this, MainActivityRel.class);
-                startActivity(intent);
+                startActivity(new Intent(HomeActivity.this, MainActivityRel.class));
             }
         });
 
