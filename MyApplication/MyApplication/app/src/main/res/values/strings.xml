@@ -81,6 +81,9 @@
     <string name="modifier">Modifier</string>
     <string name="remarque">Remarque(s) :</string>
     <string name="validerForm">Valider le formulaire</string>
+    <!-- Ces 4 espaces permettent aux editText contenant le dénombrement, le nbMale etc... d'avoir une taille minimale
+    et de grandir en cas de dépassement de cette taille minimale-->
+    <string name="empty_nombre_text">    </string>
 
     <!--Flore-->
     <string name="abondance">Indice d\'abondance : </string>

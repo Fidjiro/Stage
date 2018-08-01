@@ -8,3 +8,7 @@ v1.2, 23/07: - Changement du message chargement de la carte en progress dialog
 	     - Ajout progress dialog chargement de la carte lors de la revisualisation d'inventaires
 	     - Changement méthode syncro des points, affiche donc maintenant une page blanche en fond
 	     - Correction bug si mdp incorrect affiche le dialog de mauvaise version
+
+v1.3, 01/08: - Ajout boutons + - pour l dénombrement et nombre de male femelle
+	     - Update des champs dénombrement, nombre de mâle, nombre de femelle, lors d'une modification via 
+	       clavier, les autres champs changent en conséquence. 

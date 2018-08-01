@@ -1,9 +1,13 @@
 package com.example.eden62.GENSMobile.Activities.FormActivities.Faune;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -20,9 +24,11 @@ public class FauneActivity extends FormActivity {
 
     protected RadioGroup rg;
     protected RadioButton buttonEntendu,buttonVu;
+    protected Button decNombreButton, incNombreButton, decNbMaleButton, incNbMaleButton, decNbFemaleButton, incNbFemaleButton;
     protected TextView maleTextView, femaleTextView;
     protected EditText nbMaleText, nbFemaleText;
     protected CheckBox maleCheckbox,femaleCheckbox;
+    protected LinearLayout maleNbLayout, femaleNbLayout;
 
     protected static final String STRING_TO_ADD = " : ";
     protected String obs;
@@ -99,6 +105,8 @@ public class FauneActivity extends FormActivity {
     protected void initFields() {
         super.initFields();
         typeTaxon = 0;
+        maleNbLayout = (LinearLayout) findViewById(R.id.maleNbLayout);
+        femaleNbLayout = (LinearLayout) findViewById(R.id.femaleNbLayout);
         rg = (RadioGroup) findViewById(R.id.typeObs);
         buttonEntendu = (RadioButton) findViewById(R.id.buttonEntendu);
         buttonVu = (RadioButton) findViewById(R.id.buttonVu);
@@ -108,13 +116,40 @@ public class FauneActivity extends FormActivity {
         nbFemaleText = (EditText) findViewById(R.id.nbFemale);
         maleCheckbox = (CheckBox) findViewById(R.id.maleCheckbox);
         femaleCheckbox = (CheckBox) findViewById(R.id.femaleCheckbox);
-
+        decNombreButton = (Button) findViewById(R.id.decDenombrement);
+        incNombreButton = (Button) findViewById(R.id.incDenombrement);
+        decNbMaleButton = (Button) findViewById(R.id.decNbMale);
+        incNbMaleButton = (Button) findViewById(R.id.incNbMale);
+        decNbFemaleButton = (Button) findViewById(R.id.decNbFemale);
+        incNbFemaleButton = (Button) findViewById(R.id.incNbFemale);
         nbMaleText.setOnFocusChangeListener(new MyFocusChangeListener());
         nbMaleText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 view.requestFocus();
             }
+        });
+        nbMaleText.addTextChangedListener(new TextWatcher() {
+            int oldNbgenre;
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                oldNbgenre = getNbGenre();
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                System.out.println("onText: " + s);
+                nbMale = getNbMale();
+                if(!nombre.getText().toString().isEmpty()) {
+                    if (isNotYetInitialized(nb))
+                        nb = getDenombrement();
+                    updateDenombrementETViaNbGenre(oldNbgenre);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
         });
         nbFemaleText.setOnFocusChangeListener(new MyFocusChangeListener());
         nbFemaleText.setOnClickListener(new View.OnClickListener() {
@@ -123,7 +158,68 @@ public class FauneActivity extends FormActivity {
                 view.requestFocus();
             }
         });
+        nbFemaleText.addTextChangedListener(new TextWatcher() {
+            int oldNbGenre;
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { oldNbGenre = getNbGenre();}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                nbFemale = getNbFemale();
+                if(!nombre.getText().toString().isEmpty()) {
+                    if (isNotYetInitialized(nb))
+                        nb = getDenombrement();
+                    updateDenombrementETViaNbGenre(oldNbGenre);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
         nombre.setOnFocusChangeListener(new MyFocusChangeListener());
+
+        decNombreButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                decNombre();
+            }
+        });
+
+        incNombreButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                incNombre();
+            }
+        });
+
+        decNbMaleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                decNbMale();
+            }
+        });
+
+        incNbMaleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                incNbMale();
+            }
+        });
+
+        decNbFemaleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                decNbFemale();
+            }
+        });
+
+        incNbFemaleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                incNbFemale();
+            }
+        });
 
         rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -132,9 +228,82 @@ public class FauneActivity extends FormActivity {
             }
         });
 
-        maleCheckbox.setOnCheckedChangeListener(new MyGenreOnCheckedChangeListener(maleTextView,nbMaleText));
+        maleCheckbox.setOnCheckedChangeListener(new MyGenreOnCheckedChangeListener(maleTextView,nbMaleText,maleNbLayout));
 
-        femaleCheckbox.setOnCheckedChangeListener(new MyGenreOnCheckedChangeListener(femaleTextView,nbFemaleText));
+        femaleCheckbox.setOnCheckedChangeListener(new MyGenreOnCheckedChangeListener(femaleTextView,nbFemaleText,femaleNbLayout));
+    }
+
+    private void updateDenombrementETViaNbGenre(int oldNbGenre) {
+        int nbGenre = getNbGenre();
+        boolean isInchoherantNb = nb < nbGenre;
+
+        if(oldNbGenre > nbGenre && oldNbGenre == nb)
+            nb -= oldNbGenre - nbGenre;
+        else {
+            if (isInchoherantNb)
+                nb += nbGenre - nb;
+        }
+        String newString = "";
+        if(nb > 0)
+            newString += nb;
+        nombre.setText(newString);
+    }
+
+    private int decreaseDecompteEditText(EditText et, int nb){
+        if(nb > 0) {
+            String newText = "";
+            nb--;
+            if(nb > 0)
+                newText += nb;
+            et.setText(newText);
+        }
+        return nb;
+    }
+
+    public boolean isNotYetInitialized(int i){
+        return i == 0;
+    }
+
+    private void incNombre(){
+        if(isNotYetInitialized(nb))
+            nb = getDenombrement();
+
+        int nbGenre = getNbGenre();
+        boolean isInchoherantNb = nb < nbGenre;
+
+        if (isInchoherantNb)
+            nb += nbGenre - nb;
+
+        nb++;
+        nombre.setText(nb + "");
+    }
+
+    private void decNombre(){
+        nb = decreaseDecompteEditText(nombre,nb);
+    }
+
+    private void incNbMale(){
+        if(isNotYetInitialized(nbMale))
+            nbMale = getNbMale();
+
+        nbMale++;
+        nbMaleText.setText(nbMale + "");
+    }
+
+    private void decNbMale(){
+        nbMale = decreaseDecompteEditText(nbMaleText,nbMale);
+    }
+
+    private void incNbFemale(){
+        if(isNotYetInitialized(nbFemale))
+            nbFemale = getNbFemale();
+
+        nbFemale ++;
+        nbFemaleText.setText(nbFemale + "");
+    }
+
+    private void decNbFemale(){
+        nbFemale = decreaseDecompteEditText(nbFemaleText,nbFemale);
     }
 
     /**
@@ -144,36 +313,39 @@ public class FauneActivity extends FormActivity {
 
         TextView genreTv;
         EditText nbGenreEdt;
+        LinearLayout nbGenreLayout;
 
-        public MyGenreOnCheckedChangeListener(TextView genreTv, EditText nbGenreEdt) {
+        public MyGenreOnCheckedChangeListener(TextView genreTv, EditText nbGenreEdt, LinearLayout nbGenreLayout) {
             this.genreTv = genreTv;
             this.nbGenreEdt = nbGenreEdt;
+            this.nbGenreLayout = nbGenreLayout;
         }
 
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            genreCheckboxOnCheckedChangeAction(isChecked, genreTv, nbGenreEdt);
+            genreCheckboxOnCheckedChangeAction(isChecked, genreTv, nbGenreEdt, nbGenreLayout);
         }
 
         // Change l'affichage des champs genre, si on coche la checkbox, on ajoute ":" au label et on affiche l'editText,
         // inversement si on décoche la checkbox
-        private void genreCheckboxOnCheckedChangeAction(boolean checked, TextView genreTv, EditText nbGenreEdt) {
+        private void genreCheckboxOnCheckedChangeAction(boolean checked, TextView genreTv, EditText nbGenreEdt, LinearLayout nbGenreLayout) {
             if (checked) {
                 addStringToAddToGenreLabel(genreTv);
-                showNbGenreField(nbGenreEdt);
+                showNbGenreField(nbGenreEdt, nbGenreLayout);
             } else {
                 removeStringToAddToGenreLabel(genreTv);
-                hideNbGenreField(nbGenreEdt);
+                hideNbGenreField(nbGenreEdt, nbGenreLayout);
             }
         }
 
-        protected void showNbGenreField(EditText nbGenreEdt) {
-            nbGenreEdt.setVisibility(View.VISIBLE);
+        protected void showNbGenreField(EditText nbGenreEdt, LinearLayout nbGenreLayout) {
+            nbGenreEdt.setText(getString(R.string.empty_nombre_text));
+            nbGenreLayout.setVisibility(View.VISIBLE);
         }
 
-        protected void hideNbGenreField(EditText nbGenreEdt) {
-            nbGenreEdt.setVisibility(View.INVISIBLE);
-            nbGenreEdt.setText("");
+        protected void hideNbGenreField(EditText nbGenreEdt, LinearLayout nbGenreLayout) {
+            nbGenreLayout.setVisibility(View.INVISIBLE);
+            nbGenreEdt.setText(getString(R.string.empty_nombre_text));
         }
 
         protected void addStringToAddToGenreLabel(TextView genreTv) {
@@ -209,7 +381,7 @@ public class FauneActivity extends FormActivity {
      */
     protected boolean coherantNumberGenre(){
         String nombreText = nombre.getText().toString();
-        return nombreText.isEmpty() || (getNbgenre() <= getDenombrement());
+        return nombreText.isEmpty() || (getNbGenre() <= getDenombrement());
     }
 
     /**
@@ -217,7 +389,7 @@ public class FauneActivity extends FormActivity {
      *
      * @return L'entier correspondant au nombre de mâle/femelle
      */
-    protected int getNbgenre(){
+    protected int getNbGenre(){
         return getNbFemaleWhenChecked() + getNbMaleWhenChecked();
     }
 

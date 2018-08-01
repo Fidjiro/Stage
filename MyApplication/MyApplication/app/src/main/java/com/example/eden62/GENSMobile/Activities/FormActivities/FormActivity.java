@@ -43,7 +43,7 @@ public abstract class FormActivity extends AppCompatActivity {
     protected long usrId,ref_taxon;
     protected double lat,lon;
     protected String dat, heure, remarquesTxt;
-    protected int nb,nv_taxon;
+    protected int nb, nv_taxon;
     protected Inventaire consultedInv;
 
     public static LoadingMapDialog lmd;
@@ -117,9 +117,9 @@ public abstract class FormActivity extends AppCompatActivity {
         nomfr.setText(consultedInv.getNomFr());
         nomlatin.setText(consultedInv.getNomLatin());
         date.setText(Utils.printDateWithYearIn2Digit(consultedInv.getDate()));
-        int invNombre = consultedInv.getNombre();
-        if(invNombre > 0)
-            nombre.setText(invNombre+ "");
+        nb = consultedInv.getNombre();
+        if(nb > 0)
+            nombre.setText(nb + "");
         remarques.setText(consultedInv.getRemarques());
     }
 
@@ -255,6 +255,18 @@ public abstract class FormActivity extends AppCompatActivity {
         });
 
         nombre.addTextChangedListener(new UnsetError());
+        nombre.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                nb = getDenombrement();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
         remarques.setOnFocusChangeListener(new MyFocusChangeListener());
     }
 

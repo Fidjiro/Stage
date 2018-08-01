@@ -136,12 +136,26 @@
                     android:textSize="@dimen/formLabelTextSize"
                     android:textStyle="bold" />
 
+                <Button
+                    android:id="@+id/decDenombrement"
+                    android:layout_width="38dp"
+                    android:layout_height="wrap_content"
+                    android:text="-" />
+
                 <EditText
                     android:id="@+id/nombre"
-                    android:layout_width="@dimen/formNombreWidth"
+                    android:layout_width="wrap_content"
+                    android:minWidth="@dimen/formNombreWidth"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/formLabelMargin"
-                    android:inputType="number" />
+                    android:text="@string/empty_nombre_text"
+                    android:inputType="number"/>
+
+                <Button
+                    android:id="@+id/incDenombrement"
+                    android:layout_width="38dp"
+                    android:layout_height="wrap_content"
+                    android:text="+" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -165,14 +179,33 @@
                     android:textSize="@dimen/formLabelTextSize"
                     android:textStyle="bold" />
 
-
-                <EditText
-                    android:id="@+id/nbMale"
-                    android:layout_width="@dimen/formNombreWidth"
+                <LinearLayout
+                    android:id="@+id/maleNbLayout"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/formLabelMargin"
-                    android:visibility="invisible"
-                    android:inputType="number" />
+                    android:visibility="invisible">
+                    <Button
+                        android:id="@+id/decNbMale"
+                        android:layout_width="38dp"
+                        android:layout_height="wrap_content"
+                        android:padding="0dp"
+                        android:text="-" />
+
+                    <EditText
+                        android:id="@+id/nbMale"
+                        android:layout_width="wrap_content"
+                        android:minWidth="@dimen/formNombreWidth"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/formLabelMargin"
+                        android:text="@string/empty_nombre_text"
+                        android:inputType="number" />
+
+                    <Button
+                        android:id="@+id/incNbMale"
+                        android:layout_width="38dp"
+                        android:layout_height="wrap_content"
+                        android:text="+" />
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -197,13 +230,33 @@
                     android:textSize="@dimen/formLabelTextSize"
                     android:textStyle="bold" />
 
-                <EditText
-                    android:id="@+id/nbFemale"
-                    android:layout_width="@dimen/formNombreWidth"
+                <LinearLayout
+                    android:id="@+id/femaleNbLayout"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/formLabelMargin"
-                    android:visibility="invisible"
-                    android:inputType="number" />
+                    android:visibility="invisible">
+                    <Button
+                        android:id="@+id/decNbFemale"
+                        android:layout_width="38dp"
+                        android:layout_height="wrap_content"
+                        android:padding="0dp"
+                        android:text="-" />
+
+                    <EditText
+                        android:id="@+id/nbFemale"
+                        android:layout_width="wrap_content"
+                        android:minWidth="@dimen/formNombreWidth"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/formLabelMargin"
+                        android:text="@string/empty_nombre_text"
+                        android:inputType="number" />
+
+                    <Button
+                        android:id="@+id/incNbFemale"
+                        android:layout_width="38dp"
+                        android:layout_height="wrap_content"
+                        android:text="+" />
+                </LinearLayout>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="wrap_content"
