@@ -36,7 +36,7 @@ public abstract class FormActivity extends AppCompatActivity {
     protected CampagneDAO campagneDao;
     protected TaxUsrDAO taxDao;
 
-    protected Button valider,modif,visualise;
+    protected Button valider,modif,visualise, decNombreButton, incNombreButton;
     protected ImageButton delete;
     protected RelativeLayout buttonsModifLayout;
 
@@ -101,6 +101,8 @@ public abstract class FormActivity extends AppCompatActivity {
     protected void changeFieldsStates(boolean enabled){
         nombre.setEnabled(enabled);
         remarques.setEnabled(enabled);
+        incNombreButton.setEnabled(enabled);
+        decNombreButton.setEnabled(enabled);
     }
 
     /**
@@ -196,6 +198,8 @@ public abstract class FormActivity extends AppCompatActivity {
         nombre = (EditText) findViewById(R.id.nombre);
         remarques = (EditText) findViewById(R.id.remarques);
         buttonsModifLayout = (RelativeLayout) findViewById(R.id.buttonsLayout);
+        decNombreButton = (Button) findViewById(R.id.decDenombrement);
+        incNombreButton = (Button) findViewById(R.id.incDenombrement);
         modif = (Button) findViewById(R.id.modifier);
         visualise = (Button) findViewById(R.id.visualiserInv);
         delete = (ImageButton) findViewById(R.id.deleteInv);
@@ -235,6 +239,20 @@ public abstract class FormActivity extends AppCompatActivity {
                 Intent intent = new Intent(FormActivity.this, ShowInvRelActivity.class);
                 intent.putExtra("inv",consultedInv);
                 startActivity(intent);
+            }
+        });
+
+        decNombreButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                decNombre();
+            }
+        });
+
+        incNombreButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                incNombre();
             }
         });
 
@@ -346,6 +364,39 @@ public abstract class FormActivity extends AppCompatActivity {
             ex.printStackTrace();
         }
         return nb;
+    }
+
+    protected int decreaseDecompteEditText(EditText et, int nb){
+        if(nb > 0) {
+            String newText = "";
+            nb--;
+            if(nb > 0)
+                newText += nb;
+            et.setText(newText);
+        }
+        return nb;
+    }
+
+    public boolean isNull(int i){
+        return i == 0;
+    }
+
+    protected void incNombre(){
+        if(isNull(nb))
+            nb = getDenombrement();
+
+        nb = specialFormModif(nb);
+
+        nb++;
+        nombre.setText(nb + "");
+    }
+
+    protected int specialFormModif(int nb){
+        return nb;
+    }
+
+    protected void decNombre(){
+        nb = decreaseDecompteEditText(nombre,nb);
     }
 
     /**

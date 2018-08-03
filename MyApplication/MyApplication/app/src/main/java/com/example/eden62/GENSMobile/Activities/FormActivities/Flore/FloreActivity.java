@@ -1,7 +1,7 @@
 package com.example.eden62.GENSMobile.Activities.FormActivities.Flore;
 
-import android.view.KeyEvent;
-import android.view.View;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.Spinner;
 
 import com.example.eden62.GENSMobile.Activities.FormActivities.FormActivity;
@@ -19,13 +19,12 @@ import java.util.List;
 public class FloreActivity extends FormActivity {
 
     protected Spinner indiceAbondance;
-    protected static final List<IntegerTuple> INDICES = new ArrayList<>(Arrays.asList(new IntegerTuple[]{
-            new IntegerTuple(0,0),
+    protected static final List<IntegerTuple> INDICES = new ArrayList<>(Arrays.asList(new IntegerTuple(0,0),
             new IntegerTuple(1,25),
             new IntegerTuple(26,100),
             new IntegerTuple(101,1000),
             new IntegerTuple(1001,10000),
-            new IntegerTuple(10001,IntegerTuple.INFINI)}));
+            new IntegerTuple(10001,IntegerTuple.INFINI)));
 
     protected int indiceAbondanceValue;
 
@@ -73,20 +72,19 @@ public class FloreActivity extends FormActivity {
     protected void initFields() {
         super.initFields();
         indiceAbondance = (Spinner) findViewById(R.id.abondance);
-        nombre.setOnFocusChangeListener(new MyFloreFocusChangeListener());
-        nombre.setOnKeyListener(new View.OnKeyListener() {
+        nombre.addTextChangedListener(new TextWatcher() {
             @Override
-            public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
-                if(usrClicOnEnterKey(keyCode,keyEvent))
-                    setIndiceFromDenombrement();
-                return false;
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                setIndiceFromDenombrement();
             }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
         });
         typeTaxon = 1;
-    }
-
-    private boolean usrClicOnEnterKey(int keyCode, KeyEvent keyEvent){
-        return (keyCode == KeyEvent.KEYCODE_ENTER) && (keyEvent.getAction() == KeyEvent.ACTION_UP);
     }
 
     @Override
@@ -151,7 +149,7 @@ public class FloreActivity extends FormActivity {
      * Représente les bornes des indices d'abondance. -1 est ici traduit comme l'infini
      */
     public static class IntegerTuple {
-        public final int x;
+        private final int x;
         public final int y;
         public final static int INFINI = -1;
 
@@ -188,21 +186,5 @@ public class FloreActivity extends FormActivity {
             i++;
 
         indiceAbondance.setSelection(i);
-    }
-
-    /**
-     * Action réalisé quand le champ dénombrement perd le focus
-     */
-    public class MyFloreFocusChangeListener extends MyFocusChangeListener{
-
-        /**
-         * Permet de selectionner le bon indice d'abondance automatiquement via le dénombrement
-         */
-        @Override
-        public void onFocusChange(View view, boolean b) {
-            super.onFocusChange(view, b);
-            if(!b)
-                setIndiceFromDenombrement();
-        }
     }
 }

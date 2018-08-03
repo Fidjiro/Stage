@@ -145,10 +145,9 @@
                 <EditText
                     android:id="@+id/nombre"
                     android:layout_width="wrap_content"
-                    android:minWidth="@dimen/formNombreWidth"
                     android:layout_height="wrap_content"
+                    android:minWidth="@dimen/formNombreWidth"
                     android:layout_marginRight="@dimen/formLabelMargin"
-                    android:text="@string/empty_nombre_text"
                     android:inputType="number"/>
 
                 <Button
@@ -194,10 +193,9 @@
                     <EditText
                         android:id="@+id/nbMale"
                         android:layout_width="wrap_content"
-                        android:minWidth="@dimen/formNombreWidth"
                         android:layout_height="wrap_content"
+                        android:minWidth="@dimen/formNombreWidth"
                         android:layout_marginRight="@dimen/formLabelMargin"
-                        android:text="@string/empty_nombre_text"
                         android:inputType="number" />
 
                     <Button
@@ -245,10 +243,9 @@
                     <EditText
                         android:id="@+id/nbFemale"
                         android:layout_width="wrap_content"
-                        android:minWidth="@dimen/formNombreWidth"
                         android:layout_height="wrap_content"
+                        android:minWidth="@dimen/formNombreWidth"
                         android:layout_marginRight="@dimen/formLabelMargin"
-                        android:text="@string/empty_nombre_text"
                         android:inputType="number" />
 
                     <Button

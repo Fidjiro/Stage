@@ -24,7 +24,7 @@ public class FauneActivity extends FormActivity {
 
     protected RadioGroup rg;
     protected RadioButton buttonEntendu,buttonVu;
-    protected Button decNombreButton, incNombreButton, decNbMaleButton, incNbMaleButton, decNbFemaleButton, incNbFemaleButton;
+    protected Button decNbMaleButton, incNbMaleButton, decNbFemaleButton, incNbFemaleButton;
     protected TextView maleTextView, femaleTextView;
     protected EditText nbMaleText, nbFemaleText;
     protected CheckBox maleCheckbox,femaleCheckbox;
@@ -59,6 +59,10 @@ public class FauneActivity extends FormActivity {
         nbMaleText.setEnabled(enabled);
         maleCheckbox.setEnabled(enabled);
         femaleCheckbox.setEnabled(enabled);
+        incNbFemaleButton.setEnabled(enabled);
+        decNbFemaleButton.setEnabled(enabled);
+        incNbMaleButton.setEnabled(enabled);
+        decNbMaleButton.setEnabled(enabled);
     }
 
     @Override
@@ -116,8 +120,6 @@ public class FauneActivity extends FormActivity {
         nbFemaleText = (EditText) findViewById(R.id.nbFemale);
         maleCheckbox = (CheckBox) findViewById(R.id.maleCheckbox);
         femaleCheckbox = (CheckBox) findViewById(R.id.femaleCheckbox);
-        decNombreButton = (Button) findViewById(R.id.decDenombrement);
-        incNombreButton = (Button) findViewById(R.id.incDenombrement);
         decNbMaleButton = (Button) findViewById(R.id.decNbMale);
         incNbMaleButton = (Button) findViewById(R.id.incNbMale);
         decNbFemaleButton = (Button) findViewById(R.id.decNbFemale);
@@ -142,7 +144,7 @@ public class FauneActivity extends FormActivity {
                 System.out.println("onText: " + s);
                 nbMale = getNbMale();
                 if(!nombre.getText().toString().isEmpty()) {
-                    if (isNotYetInitialized(nb))
+                    if (isNull(nb))
                         nb = getDenombrement();
                     updateDenombrementETViaNbGenre(oldNbgenre);
                 }
@@ -168,7 +170,7 @@ public class FauneActivity extends FormActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 nbFemale = getNbFemale();
                 if(!nombre.getText().toString().isEmpty()) {
-                    if (isNotYetInitialized(nb))
+                    if (isNull(nb))
                         nb = getDenombrement();
                     updateDenombrementETViaNbGenre(oldNbGenre);
                 }
@@ -178,20 +180,6 @@ public class FauneActivity extends FormActivity {
             public void afterTextChanged(Editable s) { }
         });
         nombre.setOnFocusChangeListener(new MyFocusChangeListener());
-
-        decNombreButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                decNombre();
-            }
-        });
-
-        incNombreButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                incNombre();
-            }
-        });
 
         decNbMaleButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -249,41 +237,18 @@ public class FauneActivity extends FormActivity {
         nombre.setText(newString);
     }
 
-    private int decreaseDecompteEditText(EditText et, int nb){
-        if(nb > 0) {
-            String newText = "";
-            nb--;
-            if(nb > 0)
-                newText += nb;
-            et.setText(newText);
-        }
-        return nb;
-    }
-
-    public boolean isNotYetInitialized(int i){
-        return i == 0;
-    }
-
-    private void incNombre(){
-        if(isNotYetInitialized(nb))
-            nb = getDenombrement();
-
+    @Override
+    protected int specialFormModif(int nb) {
         int nbGenre = getNbGenre();
         boolean isInchoherantNb = nb < nbGenre;
 
         if (isInchoherantNb)
             nb += nbGenre - nb;
-
-        nb++;
-        nombre.setText(nb + "");
-    }
-
-    private void decNombre(){
-        nb = decreaseDecompteEditText(nombre,nb);
+        return super.specialFormModif(nb);
     }
 
     private void incNbMale(){
-        if(isNotYetInitialized(nbMale))
+        if(isNull(nbMale))
             nbMale = getNbMale();
 
         nbMale++;
@@ -295,7 +260,7 @@ public class FauneActivity extends FormActivity {
     }
 
     private void incNbFemale(){
-        if(isNotYetInitialized(nbFemale))
+        if(isNull(nbFemale))
             nbFemale = getNbFemale();
 
         nbFemale ++;
