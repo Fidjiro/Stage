@@ -8,14 +8,7 @@
     tools:context=".Activities.Historiques.Releves.InfoRelevesPopups.PopUpLigne"
     android:background="@drawable/back">
 
-    <TextView
-        android:id="@+id/titleViewPopup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/popUpTitle"
-        android:textSize="@dimen/formTitleTextSize"
-        android:textStyle="bold" />
+    <include layout="@layout/title_info_releve_popup"/>
 
     <ScrollView
         android:id="@+id/scrollViewPopup"
@@ -33,82 +26,8 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/formLayoutsMargin"
-                android:orientation="horizontal">
+            <include layout="@layout/popup_info_releve_skeleton"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/formLabelMargin"
-                    android:text="@string/nom"
-                    android:textSize="@dimen/formLabelTextSize"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/nom"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/formLayoutsMargin"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/formLabelMargin"
-                    android:text="@string/type"
-                    android:textSize="@dimen/formLabelTextSize"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/formLayoutsMargin"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/formLabelMargin"
-                    android:text="@string/date"
-                    android:textSize="@dimen/formLabelTextSize"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/formLayoutsMargin"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/formLabelMargin"
-                    android:text="@string/heure"
-                    android:textSize="@dimen/formLabelTextSize"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/heure"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -151,32 +70,5 @@
 
     </ScrollView>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:id="@+id/exportRel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:text="Exporter"
-            android:textAllCaps="false"/>
-
-        <Button
-            android:id="@+id/redraw"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/visualise"
-            android:textAllCaps="false" />
-
-        <ImageButton
-            android:id="@+id/deleteRel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_gravity="right"
-            android:src="@drawable/delete" />
-    </RelativeLayout>
+    <include layout="@layout/popup_info_releve_buttons"/>
 </LinearLayout>

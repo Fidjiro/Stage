@@ -20,6 +20,16 @@ public class AmphibienActivity extends FauneActivity {
         setContentView(R.layout.activity_form_amphib);
     }
 
+    /**
+     * Extension de la méthode initFields mère pour adapter au layout amphibien
+     */
+    @Override
+    protected void initFields() {
+        super.initFields();
+        typeTaxon = 3;
+        presencePonte = (CheckBox) findViewById(R.id.ponte);
+    }
+
     @Override
     protected Inventaire createPersonalInventaire() {
         return new Inventaire(ref_taxon, Utils.getVerCode(this), nv_taxon, usrId, nomFrString, nomLatinString, typeTaxon, lat, lon, dat, heure, nb, obs, remarquesTxt, nbMale, nbFemale,presencePonteValue);
@@ -43,16 +53,6 @@ public class AmphibienActivity extends FauneActivity {
         super.modifConsultedInventaire();
 
         consultedInv.setPresencePonte(presencePonteValue);
-    }
-
-    /**
-     * Extension de la méthode initFields mère pour adapter au layout amphibien
-     */
-    @Override
-    protected void initFields() {
-        super.initFields();
-        typeTaxon = 3;
-        presencePonte = (CheckBox) findViewById(R.id.ponte);
     }
 
     @Override

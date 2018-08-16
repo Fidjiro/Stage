@@ -67,6 +67,9 @@ public abstract class MainActivity extends AppCompatActivity{
         initFields();
     }
 
+    /**
+     * Initialise les éléments de cette activité
+     */
     protected void initFields(){
         progressDialog = ProgressDialog.show(this, "",
                 "En attente du signal GPS...", true);

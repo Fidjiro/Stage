@@ -40,6 +40,7 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -101,8 +102,13 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.CustomTheme"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".Activities.SyncInvActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".Activities.SyncInvActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Activities.ProtocoleActivities.ChooseProtocoleActivity" />
+        <activity android:name=".Activities.ProtocoleActivities.RNF.ChooseTransectActivity" />
+        <activity android:name=".Activities.ProtocoleActivities.RNF.FormMeteoActivity" />
+        <activity android:name=".Activities.ProtocoleActivities.RNF.FillTransectActivity"></activity>
     </application>
 
 </manifest>

@@ -152,4 +152,72 @@
     <string name="notificationTitle">Localisation en cours</string>
     <string name="notificationMessage">Relevé de terrain en cours de traçage</string>
     <string name="notificationTicker">Gps activé pour continuer le relevé de terrain</string>
+
+    <!--Protocoles-->
+    <string name="chooseProto">Choix du protocole :</string>
+    <string-array name="protocoles">
+        <item></item>
+        <item>RNF rhopalocères</item>
+    </string-array>
+    <string name="chooseSite">Choix du site :</string>
+    <string-array name="sites">
+        <item></item>
+        <item>Mont Pelé et Hulin</item>
+    </string-array>
+    <string name="chooseTransectTitle">Choix du transect</string>
+
+    <!-- Formulaire météo -->
+    <string-array name="chooseVisibilite">
+        <item></item>
+        <item>Bonne</item>
+        <item>Moyenne</item>
+        <item>Mauvaise</item>
+        <item>Nulle</item>
+    </string-array>
+    <string-array name="choosePrecipitation">
+        <item></item>
+        <item>Pas de précipitation</item>
+        <item>Pluie continue</item>
+        <item>Averse</item>
+        <item>Grêle</item>
+        <item>Neige</item>
+        <item>Orage</item>
+    </string-array>
+    <string-array name="chooseNebulosite">
+        <item></item>
+        <item>Ciel bleu</item>
+        <item>Ciel couvert</item>
+        <item>Nuageux</item>
+        <item>Orageux</item>
+        <item>Brume</item>
+        <item>Brouillard</item>
+    </string-array>
+    <string-array name="chooseDirectionVent">
+        <item></item>
+        <item>N</item>
+        <item>NE</item>
+        <item>E</item>
+        <item>SE</item>
+        <item>S</item>
+        <item>SW</item>
+        <item>W</item>
+        <item>NW</item>
+    </string-array>
+    <string-array name="chooseVitesseVent">
+        <item></item>
+        <item>Nulle</item>
+        <item>Faible</item>
+        <item>Modérée</item>
+        <item>Forte</item>
+        <item>Rafales</item>
+        <item>Tempêtes</item>
+    </string-array>
+    <string name="meteoTitle">Conditions météorologiques</string>
+    <string name="celsius">°C</string>
+    <string name="visibilite">Visibilité : </string>
+    <string name="precipitation">Précipitation : </string>
+    <string name="nebulosite">Nébulosité : </string>
+    <string name="temperatureAir">Température air : </string>
+    <string name="directionVent">Direction du vent : </string>
+    <string name="vitesseVent">Vitesse du vent : </string>
 </resources>

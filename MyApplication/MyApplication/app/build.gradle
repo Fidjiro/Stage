@@ -1,3 +1,4 @@
+//noinspection GradleDependency
 apply plugin: 'com.android.application'
 
 android {
@@ -25,6 +26,7 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:23.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation 'com.android.support:design:23.1.0'
+    implementation 'com.android.support:support-v4:23.1.0'
     implementation 'com.squareup.okhttp3:okhttp:3.4.1'
     implementation 'com.android.volley:volley:1.0.0'
     testImplementation 'junit:junit:4.12'
@@ -40,7 +42,7 @@ dependencies {
     implementation 'com.caverock:androidsvg:1.2.2-beta-1'
 
     implementation 'org.mapsforge:mapsforge-map-awt:master-SNAPSHOT'
-    implementation 'com.metsci.ext.com.kitfox.svg:svg-salamander:0.1.19'
+
 
     implementation 'org.mapsforge:mapsforge-core:master-SNAPSHOT'
     implementation 'org.mapsforge:mapsforge-poi:master-SNAPSHOT'
@@ -55,4 +57,8 @@ dependencies {
     implementation 'org.xerial:sqlite-jdbc:3.20.0'
 
     implementation 'com.github.franmontiel:PersistentCookieJar:v1.0.1'
+}
+
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }

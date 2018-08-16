@@ -1,7 +1,6 @@
 package com.example.eden62.GENSMobile.Activities.Historiques.Releves;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +16,7 @@ import com.example.eden62.GENSMobile.Activities.Historiques.Releves.InfoRelevesP
 import com.example.eden62.GENSMobile.Activities.Historiques.Releves.InfoRelevesPopups.PopUpPolygone;
 import com.example.eden62.GENSMobile.Database.ReleveDatabase.HistoryDao;
 import com.example.eden62.GENSMobile.Database.ReleveDatabase.Releve;
-import com.example.eden62.GENSMobile.HistoryAdapters.ReleveAdapter;
+import com.example.eden62.GENSMobile.Adapters.HistoryAdapters.ReleveAdapter;
 import com.example.eden62.GENSMobile.R;
 import com.example.eden62.GENSMobile.Tools.Utils;
 

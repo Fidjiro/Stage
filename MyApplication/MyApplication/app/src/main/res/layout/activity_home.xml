@@ -45,8 +45,7 @@
             android:background="@drawable/fond_bouton"
             android:drawableLeft="@drawable/icone_formulaire"
             android:paddingLeft="10dp"
-            android:textAllCaps="false"
-            android:visibility="gone"/>
+            android:textAllCaps="false"/>
 
         <Button
             android:id="@+id/releve_button"

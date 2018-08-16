@@ -175,6 +175,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         nbRelToSyncTxt.setText(nbRelToSync + " " + getString(R.string.relToSync));
     }
 
+    // Récupère les inventaires de l'utilisateur à envoyer au serveur
     private ArrayList<Inventaire> getInventairesToSend(){
         List<Inventaire> tmp =  campagneDao.getInventaireOfTheUsr(usrId);
         ArrayList<Inventaire> res = new ArrayList<>();

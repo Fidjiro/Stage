@@ -1,4 +1,4 @@
-package com.example.eden62.GENSMobile.HistoryAdapters;
+package com.example.eden62.GENSMobile.Adapters.HistoryAdapters;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -33,9 +33,9 @@ public class InventaireAdapter extends ItemsAdapter<InventoryStocker,Inventaire>
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_item_inventaires,parent, false);
         }
 
-        InventaireAdapter.InventaireViewHolder viewHolder = (InventaireAdapter.InventaireViewHolder) convertView.getTag();
+        InventaireViewHolder viewHolder = (InventaireViewHolder) convertView.getTag();
         if(viewHolder == null){
-            viewHolder = new InventaireAdapter.InventaireViewHolder();
+            viewHolder = new InventaireViewHolder();
             viewHolder.nomEspece = (TextView) convertView.findViewById(R.id.nomEspeceInv);
             viewHolder.denombrement = (TextView) convertView.findViewById(R.id.denombrementInv);
             viewHolder.date = (TextView) convertView.findViewById(R.id.dateInv);

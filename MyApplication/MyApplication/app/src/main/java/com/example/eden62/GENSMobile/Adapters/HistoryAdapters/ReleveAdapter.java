@@ -1,4 +1,4 @@
-package com.example.eden62.GENSMobile.HistoryAdapters;
+package com.example.eden62.GENSMobile.Adapters.HistoryAdapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;

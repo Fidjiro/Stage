@@ -176,6 +176,7 @@ public class MainActivityRel extends MainActivity {
         return super.onKeyDown(keyCode, event);
     }
 
+    // Vérifie que l'utilisateur à appuyé sur le bouton retour
     private boolean usrPressBackButton(int keyCode, KeyEvent event){
         return Build.VERSION.SDK_INT > 5
                 && keyCode == KeyEvent.KEYCODE_BACK

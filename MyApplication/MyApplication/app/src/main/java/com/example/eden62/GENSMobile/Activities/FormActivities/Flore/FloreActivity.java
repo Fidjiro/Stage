@@ -36,35 +36,6 @@ public class FloreActivity extends FormActivity {
         setContentView(R.layout.activity_form_flore);
     }
 
-    @Override
-    protected void changeFieldsStates(boolean enabled) {
-        super.changeFieldsStates(enabled);
-        indiceAbondance.setEnabled(enabled);
-    }
-
-    @Override
-    protected void setFieldsFromConsultedInv() {
-        super.setFieldsFromConsultedInv();
-        indiceAbondance.setSelection(consultedInv.getIndiceAbondance());
-    }
-
-    @Override
-    protected void modifConsultedInventaire() {
-        super.modifConsultedInventaire();
-        setStockedValuesFromUsrInput();
-        consultedInv.setIndiceAbondance(indiceAbondanceValue);
-    }
-
-    /**
-     * Retourne un {@link Inventaire} pour une flaure avec l'attribut typeObs déjà à <bold>Vu</bold> car on est obligé de voir une fleur,
-     * on ne peut pas l'entendre
-     * @return L'objet {@link Inventaire} à insérer dans la base
-     */
-    @Override
-    protected Inventaire createPersonalInventaire() {
-        return new Inventaire(ref_taxon, Utils.getVerCode(this), nv_taxon, usrId, nomFrString,nomLatinString, typeTaxon, lat, lon, dat, heure, nb, "Vu", remarquesTxt, indiceAbondanceValue);
-    }
-
     /**
      * Extension de la méthode initFields mère pour adapter au layout flore
      */
@@ -88,15 +59,38 @@ public class FloreActivity extends FormActivity {
     }
 
     @Override
-    protected boolean formIsValidable() {
-        return super.formIsValidable() && (isEmptyDenombrement() || coherentDenombrement());
+    protected void changeFieldsStates(boolean enabled) {
+        super.changeFieldsStates(enabled);
+        indiceAbondance.setEnabled(enabled);
+    }
+
+    @Override
+    protected void setFieldsFromConsultedInv() {
+        super.setFieldsFromConsultedInv();
+        indiceAbondance.setSelection(consultedInv.getIndiceAbondance());
+    }
+
+    @Override
+    protected void modifConsultedInventaire() {
+        super.modifConsultedInventaire();
+        setStockedValuesFromUsrInput();
+        consultedInv.setIndiceAbondance(indiceAbondanceValue);
     }
 
     /**
-     * Vérifie si le champ dénombrement est vide
+     * Retourne un {@link Inventaire} pour une flaure avec l'attribut typeObs déjà à <bold>Vu</bold> car on est obligé de voir une fleur,
+     * on ne peut pas l'entendre
+     *
+     * @return L'objet {@link Inventaire} à insérer dans la base
      */
-    protected boolean isEmptyDenombrement(){
-        return nombre.getText().toString().equals("");
+    @Override
+    protected Inventaire createPersonalInventaire() {
+        return new Inventaire(ref_taxon, Utils.getVerCode(this), nv_taxon, usrId, nomFrString,nomLatinString, typeTaxon, lat, lon, dat, heure, nb, "Vu", remarquesTxt, indiceAbondanceValue);
+    }
+
+    @Override
+    protected boolean formIsValidable() {
+        return super.formIsValidable() && (isEmptyDenombrement() || coherentDenombrement());
     }
 
     /**

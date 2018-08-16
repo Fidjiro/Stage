@@ -8,4 +8,6 @@
 
     <color name="boutonMissionPressed">#FF8C00</color>
     <color name="boutonMissionNotPressed">#FFA500</color>
+
+    <color name="black_overlay">#66000000</color>
 </resources>

@@ -80,6 +80,13 @@ public abstract class FormActivity extends AppCompatActivity {
     }
 
     /**
+     * Vérifie si le champ dénombrement est vide
+     */
+    protected boolean isEmptyDenombrement(){
+        return nombre.getText().toString().isEmpty();
+    }
+
+    /**
      * Rend ce formulaire non modifiable
      */
     protected void setFormNotModifiable(){
@@ -101,6 +108,7 @@ public abstract class FormActivity extends AppCompatActivity {
     protected void changeFieldsStates(boolean enabled){
         nombre.setEnabled(enabled);
         remarques.setEnabled(enabled);
+
         incNombreButton.setEnabled(enabled);
         decNombreButton.setEnabled(enabled);
     }
@@ -320,8 +328,7 @@ public abstract class FormActivity extends AppCompatActivity {
      * @return <code>True</code> si le dénombrement est valide, <code>false</code> sinon
      */
     protected boolean checkNombreValid(){
-        String nombreText = nombre.getText().toString();
-        return nombreText.isEmpty() || (getDenombrement() > 0);
+        return isEmptyDenombrement() || (getDenombrement() > 0);
     }
 
     /**
@@ -366,6 +373,13 @@ public abstract class FormActivity extends AppCompatActivity {
         return nb;
     }
 
+    /**
+     * Décrémente la valeure contenue dans un EditText, utile pour les différents dénombrements
+     *
+     * @param et L'editText à changer
+     * @param nb La valeur à modifier
+     * @return La valeur décrémenté de 1
+     */
     protected int decreaseDecompteEditText(EditText et, int nb){
         if(nb > 0) {
             String newText = "";
@@ -377,10 +391,19 @@ public abstract class FormActivity extends AppCompatActivity {
         return nb;
     }
 
+    /**
+     * Verifie que la variable de valeur i à été initialisée
+     *
+     * @param i La valeur de la variable à vérifié
+     * @return <code>True</code> si la variable n'a pas été initialisée, <code>false</code> si oui
+     */
     public boolean isNull(int i){
         return i == 0;
     }
 
+    /**
+     * Incrémente le dénombrement total de 1 et effectue une modification supplémentaire via {@link #specialFormModif(int)}
+     */
     protected void incNombre(){
         if(isNull(nb))
             nb = getDenombrement();
@@ -391,10 +414,19 @@ public abstract class FormActivity extends AppCompatActivity {
         nombre.setText(nb + "");
     }
 
+    /**
+     * Effectue une modification spéciale du dénombrement selon le type de formulaire
+     *
+     * @param nb La valeur sur laquelle effectuer la modification
+     * @return La valeur modifiée
+     */
     protected int specialFormModif(int nb){
         return nb;
     }
 
+    /**
+     * Décrémente le dénombrement total de 1
+     */
     protected void decNombre(){
         nb = decreaseDecompteEditText(nombre,nb);
     }

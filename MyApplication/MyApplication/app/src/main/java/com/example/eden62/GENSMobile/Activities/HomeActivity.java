@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.eden62.GENSMobile.Activities.MapsActivities.Recensement.MainActivityRec;
 import com.example.eden62.GENSMobile.Activities.MapsActivities.Releve.MainActivityRel;
+import com.example.eden62.GENSMobile.Activities.ProtocoleActivities.ChooseProtocoleActivity;
 import com.example.eden62.GENSMobile.R;
 import com.example.eden62.GENSMobile.Tools.LoadingMapDialog;
 
@@ -47,8 +48,7 @@ public class HomeActivity extends AppCompatActivity {
         protocoleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showProgress(true);
-                startActivity(new Intent(HomeActivity.this, MainActivityRec.class));
+                startActivity(new Intent(HomeActivity.this, ChooseProtocoleActivity.class));
             }
         });
 

@@ -25,7 +25,7 @@ import com.example.eden62.GENSMobile.Database.CampagneDatabase.CampagneDAO;
 import com.example.eden62.GENSMobile.Database.CampagneDatabase.Inventaire;
 import com.example.eden62.GENSMobile.Database.LoadingDatabase.TaxUsrDAO;
 import com.example.eden62.GENSMobile.R;
-import com.example.eden62.GENSMobile.HistoryAdapters.InventaireAdapter;
+import com.example.eden62.GENSMobile.Adapters.HistoryAdapters.InventaireAdapter;
 import com.example.eden62.GENSMobile.Tools.Utils;
 
 import java.util.ArrayList;
@@ -138,6 +138,7 @@ public class HistoryRecensementActivity extends HistoryActivity<InventaireAdapte
     protected void closeDatabases() {
         campagneDao.close();
         taxUsrDao.close();
+
     }
 
     /**

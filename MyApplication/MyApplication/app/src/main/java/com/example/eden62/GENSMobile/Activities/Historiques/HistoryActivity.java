@@ -14,7 +14,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 
-import com.example.eden62.GENSMobile.HistoryAdapters.ItemsAdapter;
+import com.example.eden62.GENSMobile.Adapters.HistoryAdapters.ItemsAdapter;
 import com.example.eden62.GENSMobile.R;
 
 import java.util.List;
@@ -44,6 +44,9 @@ public abstract class HistoryActivity<T extends ItemsAdapter> extends AppCompatA
         setAdapter();
     }
 
+    /**
+     * Initialise les champs de cette activitée
+     */
     protected void initFields(){
         setListViewHeader();
         listItems = (ListView) findViewById(R.id.listViewHistory);
