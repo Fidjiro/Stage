@@ -7,8 +7,9 @@ public class Transect implements Parcelable{
 
     private String name;
     private int length;
-    private RNFInventories inventories;
+    private RNFInventories inventories = new RNFInventories();
     private String time;
+    private String info = "";
     private boolean done;
 
     public Transect(String name, int length) {
@@ -26,8 +27,9 @@ public class Transect implements Parcelable{
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(name);
         parcel.writeInt(length);
-        //parcel.writeString(nebulosite);
+        parcel.writeTypedList(inventories);
         parcel.writeString(time);
+        parcel.writeString(info);
         parcel.writeByte((byte) (done ? 1:0));
     }
 
@@ -44,8 +46,9 @@ public class Transect implements Parcelable{
     private Transect(Parcel in) {
         name = in.readString();
         length = in.readInt();
-        //nebulosite = in.readString();
+        in.readTypedList(inventories,RNFInventaire.CREATOR);
         time = in.readString();
+        info = in.readString();
         done = in.readByte() != 0;
     }
 
@@ -73,11 +76,32 @@ public class Transect implements Parcelable{
         this.time = time;
     }
 
+    public RNFInventories getInventories() {
+        return inventories;
+    }
+
+    public void setInventories(RNFInventories inventories) {
+        this.inventories = inventories;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
+
     public boolean isDone() {
         return done;
     }
 
     public void setDone(boolean done) {
         this.done = done;
+    }
+
+    @Override
+    public String toString() {
+        return getName() + " (" + getLength() + "m) " + getInfo();
     }
 }

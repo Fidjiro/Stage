@@ -35,17 +35,13 @@ public class TransectAdapter extends ArrayAdapter<Transect> {
 
         Transect transect = getItem(position);
 
-        viewHolder.transectName.setText(formateTransectNameToShow(transect));
+        viewHolder.transectName.setText(transect.toString());
         if(transect.isDone())
             viewHolder.transectState.setImageResource(R.drawable.check_oui);
         else
             viewHolder.transectState.setImageResource(R.drawable.to_sync);
 
         return convertView;
-    }
-
-    private String formateTransectNameToShow(Transect t){
-        return t.getName() + " (" + t.getLength() + "m)";
     }
 
     private class TransectViewHolder{

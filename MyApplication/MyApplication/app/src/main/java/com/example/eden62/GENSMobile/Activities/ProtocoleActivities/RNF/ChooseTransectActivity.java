@@ -8,6 +8,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.eden62.GENSMobile.Adapters.RNFAdapter.TransectAdapter;
+import com.example.eden62.GENSMobile.Database.RNFDatabase.RNFInventaire;
+import com.example.eden62.GENSMobile.Database.RNFDatabase.RNFInventories;
 import com.example.eden62.GENSMobile.Database.RNFDatabase.RNFMeteo;
 import com.example.eden62.GENSMobile.Database.RNFDatabase.Transect;
 import com.example.eden62.GENSMobile.R;
@@ -20,6 +22,8 @@ public class ChooseTransectActivity extends AppCompatActivity {
     protected ListView listTransect;
     protected RNFMeteo meteo;
     protected int launchedTransectPos;
+    protected List<Transect> transects;
+
     public static final int RESULT_TRANSECT_DONE = 4;
 
     @Override
@@ -30,12 +34,15 @@ public class ChooseTransectActivity extends AppCompatActivity {
 
         listTransect = (ListView) findViewById(R.id.listTransect);
 
-        final List<Transect> transects = new ArrayList<>();
+        transects = new ArrayList<>();
         transects.add(new Transect("Transect 1",100));
+        transects.get(0).getInventories().add(new RNFInventaire("nomLatin1","nomFr1",0,0,0));
+        transects.get(0).getInventories().add(new RNFInventaire("nomLatin2","nomFr2",0,0,0));
         transects.add(new Transect("Transect 2",103));
         transects.add(new Transect("Transect 3",102));
         transects.add(new Transect("Transect 4",103));
         transects.add(new Transect("Transect 5",100));
+
         listTransect.setAdapter(new TransectAdapter(this,transects));
 
         listTransect.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -44,7 +51,7 @@ public class ChooseTransectActivity extends AppCompatActivity {
                 launchedTransectPos = position;
                 Intent intent = new Intent(ChooseTransectActivity.this, FillTransectActivity.class);
                 intent.putExtra("transect",transects.get(position));
-                startActivityForResult(null,RESULT_TRANSECT_DONE);
+                startActivityForResult(intent,RESULT_TRANSECT_DONE);
             }
         });
 
@@ -54,8 +61,25 @@ public class ChooseTransectActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == RESULT_TRANSECT_DONE){
+            Transect modifiedTransect = transects.get(launchedTransectPos);
+            modifiedTransect.setDone(true);
+            RNFInventories invs = modifiedTransect.getInventories();
+            int nbEspeceObs = invs.getNbEspecesObs();
 
+            if(nbEspeceObs == 0)
+                modifiedTransect.setInfo(invs.noObservation());
+            else
+                modifiedTransect.setInfo(invs.nbEspecesObs());
+            listTransect.setAdapter(new TransectAdapter(this,transects));
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private boolean allTransectsDone(){
+        for(Transect t : transects){
+            if(!t.isDone())
+                return false;
+        }
+        return true;
     }
 }

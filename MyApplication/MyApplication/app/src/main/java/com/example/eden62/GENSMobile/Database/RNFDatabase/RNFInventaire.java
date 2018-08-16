@@ -1,6 +1,9 @@
 package com.example.eden62.GENSMobile.Database.RNFDatabase;
 
-public class RNFInventaire {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class RNFInventaire implements Parcelable{
 
     protected String nomLatin;
     protected String nomFr;
@@ -14,6 +17,38 @@ public class RNFInventaire {
         this.nombre = nombre;
         this.nbMale = nbMale;
         this.nbFemale = nbFemale;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(nomLatin);
+        parcel.writeString(nomFr);
+        parcel.writeInt(nombre);
+        parcel.writeInt(nbMale);
+        parcel.writeInt(nbFemale);
+    }
+
+    public static final Parcelable.Creator<RNFInventaire> CREATOR = new Parcelable.Creator<RNFInventaire>() {
+        public RNFInventaire createFromParcel(Parcel in) {
+            return new RNFInventaire(in);
+        }
+
+        public RNFInventaire[] newArray(int size) {
+            return new RNFInventaire[size];
+        }
+    };
+
+    private RNFInventaire(Parcel in) {
+        nomLatin = in.readString();
+        nomFr = in.readString();
+        nombre = in.readInt();
+        nbMale = in.readInt();
+        nbFemale = in.readInt();
     }
 
     public String getNomLatin() {
