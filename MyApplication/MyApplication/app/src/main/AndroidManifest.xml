@@ -108,7 +108,9 @@
         <activity android:name=".Activities.ProtocoleActivities.ChooseProtocoleActivity" />
         <activity android:name=".Activities.ProtocoleActivities.RNF.ChooseTransectActivity" />
         <activity android:name=".Activities.ProtocoleActivities.RNF.FormMeteoActivity" />
-        <activity android:name=".Activities.ProtocoleActivities.RNF.FillTransectActivity"></activity>
+        <activity android:name=".Activities.ProtocoleActivities.RNF.FillTransectActivity"
+            android:theme="@style/AppTheme"/>
+
     </application>
 
 </manifest>

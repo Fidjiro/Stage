@@ -11,9 +11,13 @@ public class RNFInventaire implements Parcelable{
     protected int nbMale;
     protected int nbFemale;
 
-    public RNFInventaire(String nomLatin, String nomFr, int nombre, int nbMale, int nbFemale) {
+    public RNFInventaire(String nomLatin, String nomFr){
         this.nomLatin = nomLatin;
         this.nomFr = nomFr;
+    }
+
+    public RNFInventaire(String nomLatin, String nomFr, int nombre, int nbMale, int nbFemale) {
+        this(nomLatin,nomFr);
         this.nombre = nombre;
         this.nbMale = nbMale;
         this.nbFemale = nbFemale;
@@ -89,5 +93,27 @@ public class RNFInventaire implements Parcelable{
 
     public void setNbFemale(int nbFemale) {
         this.nbFemale = nbFemale;
+    }
+
+    public int getNbGenre(){
+        return nbMale + nbFemale;
+    }
+
+    public boolean hasCoherentDenombrement(){
+        return nombre == 0 || (getNbGenre()) <= nombre;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RNFInventaire that = (RNFInventaire) o;
+        return nomLatin.equals(that.nomLatin) &&
+                nomFr.equals(that.nomFr);
+    }
+
+    @Override
+    public int hashCode() {
+        return nomLatin.hashCode();
     }
 }

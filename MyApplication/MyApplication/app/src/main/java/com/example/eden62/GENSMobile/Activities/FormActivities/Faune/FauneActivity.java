@@ -81,7 +81,6 @@ public class FauneActivity extends FormActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                System.out.println("onText: " + s);
                 nbMale = getNbMale();
                 if(!isEmptyDenombrement()) {
                     if (isNull(nb))

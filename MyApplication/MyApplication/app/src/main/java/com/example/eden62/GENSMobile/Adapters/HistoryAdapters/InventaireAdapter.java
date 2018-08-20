@@ -29,9 +29,8 @@ public class InventaireAdapter extends ItemsAdapter<InventoryStocker,Inventaire>
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        if(convertView == null){
+        if(convertView == null)
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_item_inventaires,parent, false);
-        }
 
         InventaireViewHolder viewHolder = (InventaireViewHolder) convertView.getTag();
         if(viewHolder == null){
@@ -123,10 +122,7 @@ public class InventaireAdapter extends ItemsAdapter<InventoryStocker,Inventaire>
     }
 
     private class InventaireViewHolder {
-        public TextView nomEspece;
-        public TextView denombrement;
-        public TextView date;
-        public TextView heure;
+        public TextView nomEspece, denombrement, date, heure;
         public CheckBox checkBox;
     }
 }

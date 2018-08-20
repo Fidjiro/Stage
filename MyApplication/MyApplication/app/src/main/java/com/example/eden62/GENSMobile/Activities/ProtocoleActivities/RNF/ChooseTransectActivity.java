@@ -24,6 +24,8 @@ public class ChooseTransectActivity extends AppCompatActivity {
     protected int launchedTransectPos;
     protected List<Transect> transects;
 
+    public static RNFInventories transect1Inventories;
+
     public static final int RESULT_TRANSECT_DONE = 4;
 
     @Override
@@ -36,8 +38,11 @@ public class ChooseTransectActivity extends AppCompatActivity {
 
         transects = new ArrayList<>();
         transects.add(new Transect("Transect 1",100));
-        transects.get(0).getInventories().add(new RNFInventaire("nomLatin1","nomFr1",0,0,0));
-        transects.get(0).getInventories().add(new RNFInventaire("nomLatin2","nomFr2",0,0,0));
+        transect1Inventories = transects.get(0).getInventories();
+        transect1Inventories.add(new RNFInventaire("Aglais io", "Paon-du-jour"));
+        transect1Inventories.add(new RNFInventaire("Coenonympha pamphilus", "Fadet commun"));
+        transect1Inventories.add(new RNFInventaire("Colias hyale", "Soufré"));
+        transect1Inventories.add(new RNFInventaire("Pieris sp.", ""));
         transects.add(new Transect("Transect 2",103));
         transects.add(new Transect("Transect 3",102));
         transects.add(new Transect("Transect 4",103));
@@ -62,7 +67,6 @@ public class ChooseTransectActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == RESULT_TRANSECT_DONE){
             Transect modifiedTransect = transects.get(launchedTransectPos);
-            modifiedTransect.setDone(true);
             RNFInventories invs = modifiedTransect.getInventories();
             int nbEspeceObs = invs.getNbEspecesObs();
 
@@ -70,6 +74,9 @@ public class ChooseTransectActivity extends AppCompatActivity {
                 modifiedTransect.setInfo(invs.noObservation());
             else
                 modifiedTransect.setInfo(invs.nbEspecesObs());
+
+            modifiedTransect.setDone(true);
+
             listTransect.setAdapter(new TransectAdapter(this,transects));
         }
         super.onActivityResult(requestCode, resultCode, data);

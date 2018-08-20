@@ -85,7 +85,7 @@ public class Transect implements Parcelable{
     }
 
     public String getInfo() {
-        return info;
+        return info.equals("") ? info : " - " + info;
     }
 
     public void setInfo(String info) {
@@ -102,6 +102,6 @@ public class Transect implements Parcelable{
 
     @Override
     public String toString() {
-        return getName() + " (" + getLength() + "m) " + getInfo();
+        return getName() + " (" + getLength() + "m)" + getInfo();
     }
 }

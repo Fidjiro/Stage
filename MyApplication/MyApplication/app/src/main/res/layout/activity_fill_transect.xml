@@ -7,25 +7,43 @@
     android:orientation="vertical"
     tools:context=".Activities.ProtocoleActivities.RNF.FillTransectActivity"
     android:background="@drawable/back">
-    <TextView
-        android:id="@+id/nomLatin1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
     <TextView
-        android:id="@+id/nomFr1"
+        android:id="@+id/titleViewTransect"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="@dimen/formTitleTextSize"
+        android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/nomLatin2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2">
+        <EditText
+            android:id="@+id/search_box_lat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/nomLatin"
+            android:maxLines="1"/>
+        <EditText
+            android:id="@+id/search_box_fr"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/nomFr"
+            android:maxLines="1"/>
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/nomFr2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:layout_constraintVertical_weight="1"/>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -34,12 +52,14 @@
             android:id="@+id/noObs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Aucune observation"/>
+            android:text="Aucune observation"
+            android:textAllCaps="false"/>
 
         <Button
             android:id="@+id/valider"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/valider"/>
+            android:text="@string/valider"
+            android:textAllCaps="false"/>
     </LinearLayout>
 </LinearLayout>

@@ -1,17 +1,27 @@
 package com.example.eden62.GENSMobile.Activities.ProtocoleActivities.RNF;
 
-import android.support.v7.app.AppCompatActivity;
+import android.app.ListActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.eden62.GENSMobile.Database.RNFDatabase.RNFInventories;
+import com.example.eden62.GENSMobile.Adapters.RNFAdapter.RNFInventaireAdapter;
+import com.example.eden62.GENSMobile.Database.RNFDatabase.RNFInventaire;
 import com.example.eden62.GENSMobile.Database.RNFDatabase.Transect;
 import com.example.eden62.GENSMobile.R;
 
-public class FillTransectActivity extends AppCompatActivity {
+import java.util.ArrayList;
+
+public class FillTransectActivity extends ListActivity {
+
+    private EditText filterLatText;
+    private EditText filterFrText;
+    RNFInventaireAdapter adapter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,27 +29,30 @@ public class FillTransectActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_fill_transect);
 
-        final TextView latin1 = (TextView) findViewById(R.id.nomLatin1);
-        TextView latin2 = (TextView) findViewById(R.id.nomLatin2);
-        TextView fr1 = (TextView) findViewById(R.id.nomFr1);
-        TextView fr2 = (TextView) findViewById(R.id.nomFr2);
+        TextView titleView = (TextView) findViewById(R.id.titleViewTransect);
+        filterLatText = (EditText) findViewById(R.id.search_box_lat);
+        filterFrText = (EditText) findViewById(R.id.search_box_fr);
+        filterLatText.addTextChangedListener(filterLatTextWatcher);
+        filterFrText.addTextChangedListener(filterFrTextWatcher);
         Button valider = (Button) findViewById(R.id.valider);
         Button noObs = (Button) findViewById(R.id.noObs);
 
         Transect t = getIntent().getParcelableExtra("transect");
-        final RNFInventories invs = t.getInventories();
 
-        try {
-            latin1.setText(invs.get(0).getNomLatin());
-            latin2.setText(invs.get(1).getNomLatin());
-            fr1.setText(invs.get(0).getNomFr());
-            fr2.setText(invs.get(1).getNomFr());
-        }catch (Exception e){}
+        titleView.setText(t.toString());
+
+        adapter = new RNFInventaireAdapter(this,ChooseTransectActivity.transect1Inventories);
+
+        setListAdapter(adapter);
+
         valider.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setResult(ChooseTransectActivity.RESULT_TRANSECT_DONE);
-                finish();
+                if(adapter.allDenombrementAreCoherent()) {
+                    setResult(ChooseTransectActivity.RESULT_TRANSECT_DONE);
+                    finish();
+                } else
+                    Toast.makeText(FillTransectActivity.this,"Le nombre d'individu mâles femelles est supérieur au total",Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -50,5 +63,44 @@ public class FillTransectActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private TextWatcher filterLatTextWatcher = new TextWatcher() {
+
+        public void afterTextChanged(Editable s) {
+        }
+
+        public void beforeTextChanged(CharSequence s, int start, int count,
+                                      int after) {
+        }
+
+        public void onTextChanged(CharSequence s, int start, int before,
+                                  int count) {
+            adapter.getLatFilter().filter(s);
+        }
+
+    };
+
+    private TextWatcher filterFrTextWatcher = new TextWatcher() {
+
+        public void afterTextChanged(Editable s) {
+        }
+
+        public void beforeTextChanged(CharSequence s, int start, int count,
+                                      int after) {
+        }
+
+        public void onTextChanged(CharSequence s, int start, int before,
+                                  int count) {
+            adapter.getFrFilter().filter(s);
+        }
+
+    };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        filterLatText.removeTextChangedListener(filterLatTextWatcher);
+        filterFrText.removeTextChangedListener(filterFrTextWatcher);
     }
 }
