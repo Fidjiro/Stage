@@ -24,4 +24,10 @@
         android:layout_weight="1"
         app:layout_constraintVertical_weight="1">
     </ListView>
+    <Button
+        android:id="@+id/finRnf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/finRnf"
+        android:textAllCaps="false"/>
 </LinearLayout>

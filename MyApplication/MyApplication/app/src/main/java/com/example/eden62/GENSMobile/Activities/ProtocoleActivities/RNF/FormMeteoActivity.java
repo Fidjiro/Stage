@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.example.eden62.GENSMobile.Database.RNFDatabase.RNFMeteo;
 import com.example.eden62.GENSMobile.R;
+import com.google.gson.Gson;
 
 public class FormMeteoActivity extends AppCompatActivity {
 
@@ -40,36 +41,42 @@ public class FormMeteoActivity extends AppCompatActivity {
                     actionWhenMeteoNotValidable();
                 else {
                     RNFMeteo meteo = createMeteoFromFields();
-                    Intent intent = new Intent(FormMeteoActivity.this, ChooseTransectActivity.class);
-                    intent.putExtra("meteo",meteo);
-                    startActivity(intent);
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra("meteo",meteo);
+                    setResult(ChooseTransectActivity.RESULT_FILL_METEO, resultIntent);
+                    finish();
                 }
             }
         });
     }
 
+    // Renvoie true si l'un des champs nebulosités, temperature ou vitesse du vent n'a pas été renseigné
     private boolean meteoNotValidable() {
         return isNotANebulosite() || isNotATemperature() || isNotAVitesseVent();
     }
 
+    // Renvoie true si le champ nebulosité n'a pas été renseigné
     private boolean isNotANebulosite(){
         String selectedNebulosite = (String) nebulosite.getSelectedItem();
 
         return selectedNebulosite.isEmpty();
     }
 
+    // Renvoie true si le champ temperature n'a pas été renseigné
     private boolean isNotATemperature(){
         String temperatureInput = temperatureAir.getText().toString();
 
         return temperatureInput.isEmpty();
     }
 
+    // Renvoie true si le champ vitesse du vent n'a pas été renseigné
     private boolean isNotAVitesseVent(){
         String selectedVitesseVent = (String) vitesseVent.getSelectedItem();
 
         return selectedVitesseVent.isEmpty();
     }
 
+    // Affiche un message en fonction du champ non renseigné
     private void actionWhenMeteoNotValidable(){
         if(isNotANebulosite()){
             ((TextView)nebulosite.getSelectedView()).setError("");
@@ -83,6 +90,7 @@ public class FormMeteoActivity extends AppCompatActivity {
         }
     }
 
+    // Créé l'objet météo via les champs du formulaire
     private RNFMeteo createMeteoFromFields(){
         String visibiliteInput = (String) visibilite.getSelectedItem();
         String precipitationInput = (String) precipitation.getSelectedItem();

@@ -104,13 +104,37 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".Activities.SyncInvActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activities.ProtocoleActivities.ChooseProtocoleActivity" />
-        <activity android:name=".Activities.ProtocoleActivities.RNF.ChooseTransectActivity" />
-        <activity android:name=".Activities.ProtocoleActivities.RNF.FormMeteoActivity" />
-        <activity android:name=".Activities.ProtocoleActivities.RNF.FillTransectActivity"
-            android:theme="@style/AppTheme"/>
-
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activities.ProtocoleActivities.ChooseProtocoleActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name"/>
+        <activity
+            android:name=".Activities.ProtocoleActivities.RNF.ChooseTransectActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name"/>
+        <activity
+            android:name=".Activities.ProtocoleActivities.RNF.FormMeteoActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name"/>
+        <activity
+            android:name=".Activities.ProtocoleActivities.RNF.FillTransectActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:label="@string/app_name"/>
+        <activity
+            android:name=".Activities.ProtocoleActivities.RNF.TakeTimeActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.CustomTheme2"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".Activities.ProtocoleActivities.RNF.NameRNFActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.CustomTheme2"
+            android:windowSoftInputMode="adjustResize"/>
     </application>
 
 </manifest>

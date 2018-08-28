@@ -1,50 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
     android:background="@drawable/back"
     tools:context=".Activities.ProtocoleActivities.ChooseProtocoleActivity">
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/formLayoutsMargin">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/chooseSite"
-            android:textSize="@dimen/formLabelTextSize"
-            android:textStyle="bold"/>
-        <Spinner
-            android:id="@+id/site_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:entries="@array/sites"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/formLayoutsMargin">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/chooseProto"
-            android:textSize="@dimen/formLabelTextSize"
-            android:textStyle="bold"/>
-        <Spinner
-            android:id="@+id/protocole_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:entries="@array/protocoles"/>
-    </LinearLayout>
     <Button
-        android:id="@+id/valider_proto"
+        android:id="@+id/mesCampagnes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/valider"
-        android:textAllCaps="false"
-        android:layout_margin="@dimen/formLayoutsMargin"/>
-</LinearLayout>
+        android:background="?android:attr/selectableItemBackground"
+        android:drawableTop="@drawable/face"
+        android:layout_margin="@dimen/formLayoutsMargin"
+        android:text="@string/mesCampagnes"
+        android:textAllCaps="false" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/formLayoutsMargin">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/chooseProto"
+                android:textSize="@dimen/formLabelTextSize"
+                android:textStyle="bold"/>
+            <Spinner
+                android:id="@+id/protocole_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/choixSiteContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/formLayoutsMargin"
+            android:visibility="gone">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/chooseSite"
+                android:textSize="@dimen/formLabelTextSize"
+                android:textStyle="bold"/>
+            <Spinner
+                android:id="@+id/site_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+        <Button
+            android:id="@+id/valider_proto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/valider"
+            android:textAllCaps="false"
+            android:layout_margin="@dimen/formLayoutsMargin"/>
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

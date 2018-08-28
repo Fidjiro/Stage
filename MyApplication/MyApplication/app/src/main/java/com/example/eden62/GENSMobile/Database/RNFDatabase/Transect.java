@@ -8,7 +8,8 @@ public class Transect implements Parcelable{
     private String name;
     private int length;
     private RNFInventories inventories = new RNFInventories();
-    private String time;
+    private int minutes;
+    private int secondes;
     private String info = "";
     private boolean done;
 
@@ -28,7 +29,8 @@ public class Transect implements Parcelable{
         parcel.writeString(name);
         parcel.writeInt(length);
         parcel.writeTypedList(inventories);
-        parcel.writeString(time);
+        parcel.writeInt(minutes);
+        parcel.writeInt(secondes);
         parcel.writeString(info);
         parcel.writeByte((byte) (done ? 1:0));
     }
@@ -47,7 +49,8 @@ public class Transect implements Parcelable{
         name = in.readString();
         length = in.readInt();
         in.readTypedList(inventories,RNFInventaire.CREATOR);
-        time = in.readString();
+        minutes = in.readInt();
+        secondes = in.readInt();
         info = in.readString();
         done = in.readByte() != 0;
     }
@@ -68,12 +71,26 @@ public class Transect implements Parcelable{
         this.length = length;
     }
 
-    public String getTime() {
-        return time;
+    public int getMinutes() {
+        return minutes;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setMinutes(int minutes) {
+        this.minutes = minutes;
+    }
+
+    public int getSecondes() {
+        return secondes;
+    }
+
+    public void setSecondes(int secondes) {
+        this.secondes = secondes;
+    }
+
+    private String getTimeString(){
+        if(getMinutes() == 0 && getSecondes() == 0 )
+            return "";
+        return " [durée: " + minutes + "m" + secondes + "s]";
     }
 
     public RNFInventories getInventories() {
@@ -102,6 +119,6 @@ public class Transect implements Parcelable{
 
     @Override
     public String toString() {
-        return getName() + " (" + getLength() + "m)" + getInfo();
+        return getName() + " (" + getLength() + "m)" + getInfo() + getTimeString();
     }
 }

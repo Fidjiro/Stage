@@ -17,6 +17,7 @@ import android.widget.ImageButton;
 import com.example.eden62.GENSMobile.Activities.Historiques.Releves.HistoryReleveActivity;
 import com.example.eden62.GENSMobile.Activities.HomeActivity;
 import com.example.eden62.GENSMobile.Activities.MapsActivities.MainActivity;
+import com.example.eden62.GENSMobile.Activities.ProtocoleActivities.RNF.ChooseTransectActivity;
 import com.example.eden62.GENSMobile.Database.ReleveDatabase.Releve;
 import com.example.eden62.GENSMobile.R;
 import com.example.eden62.GENSMobile.Tools.MyMapView;
@@ -164,23 +165,8 @@ public class MainActivityRel extends MainActivity {
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        // Récupère l'event du clic sur le bouton retour de l'appareil
-        if (usrPressBackButton(keyCode,event)) {
-            if(!noReleveInProgress())
-                createAvertissementDialog(BOITE_CANCEL_RELEVE).show();
-            else
-                onBackPressed();
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
-    // Vérifie que l'utilisateur à appuyé sur le bouton retour
-    private boolean usrPressBackButton(int keyCode, KeyEvent event){
-        return Build.VERSION.SDK_INT > 5
-                && keyCode == KeyEvent.KEYCODE_BACK
-                && event.getRepeatCount() == 0;
+    public void onBackPressed() {
+        createAvertissementDialog(BOITE_CANCEL_RELEVE).show();
     }
 
     // Efface les markers réalisés en même temps qu'une polyline
@@ -413,7 +399,7 @@ public class MainActivityRel extends MainActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         currentReleve = NO_RELEVE;
-                        onBackPressed();
+                        MainActivityRel.super.onBackPressed();
                     }
                 });
                 builder.setNegativeButton(getText(R.string.non), new DialogInterface.OnClickListener() {

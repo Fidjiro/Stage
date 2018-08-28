@@ -55,10 +55,7 @@ public class RelToGpx implements Serializable{
         }
         else{
             // Récupération de la List<LatLong> via json
-            Gson gson = new Gson();
-            Type type = new TypeToken<List<LatLong>>() {}.getType();
-            String relLatLongsString = rel.getLat_long();
-            List<LatLong> relLatLongs = gson.fromJson(relLatLongsString, type);
+            List<LatLong> relLatLongs = rel.getLat_longFromJson();
             segments += "<trk>\n<name>" + rel.getNom() + "</name><trkseg>\n";
 
             for (LatLong location : relLatLongs) {

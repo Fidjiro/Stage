@@ -86,15 +86,11 @@ public class ShowInvRelActivity extends MainActivity {
 
     // Redessine le relevé sur la carte
     private void redrawReleve(Releve rel){
-        Gson gson = new Gson();
         String relType = rel.getType();
         if (relType.equals("Point")) {
             drawPoint(new LatLong(Double.parseDouble(rel.getLatitudes()), Double.parseDouble(rel.getLongitudes())));
         } else {
-            Type type = new TypeToken<List<LatLong>>() {
-            }.getType();
-            String relLatLongsString = rel.getLat_long();
-            List<LatLong> relLatLongs = gson.fromJson(relLatLongsString, type);
+            List<LatLong> relLatLongs = rel.getLat_longFromJson();
             if (relType.equals("Ligne")) {
                 Polyline polylineRel = new Polyline(Utils.createPaint(
                         PAINT_STROKE,

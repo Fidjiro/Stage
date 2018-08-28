@@ -402,15 +402,21 @@ public abstract class FormActivity extends AppCompatActivity {
     }
 
     /**
-     * Incrémente le dénombrement total de 1 et effectue une modification supplémentaire via {@link #specialFormModif(int)}
+     * Incrémente le dénombrement total de 1 si le dénombrement à déjà été renseigné par l'utilisateur et effectue une
+     * modification supplémentaire via {@link #specialFormModif(int)}
      */
     protected void incNombre(){
         if(isNull(nb))
             nb = getDenombrement();
 
-        nb = specialFormModif(nb);
+        int nbBeforeAdjust = nb;
 
-        nb++;
+        nb = specialFormModif(nb);
+        boolean wasCoherentNombreBeforeAdjust = nbBeforeAdjust == nb;
+
+        // On incrémente le dénombrement seulement si celui-ci n'a pas été modifié pour être égale au total de genre
+        if(wasCoherentNombreBeforeAdjust)
+            nb++;
         nombre.setText(nb + "");
     }
 

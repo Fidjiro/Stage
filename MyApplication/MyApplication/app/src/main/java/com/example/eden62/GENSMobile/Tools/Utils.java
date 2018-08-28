@@ -138,7 +138,7 @@ public final class Utils {
     /**
      * Récupère l'heure de l'appareil
      *
-     * @return L'heure relevé à partir de l'appareil
+     * @return L'heure relevé au format hh:mm:ss
      */
     public static String getTime(){
         Calendar c = Calendar.getInstance();

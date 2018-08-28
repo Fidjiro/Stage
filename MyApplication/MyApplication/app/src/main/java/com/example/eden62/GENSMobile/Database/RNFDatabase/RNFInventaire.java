@@ -5,19 +5,23 @@ import android.os.Parcelable;
 
 public class RNFInventaire implements Parcelable{
 
+    protected long ref_taxon;
     protected String nomLatin;
     protected String nomFr;
+    protected int nv;
     protected int nombre;
     protected int nbMale;
     protected int nbFemale;
 
-    public RNFInventaire(String nomLatin, String nomFr){
+    public RNFInventaire(long ref_taxon, String nomLatin, String nomFr, int nv){
+        this.ref_taxon = ref_taxon;
         this.nomLatin = nomLatin;
         this.nomFr = nomFr;
+        this.nv = nv;
     }
 
-    public RNFInventaire(String nomLatin, String nomFr, int nombre, int nbMale, int nbFemale) {
-        this(nomLatin,nomFr);
+    public RNFInventaire(long ref_taxon, String nomLatin, String nomFr, int nv, int nombre, int nbMale, int nbFemale) {
+        this(ref_taxon, nomLatin,nomFr, nv);
         this.nombre = nombre;
         this.nbMale = nbMale;
         this.nbFemale = nbFemale;

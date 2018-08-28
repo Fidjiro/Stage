@@ -4,6 +4,13 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.example.eden62.GENSMobile.Database.DatabaseItem;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.mapsforge.core.model.LatLong;
+
+import java.lang.reflect.Type;
+import java.util.List;
 
 public class Releve implements Parcelable,DatabaseItem{
 
@@ -139,6 +146,12 @@ public class Releve implements Parcelable,DatabaseItem{
 
     public String getLat_long() {
         return lat_long;
+    }
+
+    public List<LatLong> getLat_longFromJson(){
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<LatLong>>() {}.getType();
+        return gson.fromJson(getLat_long(), type);
     }
 
     public void setLat_long(String lat_long) {

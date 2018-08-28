@@ -1,5 +1,9 @@
 package com.example.eden62.GENSMobile.Database.RNFDatabase;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.List;
 
 public class RNFCampagne {
@@ -8,16 +12,20 @@ public class RNFCampagne {
     protected String name;
     protected String date;
     protected long author_id;
-    protected List<Transect> transects;
-    protected RNFMeteo meteo;
+    protected String transects;
+    protected String meteo;
 
-    public RNFCampagne(long _id, String name, String date, long author_id, RNFMeteo meteo, List<Transect> transects) {
-        this._id = _id;
+    public RNFCampagne(String name, String date, long author_id, String transects, String meteo) {
         this.name = name;
         this.date = date;
         this.author_id = author_id;
-        this.meteo = meteo;
         this.transects = transects;
+        this.meteo = meteo;
+    }
+
+    public RNFCampagne(long _id, String name, String date, long author_id, String transects, String meteo) {
+        this(name, date, author_id, transects, meteo);
+        this._id = _id;
     }
 
     public long get_id() {
@@ -52,19 +60,31 @@ public class RNFCampagne {
         this.author_id = author_id;
     }
 
-    public RNFMeteo getMeteo() {
+    public String getMeteo() {
         return meteo;
     }
 
-    public void setMeteo(RNFMeteo meteo) {
+    public RNFMeteo getMeteoFromJson(){
+        Gson gson = new Gson();
+        Type type = new TypeToken<RNFMeteo>() {}.getType();
+        return gson.fromJson(getMeteo(), type);
+    }
+
+    public List<Transect> getTransectsFromJson(){
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<Transect>>() {}.getType();
+        return gson.fromJson(getTransects(),type);
+    }
+
+    public void setMeteo(String meteo) {
         this.meteo = meteo;
     }
 
-    public List<Transect> getTransects() {
+    public String getTransects() {
         return transects;
     }
 
-    public void setTransects(List<Transect> transects) {
+    public void setTransects(String transects) {
         this.transects = transects;
     }
 }
