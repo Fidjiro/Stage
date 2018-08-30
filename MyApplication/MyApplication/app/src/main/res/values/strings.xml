@@ -156,10 +156,7 @@
     <!--Protocoles-->
     <string name="chooseProto">Choix du protocole :</string>
     <string name="chooseSite">Choix du site :</string>
-    <string-array name="sites">
-        <item></item>
-        <item>Mont Pelé et Hulin</item>
-    </string-array>
+    <string name="nomRNF">RNF rhopalocères</string>
     <string name="chooseTransectTitle">Choix du transect</string>
     <string name="finRnf">Mettre fin au RNF</string>
     <string name="avertissementCancelRnf">Êtes-vous sûr de vouloir quitter le RNF ? Vos modifications actuelles ne seront pas enregistrées</string>
@@ -170,6 +167,16 @@
     <string name="tempsParcours">Temps de parcours : </string>
     <string name="nomCampagne">Nom de la campagne : </string>
     <string name="validerTransect">Valider transect</string>
+    <string name="mesSaisies">Mes saisies</string>
+
+    <!--Historique des saisies-->
+    <string name="titleHistorySaisies">Historique des saisies</string>
+    <string name="syntheseSaisie">Synthèse de la saisie</string>
+    <string name="proto">Protocole :</string>
+    <string name="site">Site :</string>
+    <string name="heureDebut">Heure début : </string>
+    <string name="heureFin">Heure fin : </string>
+    <string name="invs">Inventaires :</string>
 
     <!-- Formulaire météo -->
     <string-array name="chooseVisibilite">

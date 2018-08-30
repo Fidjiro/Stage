@@ -1,9 +1,9 @@
-package com.example.eden62.GENSMobile.Database.RNFDatabase;
+package com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class RNFMeteo implements Parcelable{
+public class ProtocoleMeteo implements Parcelable{
 
     protected String visibilite;
     protected String precipitation;
@@ -12,7 +12,7 @@ public class RNFMeteo implements Parcelable{
     protected String directionVent;
     protected String vitesseVent;
 
-    public RNFMeteo(String visibilite, String precipitation, String nebulosite, float temperatureAir, String directionVent, String vitesseVent) {
+    public ProtocoleMeteo(String visibilite, String precipitation, String nebulosite, float temperatureAir, String directionVent, String vitesseVent) {
         this.visibilite = visibilite;
         this.precipitation = precipitation;
         this.nebulosite = nebulosite;
@@ -36,17 +36,17 @@ public class RNFMeteo implements Parcelable{
         parcel.writeString(vitesseVent);
     }
 
-    public static final Parcelable.Creator<RNFMeteo> CREATOR = new Parcelable.Creator<RNFMeteo>() {
-        public RNFMeteo createFromParcel(Parcel in) {
-            return new RNFMeteo(in);
+    public static final Parcelable.Creator<ProtocoleMeteo> CREATOR = new Parcelable.Creator<ProtocoleMeteo>() {
+        public ProtocoleMeteo createFromParcel(Parcel in) {
+            return new ProtocoleMeteo(in);
         }
 
-        public RNFMeteo[] newArray(int size) {
-            return new RNFMeteo[size];
+        public ProtocoleMeteo[] newArray(int size) {
+            return new ProtocoleMeteo[size];
         }
     };
 
-    private RNFMeteo(Parcel in) {
+    private ProtocoleMeteo(Parcel in) {
         visibilite = in.readString();
         precipitation = in.readString();
         nebulosite = in.readString();

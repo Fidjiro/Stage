@@ -1,4 +1,4 @@
-package com.example.eden62.GENSMobile.Database.RNFDatabase;
+package com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.RNF;
 
 import android.os.Parcel;
 import android.os.Parcelable;

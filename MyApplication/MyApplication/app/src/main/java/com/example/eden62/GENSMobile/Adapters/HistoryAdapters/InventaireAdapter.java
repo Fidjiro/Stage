@@ -116,11 +116,6 @@ public class InventaireAdapter extends ItemsAdapter<InventoryStocker,Inventaire>
         view.setTextColor(color);
     }
 
-    @Override
-    public List<CheckBox> getAllCheckboxes() {
-        return allCheckBoxes;
-    }
-
     private class InventaireViewHolder {
         public TextView nomEspece, denombrement, date, heure;
         public CheckBox checkBox;

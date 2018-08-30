@@ -28,6 +28,60 @@
             android:layout_height="wrap_content"
             android:textColor="#FFFFFF"
             android:layout_margin="@dimen/formLabelMargin"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/heureDebut"
+                android:textColor="#FFFFFF"/>
+            <EditText
+                android:id="@+id/heureDebutH"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:inputType="number"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=":"
+                android:textColor="#FFFFFF"/>
+            <EditText
+                android:id="@+id/heureDebutM"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:inputType="number"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/heureFin"
+                android:textColor="#FFFFFF"/>
+            <EditText
+                android:id="@+id/heureFinH"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:inputType="number"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=":"
+                android:textColor="#FFFFFF"/>
+            <EditText
+                android:id="@+id/heureFinM"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:inputType="number"/>
+        </LinearLayout>
         <Button
             android:id="@+id/valider"
             android:layout_width="wrap_content"

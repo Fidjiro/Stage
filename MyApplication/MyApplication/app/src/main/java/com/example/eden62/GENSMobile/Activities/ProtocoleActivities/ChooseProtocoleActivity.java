@@ -16,9 +16,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.eden62.GENSMobile.Activities.Historiques.Saisies.HistorySaisiesActivity;
 import com.example.eden62.GENSMobile.Activities.ProtocoleActivities.RNF.ChooseTransectActivity;
 import com.example.eden62.GENSMobile.Activities.ProtocoleActivities.RNF.RNFSite;
-import com.example.eden62.GENSMobile.Database.RNFDatabase.Transect;
+import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.RNF.Transect;
 import com.example.eden62.GENSMobile.R;
 
 import java.util.ArrayList;
@@ -43,6 +44,14 @@ public class ChooseProtocoleActivity extends AppCompatActivity {
 
         protoSpinner = (Spinner) findViewById(R.id.protocole_spinner);
         siteSpinner = (Spinner) findViewById(R.id.site_spinner);
+        Button mesSaisies = (Button) findViewById(R.id.mesSaisies);
+
+        mesSaisies.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ChooseProtocoleActivity.this, HistorySaisiesActivity.class));
+            }
+        });
 
         ArrayAdapter<Protocole> protoAdapter = new ArrayAdapter<Protocole>(this, android.R.layout.simple_spinner_item, protocoles){
             @NonNull
@@ -71,33 +80,7 @@ public class ChooseProtocoleActivity extends AppCompatActivity {
             }
         };
 
-        sitesAdapter = new ArrayAdapter<Site>(this, android.R.layout.simple_spinner_item, sites){
-            @NonNull
-            @Override
-            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-                if(convertView == null)
-                    convertView = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_spinner_item,parent, false);
-
-                TextView t = (TextView) convertView.findViewById(android.R.id.text1);
-
-                Site s = getItem(position);
-                t.setText(s.getName());
-
-                return convertView;
-            }
-
-            @Override
-            public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-                if(convertView == null)
-                    convertView = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_spinner_dropdown_item,parent, false);
-                TextView t = (TextView) convertView.findViewById(android.R.id.text1);
-
-                Site s = getItem(position);
-                t.setText(s.getName());
-
-                return convertView;
-            }
-        };
+        setSiteAdapter(sites);
 
         protoSpinner.setAdapter(protoAdapter);
         Button validProto = (Button) findViewById(R.id.valider_proto);
@@ -131,10 +114,39 @@ public class ChooseProtocoleActivity extends AppCompatActivity {
         });
     }
 
+    private void setSiteAdapter(List<Site> sites){
+        sitesAdapter = new ArrayAdapter<Site>(this, android.R.layout.simple_spinner_item, sites){
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                if(convertView == null)
+                    convertView = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_spinner_item,parent, false);
+
+                TextView t = (TextView) convertView.findViewById(android.R.id.text1);
+
+                Site s = getItem(position);
+                t.setText(s.getName());
+
+                return convertView;
+            }
+
+            @Override
+            public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                if(convertView == null)
+                    convertView = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_spinner_dropdown_item,parent, false);
+                TextView t = (TextView) convertView.findViewById(android.R.id.text1);
+
+                Site s = getItem(position);
+                t.setText(s.getName());
+
+                return convertView;
+            }
+        };
+    }
+
     private void setListOfSites() {
         sites = ((Protocole)protoSpinner.getSelectedItem()).getAvailableSites();
-        sitesAdapter.addAll(sites);
-        sitesAdapter.notifyDataSetChanged();
+        setSiteAdapter(sites);
         siteSpinner.setAdapter(sitesAdapter);
     }
 
@@ -159,7 +171,7 @@ public class ChooseProtocoleActivity extends AppCompatActivity {
 
         //Ajout d'un protocole de nom vide pour avoir l'item vide dans le spinner
         protocoles.add(new Protocole("",null,null));
-        protocoles.add(new Protocole("RNF rhopalocères", sites, ChooseTransectActivity.class));
+        protocoles.add(new Protocole(getString(R.string.nomRNF), sites, ChooseTransectActivity.class));
     }
 
     private void setErrorOnSelectedItem(Spinner s, String spinnerType){
@@ -182,9 +194,10 @@ public class ChooseProtocoleActivity extends AppCompatActivity {
     protected void launchProto(){
         Protocole selectedProto = (Protocole) protoSpinner.getSelectedItem();
         Intent intent = new Intent(this, selectedProto.getActivityToLaunch());
-        if(selectedProto.getName().equals("RNF rhopalocères")){
+        if(selectedProto.getName().equals(getString(R.string.nomRNF))){
             RNFSite site = (RNFSite) siteSpinner.getSelectedItem();
             intent.putParcelableArrayListExtra("transects",site.getTransects());
+            intent.putExtra("nomSite",site.getName());
         }
         startActivity(intent);
     }
@@ -195,5 +208,11 @@ public class ChooseProtocoleActivity extends AppCompatActivity {
 
     protected boolean isASelectedItem(Spinner s){
         return !s.getSelectedItem().toString().equals("");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        protoSpinner.setSelection(0);
     }
 }

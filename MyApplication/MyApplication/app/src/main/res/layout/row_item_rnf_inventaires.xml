@@ -10,6 +10,7 @@
         android:id="@+id/nomEspeceRNFInv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_gravity="center_vertical"
         android:layout_weight="1"
         android:lines="1"
         android:textStyle="bold"
@@ -19,6 +20,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_gravity="center_vertical"
         android:orientation="horizontal"
         android:layout_weight="1"
         android:weightSum="3">
@@ -33,6 +35,7 @@
                 android:id="@+id/decDenombrement"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_weight="0.75"
                 android:text="-" />
 
@@ -40,6 +43,7 @@
                 android:id="@+id/nombre"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_weight="1.5"
                 android:hint="Total"
                 android:inputType="number"/>
@@ -48,6 +52,7 @@
                 android:id="@+id/incDenombrement"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_weight="0.75"
                 android:text="+"/>
         </LinearLayout>
@@ -62,6 +67,7 @@
                 android:id="@+id/decNbMale"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_weight="0.75"
                 android:text="-" />
 
@@ -69,6 +75,7 @@
                 android:id="@+id/nbMale"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:hint="Mâle"
                 android:layout_weight="1.5"
                 android:inputType="number" />
@@ -77,6 +84,7 @@
                 android:id="@+id/incNbMale"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_weight="0.75"
                 android:text="+" />
         </LinearLayout>
@@ -91,6 +99,7 @@
                 android:id="@+id/decNbFemale"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_weight="0.75"
                 android:text="-" />
 
@@ -98,6 +107,7 @@
                 android:id="@+id/nbFemale"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:hint="Femelle"
                 android:layout_weight="1.5"
                 android:inputType="number" />
@@ -106,6 +116,7 @@
                 android:id="@+id/incNbFemale"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_weight="0.75"
                 android:text="+" />
         </LinearLayout>

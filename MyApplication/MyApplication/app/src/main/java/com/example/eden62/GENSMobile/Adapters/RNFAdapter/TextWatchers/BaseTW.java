@@ -3,9 +3,7 @@ package com.example.eden62.GENSMobile.Adapters.RNFAdapter.TextWatchers;
 import android.text.Editable;
 import android.text.TextWatcher;
 
-import com.example.eden62.GENSMobile.Database.RNFDatabase.RNFInventaire;
-
-import java.util.List;
+import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.RNF.RNFInventaire;
 
 public abstract class BaseTW implements TextWatcher {
 

@@ -99,7 +99,7 @@ public class MyHttpService {
 
         RequestBody requestBody = new FormBody.Builder().add("_id",inv.get_id() + "").
                 add("ref_taxon",inv.getRef_taxon() + "").
-                add("ref_user",inv.getUser() + "").
+                add("author_id",inv.getUser() + "").
                 add("typeTaxon",inv.getTypeTaxon() + "").
                 add("latitude",inv.getLatitude() + "").
                 add("longitude",inv.getLongitude() + "").

@@ -188,22 +188,7 @@ public class HistoryRecensementActivity extends HistoryActivity<InventaireAdapte
 
     @Override
     protected void actionOnItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        TextView nomsInvTxt = (TextView)view.findViewById(R.id.nomEspeceInv);
-        TextView heureInvTxt = (TextView)view.findViewById(R.id.heureInventaire);
-
-        String noms = nomsInvTxt.getText().toString();
-        String[] splittedNoms;
-
-        if(noms.contains(" - "))
-            splittedNoms = noms.split(" - ");
-        else {
-            if(noms.contains(" sp."))
-                noms = noms.replace(" sp.","");
-            splittedNoms = new String[]{noms, ""};
-        }
-
-        String[] params = new String[] {splittedNoms[0],splittedNoms[1],heureInvTxt.getText().toString()};
-        Inventaire selectedInventaire = campagneDao.getInventaireFromHistory(params);
+        Inventaire selectedInventaire = (Inventaire)adapterView.getItemAtPosition(i);
         startActivity(generateGoodIntent(selectedInventaire));
     }
 

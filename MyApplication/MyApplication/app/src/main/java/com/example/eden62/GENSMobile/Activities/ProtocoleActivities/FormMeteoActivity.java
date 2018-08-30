@@ -1,4 +1,4 @@
-package com.example.eden62.GENSMobile.Activities.ProtocoleActivities.RNF;
+package com.example.eden62.GENSMobile.Activities.ProtocoleActivities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,9 +10,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.eden62.GENSMobile.Database.RNFDatabase.RNFMeteo;
+import com.example.eden62.GENSMobile.Activities.ProtocoleActivities.RNF.ChooseTransectActivity;
+import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.ProtocoleMeteo;
 import com.example.eden62.GENSMobile.R;
-import com.google.gson.Gson;
 
 public class FormMeteoActivity extends AppCompatActivity {
 
@@ -40,7 +40,7 @@ public class FormMeteoActivity extends AppCompatActivity {
                 if(meteoNotValidable())
                     actionWhenMeteoNotValidable();
                 else {
-                    RNFMeteo meteo = createMeteoFromFields();
+                    ProtocoleMeteo meteo = createMeteoFromFields();
                     Intent resultIntent = new Intent();
                     resultIntent.putExtra("meteo",meteo);
                     setResult(ChooseTransectActivity.RESULT_FILL_METEO, resultIntent);
@@ -91,7 +91,7 @@ public class FormMeteoActivity extends AppCompatActivity {
     }
 
     // Créé l'objet météo via les champs du formulaire
-    private RNFMeteo createMeteoFromFields(){
+    private ProtocoleMeteo createMeteoFromFields(){
         String visibiliteInput = (String) visibilite.getSelectedItem();
         String precipitationInput = (String) precipitation.getSelectedItem();
         String nebulositeInput = (String) nebulosite.getSelectedItem();
@@ -99,6 +99,6 @@ public class FormMeteoActivity extends AppCompatActivity {
         String directionVentInput = (String) directionVent.getSelectedItem();
         String vitesseVentInput = (String) vitesseVent.getSelectedItem();
 
-        return new RNFMeteo(visibiliteInput, precipitationInput, nebulositeInput, temperatureInput, directionVentInput, vitesseVentInput);
+        return new ProtocoleMeteo(visibiliteInput, precipitationInput, nebulositeInput, temperatureInput, directionVentInput, vitesseVentInput);
     }
 }

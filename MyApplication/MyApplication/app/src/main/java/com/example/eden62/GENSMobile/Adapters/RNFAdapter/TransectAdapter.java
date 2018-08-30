@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.eden62.GENSMobile.Database.RNFDatabase.Transect;
+import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.RNF.Transect;
 import com.example.eden62.GENSMobile.R;
 
 import java.util.List;

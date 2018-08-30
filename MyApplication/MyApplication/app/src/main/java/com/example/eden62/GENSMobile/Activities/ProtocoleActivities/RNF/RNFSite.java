@@ -1,7 +1,7 @@
 package com.example.eden62.GENSMobile.Activities.ProtocoleActivities.RNF;
 
 import com.example.eden62.GENSMobile.Activities.ProtocoleActivities.Site;
-import com.example.eden62.GENSMobile.Database.RNFDatabase.Transect;
+import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.RNF.Transect;
 
 import java.util.ArrayList;
 

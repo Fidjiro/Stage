@@ -153,7 +153,7 @@ public final class Utils {
      * @param i L'entier à transformer
      * @return L'entier formaté
      */
-    private static String formatInt(int i){
+    public static String formatInt(int i){
         if(i < 10)
             return "0" + i;
         return "" + i;

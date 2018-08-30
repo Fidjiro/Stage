@@ -1,6 +1,4 @@
-package com.example.eden62.GENSMobile.Database.RNFDatabase;
-
-import com.example.eden62.GENSMobile.Activities.ProtocoleActivities.RNF.TemplateRNFSpecies;
+package com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.RNF;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -2,9 +2,7 @@ package com.example.eden62.GENSMobile.Adapters.RNFAdapter.TextWatchers;
 
 import android.widget.EditText;
 
-import com.example.eden62.GENSMobile.Database.RNFDatabase.RNFInventaire;
-
-import java.util.List;
+import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.RNF.RNFInventaire;
 
 public abstract class BaseGenreTW extends BaseTW {
 

@@ -14,14 +14,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.eden62.GENSMobile.Adapters.RNFAdapter.RNFMatchableArrayAdapter;
-import com.example.eden62.GENSMobile.Database.RNFDatabase.RNFInventaire;
-import com.example.eden62.GENSMobile.Database.RNFDatabase.RNFInventories;
-import com.example.eden62.GENSMobile.Database.RNFDatabase.Transect;
+import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.RNF.RNFInventaire;
+import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.RNF.RNFInventories;
+import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.RNF.Transect;
 import com.example.eden62.GENSMobile.R;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 public class FillTransectActivity extends ListActivity {
 

@@ -1,6 +1,6 @@
 package com.example.eden62.GENSMobile.Activities.ProtocoleActivities.RNF;
 
-import com.example.eden62.GENSMobile.Database.RNFDatabase.RNFInventaire;
+import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.RNF.RNFInventaire;
 
 import java.util.ArrayList;
 

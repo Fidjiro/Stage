@@ -119,13 +119,9 @@ public class HistoryReleveActivity extends HistoryActivity<ReleveAdapter> {
 
     @Override
     protected void actionOnItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        TextView nomRelTxt = (TextView)view.findViewById(R.id.nomRel);
-        TextView typeRelTxt = (TextView)view.findViewById(R.id.typeReleve);
-        TextView heureRelTxt = (TextView)view.findViewById(R.id.heureReleve);
+        Releve rel = (Releve)adapterView.getItemAtPosition(i);
 
-        Releve rel = dao.getReleveFromNomTypeHeure(new String[]{nomRelTxt.getText().toString(), typeRelTxt.getText().toString(), heureRelTxt.getText().toString()});
-
-        Intent intent = generateGoodIntent(typeRelTxt.getText().toString());
+        Intent intent = generateGoodIntent(rel.getType());
         intent.putExtra("releve",rel);
         startActivity(intent);
     }

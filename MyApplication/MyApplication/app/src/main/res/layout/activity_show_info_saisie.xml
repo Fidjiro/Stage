@@ -5,168 +5,176 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Activities.ProtocoleActivities.FormMeteoActivity"
+    tools:context=".Activities.Historiques.Saisies.ShowInfoSaisieActivity"
     android:background="@drawable/back">
 
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/titleViewPopup"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/meteoTitle"
+        android:layout_gravity="center"
+        android:text="@string/syntheseSaisie"
         android:textSize="@dimen/formTitleTextSize"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
     <ScrollView
+        android:id="@+id/scrollViewSynthese"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         app:layout_constraintVertical_weight="1"
         android:layout_marginTop="8dp">
         <LinearLayout
+            android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
             android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/formLayoutsMargin"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/visibilite"
-                    android:textSize="@dimen/formLabelTextSize"
-                    android:textStyle="bold"/>
-
-                <Spinner
-                    android:id="@+id/visibilite"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:entries="@array/chooseVisibilite"/>
-
-            </LinearLayout>
-
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_margin="@dimen/formLayoutsMargin">
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/precipitation"
+                    android:layout_marginRight="@dimen/formLabelMargin"
+                    android:text="@string/nomCampagne"
                     android:textSize="@dimen/formLabelTextSize"
                     android:textStyle="bold"/>
-
-                <Spinner
-                    android:id="@+id/precipitation"
+                <TextView
+                    android:id="@+id/nomCampagne"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:entries="@array/choosePrecipitation"/>
-
+                    android:minWidth="@dimen/formNombreWidth"/>
             </LinearLayout>
-
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_margin="@dimen/formLayoutsMargin">
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/nebulosite"
+                    android:layout_marginRight="@dimen/formLabelMargin"
+                    android:text="@string/proto"
                     android:textSize="@dimen/formLabelTextSize"
                     android:textStyle="bold"/>
-
-                <Spinner
-                    android:id="@+id/nebulosite"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:entries="@array/chooseNebulosite"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/formLayoutsMargin"
-                android:orientation="horizontal">
-
                 <TextView
+                    android:id="@+id/nomProto"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/temperatureAir"
-                    android:textSize="@dimen/formLabelTextSize"
-                    android:textStyle="bold"/>
-
-                <EditText
-                    android:id="@+id/temperature"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="@dimen/formNombreWidth"
-                    android:inputType="number" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/celsius"/>
-
+                    android:layout_height="wrap_content"/>
             </LinearLayout>
-
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_margin="@dimen/formLayoutsMargin">
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/directionVent"
+                    android:layout_marginRight="@dimen/formLabelMargin"
+                    android:text="@string/site"
                     android:textSize="@dimen/formLabelTextSize"
                     android:textStyle="bold"/>
-
-                <Spinner
-                    android:id="@+id/directionVent"
+                <TextView
+                    android:id="@+id/nomSite"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:entries="@array/chooseDirectionVent"/>
-
+                    android:layout_height="wrap_content"/>
             </LinearLayout>
-
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_margin="@dimen/formLayoutsMargin">
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/vitesseVent"
+                    android:layout_marginRight="@dimen/formLabelMargin"
+                    android:text="@string/date"
                     android:textSize="@dimen/formLabelTextSize"
                     android:textStyle="bold"/>
-
-                <Spinner
-                    android:id="@+id/vitesseVent"
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="@dimen/formLayoutsMargin">
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:entries="@array/chooseVitesseVent"/>
-
+                    android:layout_marginRight="@dimen/formLabelMargin"
+                    android:text="@string/heureDebut"
+                    android:textSize="@dimen/formLabelTextSize"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/heureDebut"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="@dimen/formLayoutsMargin">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/formLabelMargin"
+                    android:text="@string/heureFin"
+                    android:textSize="@dimen/formLabelTextSize"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/heureFin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <Button
+                android:id="@+id/modifInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Modifier campagne"
+                android:textAllCaps="false"
+                android:layout_margin="@dimen/formLayoutsMargin"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/invs"
+                android:textSize="@dimen/formLabelTextSize"
+                android:textStyle="bold"
+                android:layout_margin="@dimen/formLayoutsMargin"/>
+            <TextView
+                android:id="@+id/syntheseSaisie"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/formLayoutsMargin"/>
         </LinearLayout>
     </ScrollView>
-    <Button
-        android:id="@+id/validerMeteo"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
-        android:text="@string/valider"
-        android:textAllCaps="false"/>
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/modifMeteo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Modifier météo"
+            android:textAllCaps="false"/>
 
+        <Button
+            android:id="@+id/modifSaisie"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Modifier inventaires"
+            android:textAllCaps="false"/>
+
+        <ImageButton
+            android:id="@+id/deleteRel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/delete" />
+    </LinearLayout>
 </LinearLayout>

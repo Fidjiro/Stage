@@ -11,18 +11,19 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.eden62.GENSMobile.Activities.ProtocoleActivities.FormMeteoActivity;
 import com.example.eden62.GENSMobile.Adapters.RNFAdapter.TransectAdapter;
-import com.example.eden62.GENSMobile.Database.RNFDatabase.RNFCampagne;
-import com.example.eden62.GENSMobile.Database.RNFDatabase.RNFDao;
-import com.example.eden62.GENSMobile.Database.RNFDatabase.RNFInventaire;
-import com.example.eden62.GENSMobile.Database.RNFDatabase.RNFInventories;
-import com.example.eden62.GENSMobile.Database.RNFDatabase.RNFMeteo;
-import com.example.eden62.GENSMobile.Database.RNFDatabase.Transect;
+import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.CampagneProtocolaire;
+import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.RNF.RNFSaisie;
+import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.CampagneProtocolaireDao;
+import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.RNF.RNFInventaire;
+import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.RNF.RNFInventories;
+import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.ProtocoleMeteo;
+import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.RNF.Transect;
 import com.example.eden62.GENSMobile.R;
 import com.example.eden62.GENSMobile.Tools.Utils;
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ChooseTransectActivity extends AppCompatActivity {
@@ -34,11 +35,11 @@ public class ChooseTransectActivity extends AppCompatActivity {
 
     protected int cptTransectDone = 0;
 
-    protected RNFMeteo meteo;
-    protected String name;
+    protected ProtocoleMeteo meteo;
+    protected String name, nomSite, heureDeb, heureFin;
     protected Gson gson = new Gson();
 
-    private RNFDao dao;
+    private CampagneProtocolaireDao dao;
 
     public static final int RESULT_TRANSECT_DONE = 4;
     public static final int RESULT_NAME_RNF = 5;
@@ -50,7 +51,7 @@ public class ChooseTransectActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_choose_transect);
 
-        dao = new RNFDao(this);
+        dao = new CampagneProtocolaireDao(this);
         dao.open();
 
         listTransect = (ListView) findViewById(R.id.listTransect);
@@ -66,7 +67,10 @@ public class ChooseTransectActivity extends AppCompatActivity {
             }
         });
 
-        transects = getIntent().getParcelableArrayListExtra("transects");
+        Intent callerIntent = getIntent();
+
+        transects = callerIntent.getParcelableArrayListExtra("transects");
+        nomSite = callerIntent.getStringExtra("nomSite");
 
         listTransect.setAdapter(new TransectAdapter(this,transects));
 
@@ -86,8 +90,9 @@ public class ChooseTransectActivity extends AppCompatActivity {
         meteo = getIntent().getParcelableExtra("meteo");
     }
 
-    protected RNFCampagne createCampagne(){
-        return new RNFCampagne(name, Utils.getDate(), Utils.getCurrUsrId(this), gson.toJson(transects), gson.toJson(meteo));
+    protected CampagneProtocolaire<RNFSaisie> createCampagne(){
+        String saisie = gson.toJson(new RNFSaisie(transects,meteo));
+        return new CampagneProtocolaire<>(Utils.getCurrUsrId(this), name, Utils.getDate(), heureDeb, heureFin, getString(R.string.nomRNF), nomSite, saisie);
     }
 
     @Override
@@ -110,12 +115,14 @@ public class ChooseTransectActivity extends AppCompatActivity {
 
         if(resultCode == RESULT_NAME_RNF) {
             name = data.getStringExtra("nomRnf");
+            heureDeb = data.getStringExtra("heureDebut");
+            heureFin = data.getStringExtra("heureFin");
             startActivityForResult(new Intent(this,FormMeteoActivity.class),RESULT_FILL_METEO);
         }
 
         if(resultCode == RESULT_FILL_METEO){
             meteo = data.getParcelableExtra("meteo");
-            RNFCampagne currCampagne = createCampagne();
+            CampagneProtocolaire<RNFSaisie> currCampagne = createCampagne();
             dao.insertRNFCampagne(currCampagne);
             finish();
         }

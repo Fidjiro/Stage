@@ -10,11 +10,10 @@ import com.example.eden62.GENSMobile.Adapters.RNFAdapter.TextWatchers.BaseTW;
 import com.example.eden62.GENSMobile.Adapters.RNFAdapter.TextWatchers.NbFemaleTW;
 import com.example.eden62.GENSMobile.Adapters.RNFAdapter.TextWatchers.NbMaleTW;
 import com.example.eden62.GENSMobile.Adapters.RNFAdapter.TextWatchers.NombreTW;
-import com.example.eden62.GENSMobile.Database.RNFDatabase.RNFInventaire;
+import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.RNF.RNFInventaire;
 import com.example.eden62.GENSMobile.R;
 import com.example.eden62.GENSMobile.Tools.MatchableArrayAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
