@@ -1,10 +1,14 @@
 package com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.RNF;
 
+import com.example.eden62.GENSMobile.Activities.ProtocoleActivities.RNF.ChooseTransectActivity;
 import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.ProtocoleMeteo;
 import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.Saisie;
 
 import java.util.List;
 
+/**
+ * Objet représentant une saisie RNF
+ */
 public class RNFSaisie implements Saisie {
 
     protected List<Transect> transects;
@@ -24,10 +28,12 @@ public class RNFSaisie implements Saisie {
         } return res;
     }
 
+    @Override
     public ProtocoleMeteo getMeteo(){
         return meteo;
     }
 
+    @Override
     public void setMeteo(ProtocoleMeteo meteo) {
         this.meteo = meteo;
     }
@@ -38,5 +44,10 @@ public class RNFSaisie implements Saisie {
 
     public void setTransects(List<Transect> transects) {
         this.transects = transects;
+    }
+
+    @Override
+    public Class getFillingActivity() {
+        return ChooseTransectActivity.class;
     }
 }

@@ -4,6 +4,9 @@ import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.RNF.RNFIn
 
 import java.util.ArrayList;
 
+/**
+ * Objet représentant toutes les espèces de papillon dans le RNF
+ */
 public class TemplateRNFSpecies extends ArrayList<RNFInventaire> {
 
     public TemplateRNFSpecies(){

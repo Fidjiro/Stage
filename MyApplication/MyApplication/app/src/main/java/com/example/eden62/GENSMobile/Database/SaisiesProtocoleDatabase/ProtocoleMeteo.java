@@ -3,6 +3,9 @@ package com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+/**
+ * Objet représentant une météo pour les campagnes protocolaires
+ */
 public class ProtocoleMeteo implements Parcelable{
 
     protected String visibilite;

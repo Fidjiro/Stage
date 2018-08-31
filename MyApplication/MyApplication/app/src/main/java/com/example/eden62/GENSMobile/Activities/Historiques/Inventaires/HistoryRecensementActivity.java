@@ -143,6 +143,7 @@ public class HistoryRecensementActivity extends HistoryActivity<InventaireAdapte
 
     /**
      * Lance le bon type de formulaire en fonction de l'inventaire
+     *
      * @param inv L'inventaire à consulter
      * @return L'intent du bon type de formulaire
      */

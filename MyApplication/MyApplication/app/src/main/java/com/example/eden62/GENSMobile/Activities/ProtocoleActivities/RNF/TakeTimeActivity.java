@@ -11,6 +11,9 @@ import android.widget.LinearLayout;
 
 import com.example.eden62.GENSMobile.R;
 
+/**
+ * Activité permettant à l'utilisateur le temps qu'il a mis pour traverser un transect
+ */
 public class TakeTimeActivity extends AppCompatActivity {
 
     @Override
@@ -53,6 +56,7 @@ public class TakeTimeActivity extends AppCompatActivity {
         });
     }
 
+    // Affecte à l'editText l'entier i en text seulement s'il est supérieur à 0
     private void setGoodText(EditText et, int i){
         String text = "";
         if(i > 0)
@@ -60,6 +64,7 @@ public class TakeTimeActivity extends AppCompatActivity {
         et.setText(text);
     }
 
+    // Récupère un int depuis une string
     private int getIntFromString(String s){
         int res = 0;
         try{

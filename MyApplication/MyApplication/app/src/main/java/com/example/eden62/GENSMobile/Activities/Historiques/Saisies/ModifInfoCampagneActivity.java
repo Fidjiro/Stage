@@ -1,109 +1,113 @@
-package com.example.eden62.GENSMobile.Activities.ProtocoleActivities.RNF;
+package com.example.eden62.GENSMobile.Activities.Historiques.Saisies;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 
+import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.CampagneProtocolaire;
+import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.CampagneProtocolaireDao;
 import com.example.eden62.GENSMobile.R;
 import com.example.eden62.GENSMobile.Tools.HeureMinutesWatcher;
 import com.example.eden62.GENSMobile.Tools.Utils;
 
 /**
- * Activité permettant de nommer une campagne rnf ainsi que de renseigner ses heures de début et fin
+ * Activité permettant de modifier les informations d'une campagne (nom, heure début, heure fin)
  */
-public class NameRNFActivity extends AppCompatActivity {
+public class ModifInfoCampagneActivity extends AppCompatActivity {
 
-    protected LinearLayout nameRnfLayout;
-    protected EditText name, heureDebutH, heureDebutM, heureFinH, heureFinM;
-    protected Button valider;
+    protected EditText heureDebut, minutesDebut, heureFin, minutesFin, nomCampagne;
+    protected Button validerModif;
+
+    protected long campagneId;
+    protected CampagneProtocolaireDao dao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_name_rnf);
 
-        final DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        setContentView(R.layout.activity_modif_info_campagne);
 
-        int width = dm.widthPixels;
+        nomCampagne = (EditText) findViewById(R.id.nomRNF);
+        heureDebut = (EditText) findViewById(R.id.heureDebutH);
+        minutesDebut = (EditText) findViewById(R.id.heureDebutM);
+        heureFin = (EditText) findViewById(R.id.heureFinH);
+        minutesFin = (EditText) findViewById(R.id.heureFinM);
+        validerModif = (Button) findViewById(R.id.valider);
 
-        nameRnfLayout = (LinearLayout) findViewById(R.id.nameRNFLayout);
-        name = (EditText) findViewById(R.id.nomRNF);
-        heureDebutH = (EditText) findViewById(R.id.heureDebutH);
-        heureDebutM = (EditText) findViewById(R.id.heureDebutM);
-        heureFinH = (EditText) findViewById(R.id.heureFinH);
-        heureFinM = (EditText) findViewById(R.id.heureFinM);
-        valider = (Button) findViewById(R.id.valider);
+        heureDebut.addTextChangedListener(new HeureMinutesWatcher(minutesDebut));
+        minutesDebut.addTextChangedListener(new HeureMinutesWatcher(heureFin));
+        heureFin.addTextChangedListener(new HeureMinutesWatcher(minutesFin));
 
-        heureDebutH.addTextChangedListener(new HeureMinutesWatcher(heureDebutM));
-        heureDebutM.addTextChangedListener(new HeureMinutesWatcher(heureFinH));
-        heureFinH.addTextChangedListener(new HeureMinutesWatcher(heureFinM));
+        dao = new CampagneProtocolaireDao(this);
+        dao.open();
 
-        nameRnfLayout.getLayoutParams().width = (int) (width*0.75);
+        campagneId = getIntent().getLongExtra("campagneId",-1);
+        final CampagneProtocolaire campagne = dao.getCampagneById(campagneId);
 
-        valider.setOnClickListener(new View.OnClickListener() {
+        String[] splittedHeureDebut = campagne.getHeureDebut().split(":");
+        String[] splittedHeureFin = campagne.getHeureFin().split(":");
+        heureDebut.setText(splittedHeureDebut[0]);
+        minutesDebut.setText(splittedHeureDebut[1]);
+        heureFin.setText(splittedHeureFin[0]);
+        minutesFin.setText(splittedHeureFin[1]);
+        nomCampagne.setText(campagne.getName());
+
+        validerModif.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String nom = name.getText().toString();
-                String heureDebH = heureDebutH.getText().toString();
-                String heureDebM = heureDebutM.getText().toString();
-                String heureFH = heureFinH.getText().toString();
-                String heureFM = heureFinM.getText().toString();
+                String nom = nomCampagne.getText().toString();
+                String heureDebH = heureDebut.getText().toString();
+                String heureDebM = minutesDebut.getText().toString();
+                String heureFH = heureFin.getText().toString();
+                String heureFM = minutesFin.getText().toString();
                 if(nom.isEmpty()){
-                    name.setError("Veuillez insérer un nom de campagne");
-                    name.requestFocus();
+                    nomCampagne.setError("Veuillez insérer un nom de campagne");
+                    nomCampagne.requestFocus();
                     return;
                 }
                 if(notValidableHeure(heureDebH,heureDebM)) {
-                    heureDebutH.setError("Veuillez insérer une heure de début");
-                    heureDebutH.requestFocus();
+                    heureDebut.setError("Veuillez insérer une heure de début");
+                    heureDebut.requestFocus();
                     return;
                 }
                 if(notValidableHeure(heureFH,heureFM)){
-                    heureFinH.setError("Veuillez insérer une heure de début");
-                    heureFinH.requestFocus();
+                    heureFin.setError("Veuillez insérer une heure de début");
+                    heureFin.requestFocus();
                     return;
                 }
                 int hDebut = getIntFromString(heureDebH);
                 int mDebut = getIntFromString(heureDebM);
                 int hFin = getIntFromString(heureFH);
                 int mFin = getIntFromString(heureFM);
-
                 if(incoherentHeures(hDebut,mDebut,hFin,mFin)){
-                    heureDebutH.setError("Veuillez saisir une heure de début inférieur à celle de fin");
-                    heureDebutH.requestFocus();
+                    heureDebut.setError("Veuillez saisir une heure de début inférieur à celle de fin");
+                    heureDebut.requestFocus();
                     return;
                 }
                 if(outOfBoundsHeure(hDebut)){
-                    heureDebutH.setError("Veuillez mettre une heure valide");
-                    heureDebutH.requestFocus();
+                    heureDebut.setError("Veuillez mettre une heure valide");
+                    heureDebut.requestFocus();
                     return;
                 } if(outOfBoundsHeure(hFin)){
-                    heureFinH.setError("Veuillez mettre une heure valide");
-                    heureFinH.requestFocus();
+                    heureFin.setError("Veuillez mettre une heure valide");
+                    heureFin.requestFocus();
                     return;
                 } if(outOfBoundsMinutes(mDebut)){
-                    heureDebutM.setError("Veuillez entrer des minutes valide");
-                    heureDebutM.requestFocus();
+                    heureDebut.setError("Veuillez entrer des minutes valide");
+                    heureDebut.requestFocus();
                     return;
                 } if(outOfBoundsMinutes(mFin)){
-                    heureFinM.setError("Veuillez entrer des minutes valide");
-                    heureFinM.requestFocus();
+                    heureFin.setError("Veuillez entrer des minutes valide");
+                    heureFin.requestFocus();
                     return;
                 }
 
-                Intent intent = new Intent();
-                intent.putExtra("nomRnf",nom);
-                intent.putExtra("heureDebut", getHeureFromInts(hDebut,mDebut));
-                intent.putExtra("heureFin", getHeureFromInts(hFin,mFin));
-                setResult(ChooseTransectActivity.RESULT_NAME_RNF,intent);
+                campagne.setName(nom);
+                campagne.setHeureDebut(getHeureFromInts(hDebut,mDebut));
+                campagne.setHeureFin(getHeureFromInts(hFin,mFin));
+                dao.modifieCampagne(campagne);
                 finish();
             }
         });

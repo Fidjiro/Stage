@@ -205,7 +205,7 @@ public class FauneActivity extends FormActivity {
     }
 
     /**
-     * Change le champ genre correspondant via les données de l'inventaire consulté.
+     * Change le champ genre correspondant au paramètre editText via les données de l'inventaire consulté.
      * Méthode valable pour le champ mâle et femelle
      *
      * @param nbGenre Décompte du genre
@@ -221,8 +221,8 @@ public class FauneActivity extends FormActivity {
     }
 
     /**
-     * Met à jour le contenu de l'édit text dénombrement en fonction du total du genre. Si inférieur, le dénombrement est ramené au total
-     * du nombre de genre. Si égal, le dénombrement suit les changement des dénombreemnt de genre
+     * Met à jour le contenu de l'édit text dénombrement en fonction du total du genre. Si inférieur, le dénombrement est
+     * ramené au total du nombre de genre. Si égal, le dénombrement suit les changement des dénombrement de genre
      *
      * @param oldNbGenre Ancien total du nombre de genre avant modification par l'utilisateur
      */
@@ -394,7 +394,7 @@ public class FauneActivity extends FormActivity {
     }
 
     /**
-     * Récupère le dénombrement du genre correspondant au paramètre lorsque la case de celui-ci est coché
+     * Récupère le dénombrement du genre correspondant au paramètre genreEditText lorsque la case de celui-ci est coché
      *
      * @param genreEditText Le champ du genre à récupérer
      * @return Le dénombrement de ce genre
@@ -410,7 +410,7 @@ public class FauneActivity extends FormActivity {
     }
 
     /**
-     * Récupère le nombre de mâle lorsque la case de celui-ci est coché
+     * Récupère le nombre de mâle lorsque la case correspondante est coché
      *
      * @return Le nombre de mâle
      * @see FauneActivity#getNbMale()
@@ -429,7 +429,7 @@ public class FauneActivity extends FormActivity {
     }
 
     /**
-     * Récupère le nombre de femelle lorsque la case de celui-ci est coché
+     * Récupère le nombre de femelle lorsque la case correspondante est coché
      *
      * @return Le nombre de femelle
      * @see FauneActivity#getNbFemale()

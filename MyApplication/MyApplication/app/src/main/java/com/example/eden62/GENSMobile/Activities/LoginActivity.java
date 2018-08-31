@@ -68,6 +68,9 @@ public class LoginActivity extends AppCompatActivity {
         int verCode = Utils.getVerCode(this);
         loginPrefsEditor = loginPreferences.edit();
 
+        loginPrefsEditor.putString("mdp","");
+        loginPrefsEditor.commit();
+
         // Si l'id de campagne n'est pas encore défini
         if(loginPreferences.getInt("idCampagne",-1) == -1) {
             loginPrefsEditor.putInt("idCampagne", 0);

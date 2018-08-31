@@ -207,6 +207,7 @@ public abstract class MainActivity extends AppCompatActivity{
                 return;
             }
         }
+        // Affiche un message si la localisation gps du téléphone n'est pas activée
         if(!locationManager.isProviderEnabled(provider)){
             createDialog(BOITE_GPS_MANQUANT).show();
         }else

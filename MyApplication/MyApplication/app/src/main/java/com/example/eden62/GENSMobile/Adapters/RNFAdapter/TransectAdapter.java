@@ -13,6 +13,9 @@ import com.example.eden62.GENSMobile.R;
 
 import java.util.List;
 
+/**
+ * Adapter de transects
+ */
 public class TransectAdapter extends ArrayAdapter<Transect> {
 
     public TransectAdapter(Context context, List<Transect> transects) {

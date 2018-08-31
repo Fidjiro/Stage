@@ -11,14 +11,29 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.eden62.GENSMobile.Activities.ProtocoleActivities.RNF.ChooseTransectActivity;
+import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.CampagneProtocolaire;
+import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.CampagneProtocolaireDao;
 import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.ProtocoleMeteo;
+import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.RNF.RNFSaisie;
+import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.Saisie;
 import com.example.eden62.GENSMobile.R;
+import com.google.gson.Gson;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
+/**
+ * Activité formulaire permettant de renseigner une météo
+ */
 public class FormMeteoActivity extends AppCompatActivity {
 
     protected Spinner visibilite,precipitation,nebulosite,directionVent,vitesseVent;
     protected EditText temperatureAir;
     protected Button valider;
+
+    protected Intent callerIntent;
+    protected boolean modification = false;
+    protected CampagneProtocolaireDao dao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +49,16 @@ public class FormMeteoActivity extends AppCompatActivity {
         temperatureAir = (EditText) findViewById(R.id.temperature);
         valider = (Button) findViewById(R.id.validerMeteo);
 
+        dao = new CampagneProtocolaireDao(this);
+        dao.open();
+        callerIntent = getIntent();
+
+        ProtocoleMeteo modifiedMeteo = callerIntent.getParcelableExtra("modifiedMeteo");
+        if(modifiedMeteo != null) {
+            setFieldsFromModifiedMeteo(modifiedMeteo);
+            modification = true;
+        }
+
         valider.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -41,13 +66,54 @@ public class FormMeteoActivity extends AppCompatActivity {
                     actionWhenMeteoNotValidable();
                 else {
                     ProtocoleMeteo meteo = createMeteoFromFields();
-                    Intent resultIntent = new Intent();
-                    resultIntent.putExtra("meteo",meteo);
-                    setResult(ChooseTransectActivity.RESULT_FILL_METEO, resultIntent);
+                    if(modification){
+                        CampagneProtocolaire c = dao.getCampagneById(callerIntent.getLongExtra("campagneId",0));
+                        // On doit réutilisiser getGoodClass car sinon Gson n'arrive pas à parser correctement le Json si
+                        // l'on met Saisie.class
+                        Saisie s = c.getSaisieFromJson(getGoodClass(c));
+                        s.setMeteo(meteo);
+                        c.setSaisie(new Gson().toJson(s));
+                        dao.modifieCampagne(c);
+                    }else {
+                        Intent resultIntent = new Intent();
+                        resultIntent.putExtra("meteo", meteo);
+                        setResult(ChooseTransectActivity.RESULT_FILL_METEO, resultIntent);
+                    }
                     finish();
                 }
             }
         });
+
+    }
+
+    /**
+     * Récupère le bon type de classe de saisie pour cette campagne via le nom du protocole que cette-ci suit
+     *
+     * @param c La campagne protocolaire
+     * @return La classe saisie correspondante au protocole de cette campagne
+     */
+    private Class getGoodClass(CampagneProtocolaire c){
+        if(c.getNomProto().equals(getString(R.string.nomRNF)))
+            return RNFSaisie.class;
+        // On ajoutera des if si d'autre protocoles sont implémentés
+        return null;
+    }
+
+    // Affecte les champs via la météo fourni via Intent
+    private void setFieldsFromModifiedMeteo(ProtocoleMeteo modifiedMeteo) {
+        setSpinnerSelection(visibilite,R.array.chooseVisibilite,modifiedMeteo.getVisibilite());
+        setSpinnerSelection(precipitation,R.array.choosePrecipitation,modifiedMeteo.getPrecipitation());
+        setSpinnerSelection(nebulosite,R.array.chooseNebulosite,modifiedMeteo.getNebulosite());
+        setSpinnerSelection(directionVent,R.array.chooseDirectionVent,modifiedMeteo.getDirectionVent());
+        setSpinnerSelection(vitesseVent,R.array.chooseVitesseVent,modifiedMeteo.getVitesseVent());
+        temperatureAir.setText(modifiedMeteo.getTemperatureAir() + "");
+    }
+
+    // Mets la string object dans la liste de string d'identifiant id en sélection du spinner
+    private void setSpinnerSelection(Spinner spinner, int id, String object){
+        String[] stringArray = getResources().getStringArray(id);
+        ArrayList<String> stringList = new ArrayList<>(Arrays.asList(stringArray));
+        spinner.setSelection(stringList.indexOf(object));
     }
 
     // Renvoie true si l'un des champs nebulosités, temperature ou vitesse du vent n'a pas été renseigné
@@ -100,5 +166,11 @@ public class FormMeteoActivity extends AppCompatActivity {
         String vitesseVentInput = (String) vitesseVent.getSelectedItem();
 
         return new ProtocoleMeteo(visibiliteInput, precipitationInput, nebulositeInput, temperatureInput, directionVentInput, vitesseVentInput);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dao.close();
     }
 }

@@ -188,6 +188,7 @@ public class MainActivityRel extends MainActivity {
 
     /**
      * Convertit une liste de LatLongs en une liste de position en Lambert
+     *
      * @param latLongs La liste à convertir
      * @return La liste convertie
      */
@@ -203,6 +204,7 @@ public class MainActivityRel extends MainActivity {
 
     /**
      * Récupère la surface d'un polygone
+     *
      * @param latLongs La liste des positions du polygone
      * @return la surface du polygone
      */
@@ -444,6 +446,7 @@ public class MainActivityRel extends MainActivity {
 
     /**
      * Renvoi la longueur de la ligne en mètres
+     *
      * @param polyline La ligne à mesurer
      * @return La longueur de la ligne
      */
@@ -489,6 +492,7 @@ public class MainActivityRel extends MainActivity {
         polygonArea = getArea(latLongs);
     }
 
+    // Récupère le périmètre du polygone
     private double getPolygonPerimeter(List<LatLong> list){
         List<LatLong> tmp = new ArrayList<>(list);
 

@@ -94,7 +94,16 @@ public class OiseauxActivity extends FauneActivity {
         consultedInv.setNidif(nidificationValue);
     }
 
-    // Mets la string object dans la liste de string d'identifiant id en sélection du spinner
+    //
+
+    /**
+     * Récupère indice de la string object dans le string-array qu'utilise le spinner pour pouvoir mettre la string object en
+     * sélection de ce spinner
+     *
+     * @param spinner Le spinner dont la sélection doit être changée
+     * @param id L'id du string-array correspondant au spinner
+     * @param object La string qui doit être en sélection du spinner
+     */
     private void setSpinnerSelection(Spinner spinner, int id, String object){
         String[] stringArray = getResources().getStringArray(id);
         ArrayList<String> stringList = new ArrayList<>(Arrays.asList(stringArray));

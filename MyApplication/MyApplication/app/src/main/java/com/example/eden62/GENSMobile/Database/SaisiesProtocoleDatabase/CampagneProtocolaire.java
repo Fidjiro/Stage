@@ -12,6 +12,11 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.List;
 
+/**
+ * Objet représentant une campagne protocolaire
+ *
+ * @param <T> Le type de saisie de cette campagne, càd le type de protocole. Chaque protocole aura un type de saisie
+ */
 public class CampagneProtocolaire<T extends Saisie> implements DatabaseItem, Parcelable{
 
     protected long _id;
@@ -153,6 +158,12 @@ public class CampagneProtocolaire<T extends Saisie> implements DatabaseItem, Par
         this.saisie = saisie;
     }
 
+    /**
+     * Récupère la saisie sous forme d'objet java depuis la String json stockée
+     *
+     * @param classT La classe de l'objet en retour qui doit être fournie dut au type erasure.
+     * @return L'objet qui étends Saisie
+     */
     public T getSaisieFromJson(Class<T> classT){
         Gson gson = new Gson();
         T res = gson.fromJson(getSaisie(),classT);

@@ -2,6 +2,9 @@ package com.example.eden62.GENSMobile.Activities.ProtocoleActivities;
 
 import java.util.List;
 
+/**
+ * Objet représentant un protocole
+ */
 public class Protocole {
 
     private String name;

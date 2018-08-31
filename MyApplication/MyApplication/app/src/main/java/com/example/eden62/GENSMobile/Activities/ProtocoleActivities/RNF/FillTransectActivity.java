@@ -21,6 +21,9 @@ import com.example.eden62.GENSMobile.R;
 
 import java.util.ArrayList;
 
+/**
+ * Activité permettant de recenser les espèces d'un transect
+ */
 public class FillTransectActivity extends ListActivity {
 
     private static final int RESULT_TEMPS_PARCOURS = 7;
@@ -100,10 +103,13 @@ public class FillTransectActivity extends ListActivity {
         });
     }
 
+    // Vérifie si le transect est conforme, si tous les dénombrement sont >= au nbGenre
     private boolean isTransectValidable(){
         return recensedInvs.allDenombrementAreCoherent() && recensedInvs.allNeededDenombrementAreNoted();
     }
 
+
+     // Action réalisée lorsque le transect n'est pas conforme aux conditions
     private void actionWhenTransectNotValidable(){
         if(!recensedInvs.allNeededDenombrementAreNoted())
             Toast.makeText(this, getString(R.string.denombrementNotNoted), Toast.LENGTH_LONG).show();

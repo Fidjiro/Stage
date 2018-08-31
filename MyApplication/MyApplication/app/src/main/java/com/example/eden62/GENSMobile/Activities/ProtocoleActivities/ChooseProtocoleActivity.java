@@ -25,6 +25,9 @@ import com.example.eden62.GENSMobile.R;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Activité permettant de choisir un protocole et de le réaliser ensuite. Permet également de consulter toutes ses saisies
+ */
 public class ChooseProtocoleActivity extends AppCompatActivity {
 
     protected Spinner protoSpinner,siteSpinner;
@@ -114,6 +117,7 @@ public class ChooseProtocoleActivity extends AppCompatActivity {
         });
     }
 
+    // Définie l'adapter du spinenr représentant les sites
     private void setSiteAdapter(List<Site> sites){
         sitesAdapter = new ArrayAdapter<Site>(this, android.R.layout.simple_spinner_item, sites){
             @NonNull
@@ -144,12 +148,16 @@ public class ChooseProtocoleActivity extends AppCompatActivity {
         };
     }
 
+    // Affecte les valeurs possible au spinner des sites
     private void setListOfSites() {
         sites = ((Protocole)protoSpinner.getSelectedItem()).getAvailableSites();
         setSiteAdapter(sites);
         siteSpinner.setAdapter(sitesAdapter);
     }
 
+    /**
+     * Affecte la liste des protocoles avec la liste de leurs sites disponibles
+     */
     protected void setListOfProto(){
         protocoles = new ArrayList<>();
 
@@ -160,13 +168,9 @@ public class ChooseProtocoleActivity extends AppCompatActivity {
         transects.add(new Transect("Transect 4",103));
         transects.add(new Transect("Transect 5",100));
 
-        ArrayList<Transect> test = new ArrayList<>();
-        test.add(new Transect("Transect test", 12));
-
         ArrayList<Site> sites = new ArrayList<>();
         //Ajout d'un site de nom vide pour avoir l'item vide dans le spinner
         sites.add(new Site(""));
-        sites.add(new RNFSite("test",test));
         sites.add(new RNFSite("Mont Pelé et Hulin",transects));
 
         //Ajout d'un protocole de nom vide pour avoir l'item vide dans le spinner
@@ -174,6 +178,7 @@ public class ChooseProtocoleActivity extends AppCompatActivity {
         protocoles.add(new Protocole(getString(R.string.nomRNF), sites, ChooseTransectActivity.class));
     }
 
+    // Met une erreur sur l'élément selectionné du spinner s
     private void setErrorOnSelectedItem(Spinner s, String spinnerType){
         String msg = TOAST_MESSAGE + spinnerType;
         TextView selectedView = (TextView) s.getSelectedView();
@@ -182,6 +187,7 @@ public class ChooseProtocoleActivity extends AppCompatActivity {
 
     }
 
+    // Action réalisé lorsque l'un des spinner n'a pas d'élément sélectionné
     private void actionWhenFieldsNotChosen() {
         if(!isASelectedItem(protoSpinner)){
             setErrorOnSelectedItem(protoSpinner, PROTO_STRING);
@@ -191,6 +197,9 @@ public class ChooseProtocoleActivity extends AppCompatActivity {
             setErrorOnSelectedItem(siteSpinner, SITE_STRING);
     }
 
+    /**
+     * Lance l'activité protocolaire correspondante au protocole et site sélectionné
+     */
     protected void launchProto(){
         Protocole selectedProto = (Protocole) protoSpinner.getSelectedItem();
         Intent intent = new Intent(this, selectedProto.getActivityToLaunch());
@@ -202,10 +211,21 @@ public class ChooseProtocoleActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * Vérifie que le protocole et le site ont été choisis
+     *
+     * @return <code>True</code> s'ils ont été choisis, <code>false</code> sinon
+     */
     protected boolean siteAndProtoAreChosen(){
         return isASelectedItem(protoSpinner) && isASelectedItem(siteSpinner);
     }
 
+    /**
+     * Vérifie si un item à été choisi dans le spinner s
+     *
+     * @param s Le spinner à vérifier
+     * @return <code>True</code> si un élément à été choisi, <code>false</code> sinon
+     */
     protected boolean isASelectedItem(Spinner s){
         return !s.getSelectedItem().toString().equals("");
     }

@@ -1,5 +1,8 @@
 package com.example.eden62.GENSMobile.Activities.ProtocoleActivities;
 
+/**
+ * Objet représentant un site
+ */
 public class Site{
 
     protected String name;

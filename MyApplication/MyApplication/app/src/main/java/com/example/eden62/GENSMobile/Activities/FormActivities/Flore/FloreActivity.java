@@ -155,6 +155,7 @@ public class FloreActivity extends FormActivity {
         /**
          * Vérifie que l'entier en paramètre est contenu dans ses bornes x et y. Pour le dernier indice d'abondance, il fallait
          * quelque chose pour représenter l'infini vu que l'indice est plus de 10 000
+         *
          * @param i L'entier à comparer
          * @return <code>true</code> si i est compris dans les bornes, <code>false</code> sinon
          */

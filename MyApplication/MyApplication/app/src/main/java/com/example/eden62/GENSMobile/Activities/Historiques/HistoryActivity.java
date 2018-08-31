@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Activité d'historique de relevé ou inventaire
  *
- * @param <T> Adapter de relevés ou d'inventaires
+ * @param <T> Adapter de relevés, de campagne protocolaires ou d'inventaires
  */
 public abstract class HistoryActivity<T extends ItemsAdapter> extends AppCompatActivity {
     protected ListView listItems;

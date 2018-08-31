@@ -16,6 +16,9 @@ import com.example.eden62.GENSMobile.Tools.Utils;
 
 import java.util.List;
 
+/**
+ * Activité historique des saisies protocolaires
+ */
 public class HistorySaisiesActivity extends HistoryActivity<SaisiesAdapter> {
 
     protected CampagneProtocolaireDao campagneProtocolaireDao;
@@ -50,7 +53,7 @@ public class HistorySaisiesActivity extends HistoryActivity<SaisiesAdapter> {
         CampagneProtocolaire c = (CampagneProtocolaire)adapterView.getItemAtPosition(i);
 
         Intent intent = new Intent(this, ShowInfoSaisieActivity.class);
-        intent.putExtra("campagne",c);
+        intent.putExtra("campagneId",c.get_id());
         startActivity(intent);
     }
 

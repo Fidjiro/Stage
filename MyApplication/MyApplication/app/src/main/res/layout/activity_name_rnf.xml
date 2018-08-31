@@ -41,6 +41,7 @@
                 android:id="@+id/heureDebutH"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minWidth="@dimen/formNombreWidth"
                 android:textColor="#FFFFFF"
                 android:inputType="number"/>
             <TextView
@@ -52,6 +53,7 @@
                 android:id="@+id/heureDebutM"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minWidth="@dimen/formNombreWidth"
                 android:textColor="#FFFFFF"
                 android:inputType="number"/>
         </LinearLayout>
@@ -68,6 +70,7 @@
                 android:id="@+id/heureFinH"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minWidth="@dimen/formNombreWidth"
                 android:textColor="#FFFFFF"
                 android:inputType="number"/>
             <TextView
@@ -79,6 +82,7 @@
                 android:id="@+id/heureFinM"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minWidth="@dimen/formNombreWidth"
                 android:textColor="#FFFFFF"
                 android:inputType="number"/>
         </LinearLayout>

@@ -17,6 +17,9 @@ import com.example.eden62.GENSMobile.Tools.Utils;
 
 import java.util.List;
 
+/**
+ * Adapter de saisies protocolaires
+ */
 public class SaisiesAdapter extends ItemsAdapter<SaisiesStocker,CampagneProtocolaire> {
 
     public SaisiesAdapter(Context context, List<CampagneProtocolaire> items) {

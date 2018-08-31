@@ -13,8 +13,13 @@ v1.3, 01/08: - Ajout boutons + - pour le dénombrement et nombre de male femelle
 	     - Update des champs dénombrement, nombre de mâle, nombre de femelle, lors d'une modification via 
 	       clavier, les autres champs changent en conséquence. 
 
+v1.3.1, 31/08: - Changement pour le réajustement du dénombrement en fonction du nbGenre, s'il est incohérent, lors 
+		de l'appui sur le bouton "+", le dénombrement total devient égal au nbGenre et non nbGenre + 1
+	       - Ajout de la remémorisation du mot de passe qui évite de renseigner plusieurs fois le mdp lors de
+		de la sync
+
 v1.4, En cours: - Ajout de l'interface choix de protocole
 		- Ajout protocole RNF
-		- En cours: Historiques des saisies protocolaires
-		- Changement pour le réajustement du dénombrement en fonction du nbGenre, s'il est incohérent, lors 
-		de l'appui sur le bouton "+", le dénombrement total devient égal au nbGenre et non nbGenre + 1
+		- Ajout historique des saisies protocolaires
+		- En cours : Synchro des protocoles
+		

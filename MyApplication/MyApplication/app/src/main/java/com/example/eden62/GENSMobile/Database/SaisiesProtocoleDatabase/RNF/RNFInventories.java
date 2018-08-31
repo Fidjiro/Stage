@@ -3,6 +3,9 @@ package com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.RNF;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Liste regroupant tous les inventaires recensés d'un transect
+ */
 public class RNFInventories extends ArrayList<RNFInventaire> {
 
     public RNFInventories(){

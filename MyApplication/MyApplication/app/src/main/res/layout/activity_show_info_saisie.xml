@@ -172,7 +172,7 @@
             android:textAllCaps="false"/>
 
         <ImageButton
-            android:id="@+id/deleteRel"
+            android:id="@+id/deleteCampagne"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/delete" />

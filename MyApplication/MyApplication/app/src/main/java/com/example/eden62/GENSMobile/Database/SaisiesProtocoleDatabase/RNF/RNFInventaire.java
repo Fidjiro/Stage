@@ -3,6 +3,9 @@ package com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.RNF;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+/**
+ * Objet représentant un inventaire pour le RNF (représentant un papillon)
+ */
 public class RNFInventaire implements Parcelable{
 
     protected long ref_taxon;
@@ -103,6 +106,11 @@ public class RNFInventaire implements Parcelable{
         return nbMale + nbFemale;
     }
 
+    /**
+     * Verifie si le dénombrement est cohérent
+     *
+     * @return <code>True</code> si le dénombrement est cohérent, <code>false</code> sinon
+     */
     public boolean hasCoherentDenombrement(){
         return nombre == 0 || (getNbGenre()) <= nombre;
     }

@@ -11,6 +11,9 @@ import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.RNF.RNFSa
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Méthodes de commnication avec la base de données des campagne protocolaires
+ */
 public class CampagneProtocolaireDao implements DAO<CampagneProtocolaire> {
 
     protected final int VERSION = 3;
@@ -49,8 +52,15 @@ public class CampagneProtocolaireDao implements DAO<CampagneProtocolaire> {
         mDb.close();
     }
 
-    public long insertRNFCampagne(CampagneProtocolaire campagne){
+    public long insertCampagne(CampagneProtocolaire campagne){
         ContentValues cv = getCvFrom(campagne);
+        return mDb.insert(TABLE_NAME, null, cv);
+    }
+
+    public long modifieCampagne(CampagneProtocolaire campagne){
+        delete(campagne);
+        ContentValues cv = getCvFrom(campagne);
+        cv.put(KEY,campagne.get_id());
         return mDb.insert(TABLE_NAME, null, cv);
     }
 
@@ -77,6 +87,24 @@ public class CampagneProtocolaireDao implements DAO<CampagneProtocolaire> {
         Cursor c = selectCampagneOfTheUsr(usrId);
 
         return dealWithCursor(c);
+    }
+
+    public int getNbCampagneOfTheUsr(long usrId){
+        Cursor c = selectCampagneOfTheUsr(usrId);
+
+        return c.getCount();
+    }
+
+    private Cursor selectCampagneById(long id){
+        String request = "SELECT * FROM " + TABLE_NAME + " WHERE " + KEY + " = ?;";
+
+        return mDb.rawQuery(request, new String[]{id + ""});
+    }
+
+    public CampagneProtocolaire getCampagneById(long id){
+        Cursor c = selectCampagneById(id);
+        c.moveToNext();
+        return dealWithSingleRowCursor(c);
     }
 
     private CampagneProtocolaire dealWithSingleRowCursor(Cursor c){

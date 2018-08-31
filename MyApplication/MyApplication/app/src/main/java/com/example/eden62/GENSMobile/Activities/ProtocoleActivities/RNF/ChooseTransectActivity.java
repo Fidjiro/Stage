@@ -26,6 +26,9 @@ import com.google.gson.Gson;
 
 import java.util.List;
 
+/**
+ * Activité permettant de choisir un transect à remplir
+ */
 public class ChooseTransectActivity extends AppCompatActivity {
 
     protected ListView listTransect;
@@ -34,6 +37,9 @@ public class ChooseTransectActivity extends AppCompatActivity {
     protected Button finRnf;
 
     protected int cptTransectDone = 0;
+    protected boolean modification = false;
+    protected CampagneProtocolaire<RNFSaisie> modifiedCampagne;
+    protected RNFSaisie modifiedSaisie;
 
     protected ProtocoleMeteo meteo;
     protected String name, nomSite, heureDeb, heureFin;
@@ -60,8 +66,14 @@ public class ChooseTransectActivity extends AppCompatActivity {
         finRnf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               if(allTransectsAreDone())
-                   startActivityForResult(new Intent(ChooseTransectActivity.this,NameRNFActivity.class),RESULT_NAME_RNF);
+               if(allTransectsAreDone()) {
+                   if(modification){
+                       modifiedCampagne.setSaisie(new Gson().toJson(modifiedSaisie));
+                       dao.modifieCampagne(modifiedCampagne);
+                       finish();
+                   } else
+                       startActivityForResult(new Intent(ChooseTransectActivity.this, NameRNFActivity.class), RESULT_NAME_RNF);
+               }
                else
                    Toast.makeText(ChooseTransectActivity.this, "Tous les transects doivent être fait", Toast.LENGTH_SHORT).show();
             }
@@ -69,8 +81,18 @@ public class ChooseTransectActivity extends AppCompatActivity {
 
         Intent callerIntent = getIntent();
 
-        transects = callerIntent.getParcelableArrayListExtra("transects");
-        nomSite = callerIntent.getStringExtra("nomSite");
+        long campagneId = callerIntent.getLongExtra("campagneId",-1);
+        if(campagneId != -1){
+            modification = true;
+            modifiedCampagne = dao.getCampagneById(campagneId);
+            modifiedSaisie = modifiedCampagne.getSaisieFromJson(RNFSaisie.class);
+            transects = modifiedSaisie.getTransects();
+            cptTransectDone = transects.size();
+            nomSite = modifiedCampagne.getNomSite();
+        } else {
+            transects = callerIntent.getParcelableArrayListExtra("transects");
+            nomSite = callerIntent.getStringExtra("nomSite");
+        }
 
         listTransect.setAdapter(new TransectAdapter(this,transects));
 
@@ -87,9 +109,14 @@ public class ChooseTransectActivity extends AppCompatActivity {
             }
         });
 
-        meteo = getIntent().getParcelableExtra("meteo");
+        meteo = callerIntent.getParcelableExtra("meteo");
     }
 
+    /**
+     * Crée une campagne RNF via les données remplies par l'utilisateur
+     *
+     * @return Une campagne RNF défini par l'utilisateur
+     */
     protected CampagneProtocolaire<RNFSaisie> createCampagne(){
         String saisie = gson.toJson(new RNFSaisie(transects,meteo));
         return new CampagneProtocolaire<>(Utils.getCurrUsrId(this), name, Utils.getDate(), heureDeb, heureFin, getString(R.string.nomRNF), nomSite, saisie);
@@ -123,7 +150,7 @@ public class ChooseTransectActivity extends AppCompatActivity {
         if(resultCode == RESULT_FILL_METEO){
             meteo = data.getParcelableExtra("meteo");
             CampagneProtocolaire<RNFSaisie> currCampagne = createCampagne();
-            dao.insertRNFCampagne(currCampagne);
+            dao.insertCampagne(currCampagne);
             finish();
         }
     }

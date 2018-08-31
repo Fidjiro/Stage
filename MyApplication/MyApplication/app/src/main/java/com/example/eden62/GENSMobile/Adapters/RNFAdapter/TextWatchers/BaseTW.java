@@ -5,6 +5,9 @@ import android.text.TextWatcher;
 
 import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.RNF.RNFInventaire;
 
+/**
+ * TextWatcher de base pour les editText de dénombrement
+ */
 public abstract class BaseTW implements TextWatcher {
 
     public RNFInventaire item;
@@ -20,6 +23,12 @@ public abstract class BaseTW implements TextWatcher {
         textChangedAction(getInputFromEditable(s));
     }
 
+    /**
+     * Récupère un int via l'editable
+     *
+     * @param s L'editable qui contient l'int
+     * @return L'int correspondant à l'editable
+     */
     protected int getInputFromEditable(Editable s){
         int input = 0;
 
@@ -32,9 +41,19 @@ public abstract class BaseTW implements TextWatcher {
         return input;
     }
 
+    /**
+     * Action spécifique pour chaque TextWatcher réalisée dans le afterTextChanged
+     *
+     * @param input L'input de l'utilisateur dans l'editText
+     */
     protected void textChangedAction(int input){
         setItemGoodField(input);
     }
 
+    /**
+     * Affecte le champ de l'inventaire correspondant à l'editText
+     *
+     * @param input L'input de l'utilisateur
+     */
     protected abstract void setItemGoodField(int input);
 }

@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Historiques des rekevés réalisés
+ * Historiques des relevés réalisés
  */
 public class HistoryReleveActivity extends HistoryActivity<ReleveAdapter> {
 
@@ -98,6 +98,7 @@ public class HistoryReleveActivity extends HistoryActivity<ReleveAdapter> {
 
     /**
      * Lance le bon type de popUp d'informations en fonction du relevé
+     *
      * @param typeReleve Le type du relevé
      * @return L'intent du bon type de popUp
      */

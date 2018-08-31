@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -13,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -25,37 +23,33 @@ import android.widget.TextView;
 
 import com.example.eden62.GENSMobile.Activities.Historiques.Inventaires.HistoryRecensementActivity;
 import com.example.eden62.GENSMobile.Activities.Historiques.Releves.HistoryReleveActivity;
+import com.example.eden62.GENSMobile.Activities.Historiques.Saisies.HistorySaisiesActivity;
 import com.example.eden62.GENSMobile.Database.CampagneDatabase.CampagneDAO;
 import com.example.eden62.GENSMobile.Database.CampagneDatabase.Inventaire;
 import com.example.eden62.GENSMobile.Database.ReleveDatabase.HistoryDao;
+import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.CampagneProtocolaireDao;
 import com.example.eden62.GENSMobile.R;
-import com.example.eden62.GENSMobile.Tools.AttemptLoginTask;
 import com.example.eden62.GENSMobile.Tools.MyHttpService;
 import com.example.eden62.GENSMobile.Tools.Utils;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Request;
-import okhttp3.Response;
 
 /**
  * Classe qui synchronise les relevés avec le serveur
  */
 public class HttpActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private LinearLayout psswLayout,nbInvLayout, nbRelLayout;
-    private Button launchSync,validPssw;
-    private TextView txtJson, nbInvToSyncTxt, nbRelToSyncTxt;
+    private LinearLayout psswLayout,nbInvLayout, nbRelLayout, nbProtosLayout;
+    private Button launchSyncInvs, launchSyncProtos, validPssw;
+    private TextView txtJson, nbInvToSyncTxt, nbRelToSyncTxt, nbProtosToSyncTxt;
     private EditText psswText;
     private Snackbar snackbar;
     private CheckBox displayMdp;
 
-    int nbInvToSync, nbRelToSync;
+    int nbInvToSync, nbRelToSync, nbProtosToSync;
 
     private String username,mdp;
     private long usrId;
@@ -66,8 +60,10 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
 
     private CampagneDAO campagneDao;
     private HistoryDao releveDao;
+    private CampagneProtocolaireDao campagneProtocolaireDao;
 
     public static int END_OF_SYNC = 3;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,15 +72,19 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         httpService = new MyHttpService(this);
         campagneDao = new CampagneDAO(this);
         releveDao = new HistoryDao(this);
+        campagneProtocolaireDao = new CampagneProtocolaireDao(this);
         campagneDao.open();
         releveDao.open();
+        campagneProtocolaireDao.open();
         prefs = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         editor = prefs.edit();
 
         makeView();
 
-        SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
-        username = loginPreferences.getString("username","");
+        if(prefs.getString("mdp","") != "")
+            setViewAfterGoodConnection();
+
+        username = prefs.getString("username","");
         usrId = Utils.getCurrUsrId(HttpActivity.this);
         setTxtNbDatas();
 
@@ -96,13 +96,15 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
      * Initialise les élémentes de la view
      */
     private void makeView() {
-        launchSync = (Button) findViewById(R.id.syncInvs);
+        launchSyncInvs = (Button) findViewById(R.id.syncInvs);
+        launchSyncProtos = (Button) findViewById(R.id.syncProtos);
         txtJson = (TextView) findViewById(R.id.tvJsonItem);
         validPssw = (Button) findViewById(R.id.validPssw);
         psswText = (EditText) findViewById(R.id.password);
         psswLayout = (LinearLayout) findViewById(R.id.passwordLayout);
         nbInvLayout = (LinearLayout) findViewById(R.id.invToSyncLayout);
         nbRelLayout = (LinearLayout) findViewById(R.id.relToSyncLayout);
+        nbProtosLayout = (LinearLayout) findViewById(R.id.protoToSyncLayout);
         psswText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
@@ -128,9 +130,10 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
                 task.execute((Void)null);
             }
         });
-        launchSync.setOnClickListener(this);
+        launchSyncInvs.setOnClickListener(this);
         nbInvToSyncTxt = (TextView) findViewById(R.id.nbInvToSync);
         nbRelToSyncTxt = (TextView) findViewById(R.id.nbRelToSync);
+        nbProtosToSyncTxt = (TextView) findViewById(R.id.nbProtoToSync);
         nbInvLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -144,6 +147,12 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
             public void onClick(View view) {
                 Intent intent = new Intent(HttpActivity.this, HistoryReleveActivity.class);
                 startActivity(intent);
+            }
+        });
+        nbProtosLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(HttpActivity.this, HistorySaisiesActivity.class));
             }
         });
         displayMdp = (CheckBox) findViewById(R.id.displayMdp);
@@ -164,6 +173,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
     private void getNbDataToSync(){
         nbInvToSync = getInventairesToSend().size();
         nbRelToSync = releveDao.getNbReleveOfTheUsr(usrId);
+        nbProtosToSync = campagneProtocolaireDao.getNbCampagneOfTheUsr(usrId);
     }
 
     /**
@@ -172,6 +182,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
     protected void setTxtNbDatas(){
         getNbDataToSync();
         nbInvToSyncTxt.setText(nbInvToSync + " " + getString(R.string.invToSync));
+        nbProtosToSyncTxt.setText(nbProtosToSync + " " + getString(R.string.protosToSync));
         nbRelToSyncTxt.setText(nbRelToSync + " " + getString(R.string.relToSync));
     }
 
@@ -275,11 +286,9 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            psswLayout.setVisibility(View.GONE);
-                            setTxtNbDatas();
-                            nbInvLayout.setVisibility(View.VISIBLE);
-                            nbRelLayout.setVisibility(View.VISIBLE);
-                            launchSync.setVisibility(View.VISIBLE);
+                            setViewAfterGoodConnection();
+                            editor.putString("mdp",mdp);
+                            editor.commit();
                             InputMethodManager imm = (InputMethodManager) HttpActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
                             imm.hideSoftInputFromWindow(psswText.getWindowToken(), 0);
                         }
@@ -294,6 +303,17 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         private boolean checkVersion(int servVersion){
             return Utils.getVerCode(HttpActivity.this) == servVersion;
         }
+    }
+
+    // Cache le layout password et affiche les infos de synchronisations et boutons
+    private void setViewAfterGoodConnection(){
+        psswLayout.setVisibility(View.GONE);
+        setTxtNbDatas();
+        nbInvLayout.setVisibility(View.VISIBLE);
+        nbRelLayout.setVisibility(View.VISIBLE);
+        // nbProtosLayout.setVisibility(View.VISIBLE);
+        launchSyncInvs.setVisibility(View.VISIBLE);
+        // launchSyncProtos.setVisibility(View.VISIBLE);
     }
 
     // Créé un message d'avertissement pour prévenir de la version obsolète de l'application
@@ -316,6 +336,7 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         super.onDestroy();
         campagneDao.close();
         releveDao.close();
+        campagneProtocolaireDao.close();
     }
 
     @Override

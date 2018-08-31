@@ -4,6 +4,9 @@ import android.widget.EditText;
 
 import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.RNF.RNFInventaire;
 
+/**
+ * TextWatcher d'editText correspondante à un nombre de mâle ou femelle
+ */
 public abstract class BaseGenreTW extends BaseTW {
 
     protected int oldNbGenre;
@@ -25,6 +28,7 @@ public abstract class BaseGenreTW extends BaseTW {
             updateDenombrementETViaNbGenre(oldNbGenre, item, nombre);
     }
 
+    // Vérifie si l'editText est vide ou non
     private boolean isEmptyET(EditText et){
         return et.getText().toString().isEmpty();
     }
@@ -52,6 +56,7 @@ public abstract class BaseGenreTW extends BaseTW {
         nombre.setText(newString);
     }
 
+    // Ajuste le dénombrement de l'inventaire s'il est inférieur au nombre total de genre
     private int adjustNombre(RNFInventaire inv){
         int nbGenre = inv.getNbGenre();
         int nb = inv.getNombre();

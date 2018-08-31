@@ -147,6 +147,7 @@ public abstract class ReleveInfoPopup extends AppCompatActivity {
 
     /**
      * Permet d'ajoute le File en paramètre en pièce jointe d'un mail
+     *
      * @param file La file qui servira de pièce jointe
      */
     public void sendFileByMail(File file){
@@ -159,6 +160,7 @@ public abstract class ReleveInfoPopup extends AppCompatActivity {
 
     /**
      * Dialog d'avertissement de suppression de relevé
+     *
      * @return Le dialog d'avertissement
      */
     public Dialog createDialog() {

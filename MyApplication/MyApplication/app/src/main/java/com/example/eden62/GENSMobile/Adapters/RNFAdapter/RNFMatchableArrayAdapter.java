@@ -255,10 +255,20 @@ public class RNFMatchableArrayAdapter extends MatchableArrayAdapter<RNFInventair
         decreaseDecompteEditText(nbFemaleText,inv.getNbFemale());
     }
 
+    /**
+     * Vérifie si le filtre est en mode latin ou français
+     *
+     * @return <code>True</code> si le filtre est en mode latin, <code>false</code> s'il est en mode français
+     */
     public boolean isLatinFilterMode() {
         return latinFilterMode;
     }
 
+    /**
+     * Affecte le mode de filtre
+     *
+     * @param latinFilterMode <code>True</code> pour mettre le filtre en mode latin, <code>false</code> pour le mettre en mode français
+     */
     public void setLatinFilterMode(boolean latinFilterMode) {
         this.latinFilterMode = latinFilterMode;
     }
