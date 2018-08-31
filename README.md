@@ -1,3 +1,3 @@
 # Application GENS Mobile
 
-Version de l'application : 1.3
+Version de l'application : 1.3.1
