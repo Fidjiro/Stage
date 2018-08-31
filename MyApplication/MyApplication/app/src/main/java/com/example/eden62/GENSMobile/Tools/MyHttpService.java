@@ -3,6 +3,7 @@ package com.example.eden62.GENSMobile.Tools;
 import android.content.Context;
 
 import com.example.eden62.GENSMobile.Database.CampagneDatabase.Inventaire;
+import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.CampagneProtocolaire;
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
@@ -29,6 +30,7 @@ public class MyHttpService {
     static final String URL_ADD_DATA = "http://vps122669.ovh.net:8080/addData.php";
     static final String URL_INFO_CAMPAGNE = "http://vps122669.ovh.net:8080/InitSync.php";
     static final String URL_MAJ_USR = "http://vps122669.ovh.net:8080/SyncUsers.php";
+    static final String URL_SEND_PROTO = "http://vps122669.ovh.net:8080/addDataProto4.php";
 
     public MyHttpService(Context ctx) {
         this.ctx = ctx;
@@ -58,6 +60,17 @@ public class MyHttpService {
     public Request createSendDataRequest(Inventaire inv, int idCampagne){
         RequestBody requestBody = createRequestBodyToSend(inv, idCampagne);
         return new Request.Builder().url(URL_ADD_DATA).post(requestBody).build();
+    }
+
+    /**
+     * Crée la requête http pour envoyer une campagne protocolaire au serveur
+     *
+     * @param c La campagne à envoyer
+     * @return La requête POST à envoyer
+     */
+    public Request createSendCampagneProtoRequest(CampagneProtocolaire c){
+        RequestBody requestBody = createRequestBodyProtoToSend(c);
+        return new Request.Builder().url(URL_SEND_PROTO).post(requestBody).build();
     }
 
     /**
@@ -94,7 +107,7 @@ public class MyHttpService {
         return client.newCall(request).execute();
     }
 
-    // Créé la requêtre à envoyer au serveur lors d'un envoi d'inventaire
+    // Créé la requête à envoyer au serveur lors d'un envoi d'inventaire
     private RequestBody createRequestBodyToSend(Inventaire inv, int idCampagne){
 
         RequestBody requestBody = new FormBody.Builder().add("_id",inv.get_id() + "").
@@ -116,6 +129,21 @@ public class MyHttpService {
                 add("nidif",inv.getNidif()).
                 add("indice_abondance",inv.getIndiceAbondance() + "").
                 add("idCampagne", idCampagne + "").
+                build();
+        return requestBody;
+    }
+
+    // Créé la requête à envoyer au serveurs lors d'un envoi d'une campagne protocolaire
+    private RequestBody createRequestBodyProtoToSend(CampagneProtocolaire c) {
+        RequestBody requestBody = new FormBody.Builder().add("_id",c.get_id() + "").
+                add("refUser",c.getAuthor_id() + "").
+                add("name",c.getName()).
+                add("date",c.getDate()).
+                add("heure_debut",c.getHeureDebut()).
+                add("heure_fin",c.getHeureFin()).
+                add("nom_proto",c.getNomProto()).
+                add("nom_site",c.getNomSite()).
+                add("saisie",c.getSaisie()).
                 build();
         return requestBody;
     }

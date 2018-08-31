@@ -27,6 +27,7 @@ import com.example.eden62.GENSMobile.Activities.Historiques.Saisies.HistorySaisi
 import com.example.eden62.GENSMobile.Database.CampagneDatabase.CampagneDAO;
 import com.example.eden62.GENSMobile.Database.CampagneDatabase.Inventaire;
 import com.example.eden62.GENSMobile.Database.ReleveDatabase.HistoryDao;
+import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.CampagneProtocolaire;
 import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.CampagneProtocolaireDao;
 import com.example.eden62.GENSMobile.R;
 import com.example.eden62.GENSMobile.Tools.MyHttpService;
@@ -165,6 +166,35 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
                     psswText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             }
         });
+
+        launchSyncProtos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!Utils.isConnected(HttpActivity.this)) {
+                    Snackbar.make(v, getString(R.string.noConnection), Snackbar.LENGTH_LONG).show();
+                    return;
+                }
+
+                final ArrayList<CampagneProtocolaire> campagneProtoToSend = getCampagneProtoToSend();
+                int currTotalCamp = campagneProtoToSend.size();
+                boolean noCampToSend = currTotalCamp == 0;
+
+                if(noCampToSend) {
+                    Snackbar.make(txtJson, "Aucun inventaire à synchroniser", Snackbar.LENGTH_LONG).show();
+                    return;
+                }
+
+                snackbar.show();
+                Intent intent = new Intent(HttpActivity.this,SyncInvActivity.class);
+                intent.putParcelableArrayListExtra("campagnesProtoToSend",campagneProtoToSend);
+                intent.putExtra("mdp",mdp);
+                startActivityForResult(intent,END_OF_SYNC);
+            }
+        });
+    }
+
+    private ArrayList<CampagneProtocolaire> getCampagneProtoToSend(){
+        return campagneProtocolaireDao.getCampagneOfTheUsr(usrId);
     }
 
     /**
@@ -241,9 +271,9 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == END_OF_SYNC)
             setTxtNbDatas();
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private class HttpActivityLoginTask extends com.example.eden62.GENSMobile.Tools.AttemptLoginTask{
@@ -283,12 +313,12 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
                         }
                     });
                 }else {
+                    editor.putString("mdp",mdp);
+                    editor.commit();
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             setViewAfterGoodConnection();
-                            editor.putString("mdp",mdp);
-                            editor.commit();
                             InputMethodManager imm = (InputMethodManager) HttpActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
                             imm.hideSoftInputFromWindow(psswText.getWindowToken(), 0);
                         }
@@ -311,9 +341,9 @@ public class HttpActivity extends AppCompatActivity implements View.OnClickListe
         setTxtNbDatas();
         nbInvLayout.setVisibility(View.VISIBLE);
         nbRelLayout.setVisibility(View.VISIBLE);
-        // nbProtosLayout.setVisibility(View.VISIBLE);
+        nbProtosLayout.setVisibility(View.VISIBLE);
         launchSyncInvs.setVisibility(View.VISIBLE);
-        // launchSyncProtos.setVisibility(View.VISIBLE);
+        launchSyncProtos.setVisibility(View.VISIBLE);
     }
 
     // Créé un message d'avertissement pour prévenir de la version obsolète de l'application

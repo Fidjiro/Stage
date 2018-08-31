@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.eden62.GENSMobile.Database.DAO;
-import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.RNF.RNFSaisie;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +43,11 @@ public class CampagneProtocolaireDao implements DAO<CampagneProtocolaire> {
 
     @Override
     public long delete(CampagneProtocolaire item) {
-        return mDb.delete(TABLE_NAME, KEY + " = ?", new String[]{item.get_id() + ""});
+        return delete(item.get_id());
+    }
+
+    public long delete(long _id){
+        return mDb.delete(TABLE_NAME, KEY + " = ?", new String[]{_id + ""});
     }
 
     @Override
@@ -83,7 +86,7 @@ public class CampagneProtocolaireDao implements DAO<CampagneProtocolaire> {
         return mDb.rawQuery(request, new String[]{usrId + ""});
     }
 
-    public List<CampagneProtocolaire> getCampagneOfTheUsr(long usrId){
+    public ArrayList<CampagneProtocolaire> getCampagneOfTheUsr(long usrId){
         Cursor c = selectCampagneOfTheUsr(usrId);
 
         return dealWithCursor(c);
@@ -121,8 +124,8 @@ public class CampagneProtocolaireDao implements DAO<CampagneProtocolaire> {
         return new CampagneProtocolaire(_id, author_id, nom, date, heureDebut, heureFin, nomProto, nomSite, saisie);
     }
 
-    protected List<CampagneProtocolaire> dealWithCursor(Cursor c){
-        List<CampagneProtocolaire> res = new ArrayList<>();
+    protected ArrayList<CampagneProtocolaire> dealWithCursor(Cursor c){
+        ArrayList<CampagneProtocolaire> res = new ArrayList<>();
 
         if(c.moveToFirst()){
             do {

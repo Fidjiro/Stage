@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import com.example.eden62.GENSMobile.Database.CampagneDatabase.CampagneDAO;
 import com.example.eden62.GENSMobile.Database.CampagneDatabase.Inventaire;
+import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.CampagneProtocolaire;
+import com.example.eden62.GENSMobile.Database.SaisiesProtocoleDatabase.CampagneProtocolaireDao;
 import com.example.eden62.GENSMobile.R;
 import com.example.eden62.GENSMobile.Tools.AttemptLoginTask;
 import com.example.eden62.GENSMobile.Tools.MyHttpService;
@@ -39,12 +41,14 @@ public class SyncInvActivity extends AppCompatActivity {
     private ProgressDialog dial;
 
     private ArrayList<Inventaire> inventairesToSend;
-    private static int cpt, currTotalInv, nbErr;
+    private ArrayList<CampagneProtocolaire> campagneProtoToSend;
+    private int cpt, currTotalInv, currTotalProto, nbErr;
     protected int idCampagne;
 
     protected SharedPreferences prefs;
 
     protected CampagneDAO campagneDao;
+    protected CampagneProtocolaireDao campagneProtocolaireDao;
 
     protected String mdp;
 
@@ -54,6 +58,8 @@ public class SyncInvActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sync_inv);
 
         campagneDao = new CampagneDAO(this);
+        campagneProtocolaireDao = new CampagneProtocolaireDao(this);
+        campagneProtocolaireDao.open();
         campagneDao.open();
 
         dial = ProgressDialog.show(this, "", "Synchronisation en cours...", true);
@@ -64,10 +70,14 @@ public class SyncInvActivity extends AppCompatActivity {
         idCampagne = prefs.getInt("idCampagne",0);
 
         Intent intent = getIntent();
-        inventairesToSend = intent.getParcelableArrayListExtra("inventairesToSend");
         mdp = intent.getStringExtra("mdp");
-        currTotalInv = inventairesToSend.size();
-        new SyncInvLoginTask(httpService.createConnectionRequest(prefs.getString("username",""),mdp),httpService).execute((Void)null);
+        inventairesToSend = intent.getParcelableArrayListExtra("inventairesToSend");
+        campagneProtoToSend = intent.getParcelableArrayListExtra("campagnesProtoToSend");
+        if(inventairesToSend != null)
+            currTotalInv = inventairesToSend.size();
+        else
+            currTotalProto = campagneProtoToSend.size();
+        new SyncInvLoginTask(httpService.createConnectionRequest(prefs.getString("username", ""), mdp), httpService).execute((Void) null);
     }
 
     private class SyncInvLoginTask extends com.example.eden62.GENSMobile.Tools.AttemptLoginTask{
@@ -94,11 +104,108 @@ public class SyncInvActivity extends AppCompatActivity {
         protected void actionOnPostExecute(Boolean success) {
             if (success) {
                 Snackbar.make(txtJson,"Connexion réussie",Snackbar.LENGTH_SHORT).show();
-                new SendCampagneInfoTask(httpService.createSendInfoCampagneRequest(idCampagne,currTotalInv),inventairesToSend).execute((Void)null);
+                if(inventairesToSend != null)
+                    new SendCampagneInfoTask(httpService.createSendInfoCampagneRequest(idCampagne,currTotalInv),inventairesToSend).execute((Void)null);
+                else{
+                    cpt = 0;
+                    for(CampagneProtocolaire c : campagneProtoToSend){
+                        new SendCampagneProtoTask(httpService.createSendCampagneProtoRequest(c)).execute((Void)null);
+                    }
+                }
             }else{
                 Snackbar.make(txtJson, "Connexion échouée",Snackbar.LENGTH_SHORT).show();
                 finish();
             }
+        }
+    }
+
+    /**
+     * Tâche qui permet d'envoyer une campagne protocolaire au serveur
+     */
+    private class SendCampagneProtoTask extends AsyncTask<Void,Void,Boolean>{
+
+        private final Request mRequete;
+        private long _id;
+        private String errMsg;
+
+        public SendCampagneProtoTask(Request mRequete) {
+            this.mRequete = mRequete;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+
+            try {
+                if (!Utils.isConnected(SyncInvActivity.this)) {
+                    Snackbar.make(txtJson, "Aucune connexion à internet.", Snackbar.LENGTH_LONG).show();
+                    return false;
+                }
+
+                Response response = httpService.executeRequest(mRequete);
+                if (!response.isSuccessful()) {
+                    throw new IOException(response.toString());
+                }
+
+                final String body = response.body().string();
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        txtJson.setText(body);
+                    }
+                });
+
+                JSONObject js = parseStringToJsonObject(body);
+                return interpreteJson(js);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Snackbar.make(txtJson, "Mauvaise forme de json",Snackbar.LENGTH_LONG).show();
+            } return false;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+
+            if (success) {
+                Snackbar.make(txtJson,"Synchronisation réussie",Snackbar.LENGTH_SHORT).show();
+                campagneProtocolaireDao.delete(_id);
+            } else {
+                if(errMsg != null){
+                    Snackbar.make(txtJson, errMsg,Snackbar.LENGTH_SHORT).show();
+                }else{
+                    Snackbar.make(txtJson,"Erreur sur la campagne " + _id,Snackbar.LENGTH_SHORT).show();
+                }
+            }
+            cpt++;
+            if(cpt == currTotalProto){
+                setResult(HttpActivity.END_OF_SYNC);
+                //finish();
+            }
+        }
+
+        @Override
+        protected void onCancelled() { }
+
+        private boolean interpreteJson(JSONObject json){
+            int err;
+            _id = -1;
+            boolean importStatus;
+            try{
+                err = json.getInt("err");
+                importStatus = json.getBoolean("import");
+                if(err == 1){
+                    errMsg = json.getString("msg");
+                    return false;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                errMsg = "Mauvais parsage de JSON";
+                return false;
+            }
+            return importStatus;
         }
     }
 
@@ -158,8 +265,7 @@ public class SyncInvActivity extends AppCompatActivity {
                 cpt = 0;
                 nbErr = 0;
                 for(Inventaire inv : inventairesToSend){
-                    SendDataTask task = new SendDataTask(httpService.createSendDataRequest(inv,idCampagne));
-                    task.execute((Void) null);
+                    new SendDataTask(httpService.createSendDataRequest(inv,idCampagne)).execute((Void) null);
                 }
                 idCampagne++;
                 SharedPreferences.Editor editor = prefs.edit();
